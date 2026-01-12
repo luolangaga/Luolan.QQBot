@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，完美集成 ASP.NET Core。")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f6f342ccda5995a08f852790b3b9a197037ed1c7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Luolan.QQBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Luolan.QQBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
