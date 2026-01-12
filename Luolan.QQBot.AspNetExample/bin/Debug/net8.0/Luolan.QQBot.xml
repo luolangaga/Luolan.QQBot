@@ -1,0 +1,2784 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Luolan.QQBot</name>
+    </assembly>
+    <members>
+        <member name="T:Luolan.QQBot.Events.EventDispatcher">
+            <summary>
+            事件分发器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Events.EventDispatcher.DispatchAsync(System.String,System.Text.Json.JsonElement,System.String)">
+            <summary>
+            分发事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.QQBotEventBase">
+            <summary>
+            事件基类
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.QQBotEventBase.EventType">
+            <summary>
+            事件类型名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.QQBotEventBase.RawData">
+            <summary>
+            原始JSON数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.QQBotEventBase.EventId">
+            <summary>
+            事件ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GuildCreateEvent">
+            <summary>
+            频道创建事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.GuildCreateEvent.Guild">
+            <summary>
+            频道信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.GuildCreateEvent.OpUserId">
+            <summary>
+            操作人ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GuildUpdateEvent">
+            <summary>
+            频道更新事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GuildDeleteEvent">
+            <summary>
+            频道删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ChannelCreateEvent">
+            <summary>
+            子频道创建事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ChannelUpdateEvent">
+            <summary>
+            子频道更新事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ChannelDeleteEvent">
+            <summary>
+            子频道删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GuildMemberAddEvent">
+            <summary>
+            成员加入事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GuildMemberUpdateEvent">
+            <summary>
+            成员更新事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GuildMemberRemoveEvent">
+            <summary>
+            成员移除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageEventBase">
+            <summary>
+            消息事件基类
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.MessageEventBase.Message">
+            <summary>
+            消息对象
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageCreateEvent">
+            <summary>
+            频道消息创建事件(私域)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageDeleteEvent">
+            <summary>
+            频道消息删除事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.MessageDeleteEvent.Message">
+            <summary>
+            被删除的消息信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Events.MessageDeleteEvent.OpUserId">
+            <summary>
+            操作人ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.DeletedMessage">
+            <summary>
+            被删除的消息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageInfo">
+            <summary>
+            删除的消息信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.AtMessageCreateEvent">
+            <summary>
+            公域消息创建事件(@机器人)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.PublicMessageDeleteEvent">
+            <summary>
+            公域消息删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.DirectMessageCreateEvent">
+            <summary>
+            私信消息创建事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.DirectMessageDeleteEvent">
+            <summary>
+            私信消息删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GroupAtMessageCreateEvent">
+            <summary>
+            群@机器人消息事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.C2CMessageCreateEvent">
+            <summary>
+            C2C消息事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GroupAddRobotEvent">
+            <summary>
+            群添加机器人事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GroupDelRobotEvent">
+            <summary>
+            群删除机器人事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GroupMsgRejectEvent">
+            <summary>
+            群消息拒绝机器人主动消息事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.GroupMsgReceiveEvent">
+            <summary>
+            群消息接受机器人主动消息事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.FriendAddEvent">
+            <summary>
+            用户添加机器人事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.FriendDelEvent">
+            <summary>
+            用户删除机器人事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.C2CMsgRejectEvent">
+            <summary>
+            C2C消息拒绝机器人主动消息事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.C2CMsgReceiveEvent">
+            <summary>
+            C2C消息接受机器人主动消息事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageReactionAddEvent">
+            <summary>
+            表情表态添加事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageReactionRemoveEvent">
+            <summary>
+            表情表态移除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.InteractionCreateEvent">
+            <summary>
+            互动事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageAuditPassEvent">
+            <summary>
+            消息审核通过事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.MessageAuditRejectEvent">
+            <summary>
+            消息审核不通过事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.AudioStartEvent">
+            <summary>
+            音频开始播放事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.AudioFinishEvent">
+            <summary>
+            音频结束播放事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.AudioOnMicEvent">
+            <summary>
+            机器人上麦事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.AudioOffMicEvent">
+            <summary>
+            机器人下麦事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumEventBase">
+            <summary>
+            论坛帖子基类
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumThreadCreateEvent">
+            <summary>
+            论坛主题创建事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumThreadUpdateEvent">
+            <summary>
+            论坛主题更新事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumThreadDeleteEvent">
+            <summary>
+            论坛主题删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumPostCreateEvent">
+            <summary>
+            论坛帖子创建事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumPostDeleteEvent">
+            <summary>
+            论坛帖子删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumReplyCreateEvent">
+            <summary>
+            论坛回复创建事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumReplyDeleteEvent">
+            <summary>
+            论坛回复删除事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumPublishAuditResultEvent">
+            <summary>
+            论坛主题审核通过事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumThreadInfo">
+            <summary>
+            论坛主题信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumPostInfo">
+            <summary>
+            论坛帖子信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ForumReplyInfo">
+            <summary>
+            论坛回复信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ReadyEvent">
+            <summary>
+            连接就绪事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Events.ResumedEvent">
+            <summary>
+            恢复成功事件
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Extensions.QQBotServiceCollectionExtensions">
+            <summary>
+            QQ机器人服务扩展
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.QQBotServiceCollectionExtensions.AddQQBot(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Luolan.QQBot.QQBotClientOptions})">
+            <summary>
+            添加QQ机器人服务
+            </summary>
+            <param name="services">服务集合</param>
+            <param name="configure">配置回调</param>
+            <returns>服务集合</returns>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.QQBotServiceCollectionExtensions.AddQQBot(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.String,System.Boolean,Luolan.QQBot.Intents)">
+            <summary>
+            添加QQ机器人服务(使用配置节)
+            </summary>
+            <param name="services">服务集合</param>
+            <param name="appId">AppId</param>
+            <param name="clientSecret">ClientSecret</param>
+            <param name="isSandbox">是否为沙箱环境</param>
+            <param name="intents">订阅的事件类型</param>
+            <returns>服务集合</returns>
+        </member>
+        <member name="T:Luolan.QQBot.Extensions.QQBotHostedService">
+            <summary>
+            QQ机器人托管服务(用于ASP.NET Core后台运行)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Extensions.QQBotHostedServiceExtensions">
+            <summary>
+            托管服务扩展
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.QQBotHostedServiceExtensions.AddQQBotHostedService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            添加QQ机器人托管服务
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.AccessTokenResponse">
+            <summary>
+            访问令牌响应
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.AccessTokenResponse.AccessToken">
+            <summary>
+            访问令牌
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.AccessTokenResponse.ExpiresIn">
+            <summary>
+            过期时间(秒) - QQ Bot API 可能返回字符串或数字
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.FlexibleIntConverter">
+            <summary>
+            灵活的整数转换器，支持字符串和数字类型
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.CachedAccessToken">
+            <summary>
+            缓存的访问令牌
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CachedAccessToken.AccessToken">
+            <summary>
+            访问令牌
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CachedAccessToken.ExpiresAt">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CachedAccessToken.IsExpired">
+            <summary>
+            是否已过期
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Models.CachedAccessToken.NeedsRefresh(System.Int32)">
+            <summary>
+            是否需要刷新
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Guild">
+            <summary>
+            频道信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.Id">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.Name">
+            <summary>
+            频道名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.Icon">
+            <summary>
+            频道头像URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.OwnerId">
+            <summary>
+            频道创建者ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.Owner">
+            <summary>
+            频道创建者标识(是否为创建者)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.MemberCount">
+            <summary>
+            成员数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.MaxMembers">
+            <summary>
+            最大成员数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.Description">
+            <summary>
+            频道描述
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Guild.JoinedAt">
+            <summary>
+            加入时间
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Channel">
+            <summary>
+            子频道信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.Id">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.Name">
+            <summary>
+            子频道名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.Type">
+            <summary>
+            子频道类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.SubType">
+            <summary>
+            子频道子类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.Position">
+            <summary>
+            排序位置
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.ParentId">
+            <summary>
+            父分组ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.OwnerId">
+            <summary>
+            创建者ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.PrivateType">
+            <summary>
+            子频道私密类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.SpeakPermission">
+            <summary>
+            子频道发言权限
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.ApplicationId">
+            <summary>
+            应用子频道的应用ID(仅应用子频道)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Channel.Permissions">
+            <summary>
+            子频道操作权限
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ChannelType">
+            <summary>
+            子频道类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Text">
+            <summary>
+            文字子频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Reserved1">
+            <summary>
+            保留类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Voice">
+            <summary>
+            语音子频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Reserved2">
+            <summary>
+            保留类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Category">
+            <summary>
+            子频道分组
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Live">
+            <summary>
+            直播子频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Application">
+            <summary>
+            应用子频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelType.Forum">
+            <summary>
+            论坛子频道
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ChannelSubType">
+            <summary>
+            子频道子类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelSubType.Chat">
+            <summary>
+            闲聊
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelSubType.Announcement">
+            <summary>
+            公告
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelSubType.Guide">
+            <summary>
+            攻略
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.ChannelSubType.Gaming">
+            <summary>
+            开黑
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Message">
+            <summary>
+            消息对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Id">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Content">
+            <summary>
+            消息内容
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Timestamp">
+            <summary>
+            消息创建时间
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.EditedTimestamp">
+            <summary>
+            消息编辑时间
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.MentionEveryone">
+            <summary>
+            是否@全体
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Author">
+            <summary>
+            消息发送者
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Member">
+            <summary>
+            消息发送者的成员信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Attachments">
+            <summary>
+            附件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Embeds">
+            <summary>
+            Embed内容
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Mentions">
+            <summary>
+            @的用户列表
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Ark">
+            <summary>
+            Ark消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.Seq">
+            <summary>
+            消息序列号
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.SeqInChannel">
+            <summary>
+            消息序号(群/C2C)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.MessageReference">
+            <summary>
+            引用消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.SrcGuildId">
+            <summary>
+            源频道ID(私信)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Message.GroupOpenId">
+            <summary>
+            群openid(群消息)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageAttachment">
+            <summary>
+            消息附件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.Id">
+            <summary>
+            附件ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.Filename">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.Url">
+            <summary>
+            附件URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.Size">
+            <summary>
+            文件大小
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.Height">
+            <summary>
+            图片高度
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.Width">
+            <summary>
+            图片宽度
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAttachment.ContentType">
+            <summary>
+            内容类型
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageEmbed">
+            <summary>
+            消息Embed
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbed.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbed.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbed.Prompt">
+            <summary>
+            消息弹窗内容
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbed.Thumbnail">
+            <summary>
+            缩略图
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbed.Fields">
+            <summary>
+            字段列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageEmbedThumbnail">
+            <summary>
+            消息Embed缩略图
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbedThumbnail.Url">
+            <summary>
+            图片URL
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageEmbedField">
+            <summary>
+            消息Embed字段
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageEmbedField.Name">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageReference">
+            <summary>
+            消息引用
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReference.MessageId">
+            <summary>
+            引用的消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReference.IgnoreGetMessageError">
+            <summary>
+            是否忽略获取引用消息详情错误
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageArk">
+            <summary>
+            Ark消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArk.TemplateId">
+            <summary>
+            模板ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArk.Kv">
+            <summary>
+            参数列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageArkKv">
+            <summary>
+            Ark消息键值对
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArkKv.Key">
+            <summary>
+            键名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArkKv.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArkKv.Obj">
+            <summary>
+            对象数组
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageArkObj">
+            <summary>
+            Ark消息对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArkObj.ObjKv">
+            <summary>
+            对象键值对列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageArkObjKv">
+            <summary>
+            Ark消息对象键值对
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArkObjKv.Key">
+            <summary>
+            键名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageArkObjKv.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageMarkdown">
+            <summary>
+            Markdown消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageMarkdown.TemplateId">
+            <summary>
+            模板ID(和content二选一)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageMarkdown.Params">
+            <summary>
+            模板参数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageMarkdown.Content">
+            <summary>
+            原生markdown内容(和template_id二选一)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageMarkdownParam">
+            <summary>
+            Markdown模板参数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageMarkdownParam.Key">
+            <summary>
+            参数名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageMarkdownParam.Values">
+            <summary>
+            参数值列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageKeyboard">
+            <summary>
+            按钮键盘
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageKeyboard.Id">
+            <summary>
+            模板ID(和content二选一)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageKeyboard.Content">
+            <summary>
+            自定义内容
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.InlineKeyboard">
+            <summary>
+            内联键盘
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InlineKeyboard.Rows">
+            <summary>
+            按钮行列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.InlineKeyboardRow">
+            <summary>
+            内联键盘行
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InlineKeyboardRow.Buttons">
+            <summary>
+            按钮列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Button">
+            <summary>
+            按钮
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Button.Id">
+            <summary>
+            按钮ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Button.RenderData">
+            <summary>
+            按钮渲染数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Button.Action">
+            <summary>
+            按钮交互数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ButtonRenderData">
+            <summary>
+            按钮渲染数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonRenderData.Label">
+            <summary>
+            按钮文本
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonRenderData.VisitedLabel">
+            <summary>
+            点击后按钮文本
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonRenderData.Style">
+            <summary>
+            按钮样式
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ButtonAction">
+            <summary>
+            按钮交互数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonAction.Type">
+            <summary>
+            按钮类型 0跳转 1回调 2指令
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonAction.Permission">
+            <summary>
+            权限类型 0指定用户 1仅管理者 2所有人 3指定角色
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonAction.Data">
+            <summary>
+            按钮点击后的数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonAction.AtBotShowChannelList">
+            <summary>
+            是否在输入框回填
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonAction.Enter">
+            <summary>
+            指令是否弹框
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonAction.UnsupportTips">
+            <summary>
+            客户端不支持本action的时候是否将data发给服务器
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ButtonPermission">
+            <summary>
+            按钮权限
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonPermission.Type">
+            <summary>
+            权限类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonPermission.SpecifyUserIds">
+            <summary>
+            指定用户ID列表
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ButtonPermission.SpecifyRoleIds">
+            <summary>
+            指定角色ID列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.DirectMessageSession">
+            <summary>
+            私信会话
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.DirectMessageSession.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.DirectMessageSession.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.DirectMessageSession.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Role">
+            <summary>
+            角色信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Role.Id">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Role.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Role.Color">
+            <summary>
+            角色颜色(ARGB十六进制)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Role.Hoist">
+            <summary>
+            是否在成员列表中单独展示
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Role.Number">
+            <summary>
+            拥有此角色的成员数量
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Role.MemberLimit">
+            <summary>
+            角色成员上限
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.GetGuildRolesResponse">
+            <summary>
+            角色列表响应
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.GetGuildRolesResponse.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.GetGuildRolesResponse.Roles">
+            <summary>
+            角色列表
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.GetGuildRolesResponse.RoleNumLimit">
+            <summary>
+            默认角色上限
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.CreateRoleRequest">
+            <summary>
+            创建角色请求
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateRoleRequest.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateRoleRequest.Color">
+            <summary>
+            角色颜色(ARGB十六进制)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateRoleRequest.Hoist">
+            <summary>
+            是否在成员列表中单独展示
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.CreateRoleResponse">
+            <summary>
+            创建角色响应
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateRoleResponse.RoleId">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateRoleResponse.Role">
+            <summary>
+            角色信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ChannelPermissions">
+            <summary>
+            频道权限
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ChannelPermissions.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ChannelPermissions.UserId">
+            <summary>
+            用户ID(查询用户权限时)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ChannelPermissions.RoleId">
+            <summary>
+            角色ID(查询角色权限时)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ChannelPermissions.Permissions">
+            <summary>
+            权限值
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.UpdateChannelPermissionsRequest">
+            <summary>
+            修改权限请求
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UpdateChannelPermissionsRequest.Add">
+            <summary>
+            添加的权限
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UpdateChannelPermissionsRequest.Remove">
+            <summary>
+            移除的权限
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Announces">
+            <summary>
+            公告对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Announces.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Announces.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Announces.MessageId">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Announces.AnnouncesType">
+            <summary>
+            公告类型 0:成员公告 1:欢迎公告
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Announces.RecommendChannels">
+            <summary>
+            推荐子频道列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.RecommendChannel">
+            <summary>
+            推荐子频道
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.RecommendChannel.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.RecommendChannel.Introduce">
+            <summary>
+            推荐语
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Schedule">
+            <summary>
+            日程对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.Id">
+            <summary>
+            日程ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.Name">
+            <summary>
+            日程名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.Description">
+            <summary>
+            日程描述
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.StartTimestamp">
+            <summary>
+            日程开始时间戳(ms)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.EndTimestamp">
+            <summary>
+            日程结束时间戳(ms)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.Creator">
+            <summary>
+            创建者
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.JumpChannelId">
+            <summary>
+            跳转子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Schedule.RemindType">
+            <summary>
+            提醒类型
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.PinsMessage">
+            <summary>
+            精华消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.PinsMessage.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.PinsMessage.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.PinsMessage.MessageIds">
+            <summary>
+            精华消息ID列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageReaction">
+            <summary>
+            表情表态对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReaction.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReaction.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReaction.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReaction.Target">
+            <summary>
+            目标消息/帖子
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageReaction.Emoji">
+            <summary>
+            表态的表情
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ReactionTarget">
+            <summary>
+            表态目标
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ReactionTarget.Id">
+            <summary>
+            目标ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ReactionTarget.Type">
+            <summary>
+            目标类型 0:消息 1:帖子 2:评论 3:回复
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Emoji">
+            <summary>
+            表情对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Emoji.Id">
+            <summary>
+            表情ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Emoji.Type">
+            <summary>
+            表情类型 1:系统表情 2:emoji表情
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Interaction">
+            <summary>
+            互动事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.Id">
+            <summary>
+            互动ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.ApplicationId">
+            <summary>
+            应用ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.Type">
+            <summary>
+            互动类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.Data">
+            <summary>
+            互动数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.Version">
+            <summary>
+            版本号
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.GroupOpenId">
+            <summary>
+            群openid
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.GroupMemberOpenId">
+            <summary>
+            群成员openid
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.ChatType">
+            <summary>
+            聊天类型 0私聊 1群聊 2频道
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.Scene">
+            <summary>
+            场景(群/C2C) group/c2c
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.UserOpenId">
+            <summary>
+            用户openid
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Interaction.Timestamp">
+            <summary>
+            时间戳
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.InteractionData">
+            <summary>
+            互动数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InteractionData.Resolved">
+            <summary>
+            按钮数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.InteractionResolved">
+            <summary>
+            互动解析数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InteractionResolved.ButtonId">
+            <summary>
+            按钮ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InteractionResolved.ButtonData">
+            <summary>
+            按钮数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InteractionResolved.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InteractionResolved.MessageId">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.InteractionResolved.FeatureId">
+            <summary>
+            特性ID(群/C2C场景)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MessageAudited">
+            <summary>
+            消息审核对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.AuditId">
+            <summary>
+            审核ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.MessageId">
+            <summary>
+            消息ID(审核通过后有值)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.GuildId">
+            <summary>
+            频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.ChannelId">
+            <summary>
+            子频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.AuditTime">
+            <summary>
+            审核时间
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MessageAudited.SeqInChannel">
+            <summary>
+            消息序号
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ApiError">
+            <summary>
+            API错误响应
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ApiError.Code">
+            <summary>
+            错误码
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ApiError.Message">
+            <summary>
+            错误消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ApiError.TraceId">
+            <summary>
+            追踪ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ApiError.Data">
+            <summary>
+            错误数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.SendMessageRequest">
+            <summary>
+            发送消息请求
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.Content">
+            <summary>
+            消息内容(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.Embed">
+            <summary>
+            Embed消息(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.Ark">
+            <summary>
+            Ark消息(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.MessageReference">
+            <summary>
+            引用消息(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.Image">
+            <summary>
+            图片URL(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.MsgId">
+            <summary>
+            被动消息ID(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.EventId">
+            <summary>
+            事件ID(选填,用于被动消息)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.Markdown">
+            <summary>
+            Markdown消息(选填)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendMessageRequest.Keyboard">
+            <summary>
+            按钮键盘(选填)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.SendGroupMessageRequest">
+            <summary>
+            群/C2C消息请求
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.Content">
+            <summary>
+            消息内容
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.MsgType">
+            <summary>
+            消息类型 0:文本 2:markdown 3:ark 4:embed 7:富媒体
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.MsgId">
+            <summary>
+            被动消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.EventId">
+            <summary>
+            前置收到的事件ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.Markdown">
+            <summary>
+            Markdown消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.Keyboard">
+            <summary>
+            按钮键盘
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.Ark">
+            <summary>
+            Ark消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.Media">
+            <summary>
+            富媒体消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageRequest.MsgSeq">
+            <summary>
+            消息序号
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.SendGroupMessageResponse">
+            <summary>
+            群/C2C消息响应
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageResponse.Id">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SendGroupMessageResponse.Timestamp">
+            <summary>
+            发送时间戳
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.MediaInfo">
+            <summary>
+            富媒体信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.MediaInfo.FileInfo">
+            <summary>
+            文件信息(文件上传后返回的file_info)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.UploadMediaRequest">
+            <summary>
+            富媒体上传请求
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UploadMediaRequest.FileType">
+            <summary>
+            文件类型 1:图片 2:视频 3:语音 4:文件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UploadMediaRequest.Url">
+            <summary>
+            文件URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UploadMediaRequest.SrvSendMsg">
+            <summary>
+            是否需要服务端后续使用
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.UploadMediaResponse">
+            <summary>
+            富媒体上传响应
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UploadMediaResponse.FileUuid">
+            <summary>
+            文件ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UploadMediaResponse.FileInfo">
+            <summary>
+            文件信息(用于发送消息)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.UploadMediaResponse.Ttl">
+            <summary>
+            过期时间(秒)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.CreateDmsRequest">
+            <summary>
+            创建私信会话请求
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateDmsRequest.RecipientId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.CreateDmsRequest.SourceGuildId">
+            <summary>
+            源频道ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.User">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.User.Id">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.User.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.User.Avatar">
+            <summary>
+            用户头像URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.User.Bot">
+            <summary>
+            是否为机器人
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.User.MemberOpenId">
+            <summary>
+            用户的openid(群/C2C消息)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.User.UserOpenId">
+            <summary>
+            用户的openid(C2C消息)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.Member">
+            <summary>
+            频道成员
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Member.User">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Member.Nick">
+            <summary>
+            用户昵称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Member.Roles">
+            <summary>
+            用户角色ID列表
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.Member.JoinedAt">
+            <summary>
+            加入时间
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.BotInfo">
+            <summary>
+            机器人信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.BotInfo.UnionOpenId">
+            <summary>
+            开放平台 union_openid
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.BotInfo.UnionUserAccount">
+            <summary>
+            开放平台 union_user_account
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.GatewayInfo">
+            <summary>
+            WebSocket网关信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.GatewayInfo.Url">
+            <summary>
+            WebSocket URL
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.GatewayBotInfo">
+            <summary>
+            带分片的WebSocket网关信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.GatewayBotInfo.Shards">
+            <summary>
+            建议分片数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.GatewayBotInfo.SessionStartLimit">
+            <summary>
+            会话限制
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.SessionStartLimit">
+            <summary>
+            会话启动限制
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SessionStartLimit.Total">
+            <summary>
+            每24小时可创建的Session数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SessionStartLimit.Remaining">
+            <summary>
+            剩余的Session数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SessionStartLimit.ResetAfter">
+            <summary>
+            重置计数的剩余时间(ms)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.SessionStartLimit.MaxConcurrency">
+            <summary>
+            每5秒可创建的Session数
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.WebSocketPayload">
+            <summary>
+            WebSocket负载
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketPayload.Op">
+            <summary>
+            操作码
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketPayload.Data">
+            <summary>
+            数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketPayload.Sequence">
+            <summary>
+            序列号(用于心跳)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketPayload.Type">
+            <summary>
+            事件类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketPayload.Id">
+            <summary>
+            消息ID(用于回调)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.OpCode">
+            <summary>
+            WebSocket操作码
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.Dispatch">
+            <summary>
+            服务端推送事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.Heartbeat">
+            <summary>
+            客户端发送心跳
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.Identify">
+            <summary>
+            客户端发送鉴权
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.Resume">
+            <summary>
+            客户端恢复会话
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.Reconnect">
+            <summary>
+            服务端要求重连
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.InvalidSession">
+            <summary>
+            服务端拒绝连接(无效Session)
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.Hello">
+            <summary>
+            服务端发送Hello(包含心跳周期)
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.HeartbeatAck">
+            <summary>
+            服务端确认心跳
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Models.OpCode.HttpCallbackAck">
+            <summary>
+            服务端要求客户端发送HTTP回调ACK
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.IdentifyData">
+            <summary>
+            鉴权数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyData.Token">
+            <summary>
+            鉴权令牌
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyData.Intents">
+            <summary>
+            订阅的事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyData.Shard">
+            <summary>
+            分片信息 [当前分片, 总分片数]
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyData.Properties">
+            <summary>
+            客户端属性
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.IdentifyProperties">
+            <summary>
+            客户端属性
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyProperties.Os">
+            <summary>
+            操作系统
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyProperties.Browser">
+            <summary>
+            浏览器/库名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.IdentifyProperties.Device">
+            <summary>
+            设备
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ResumeData">
+            <summary>
+            恢复会话数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ResumeData.Token">
+            <summary>
+            鉴权令牌
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ResumeData.SessionId">
+            <summary>
+            会话ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ResumeData.Seq">
+            <summary>
+            最后收到的序列号
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.HelloData">
+            <summary>
+            Hello事件数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.HelloData.HeartbeatInterval">
+            <summary>
+            心跳周期(毫秒)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.ReadyData">
+            <summary>
+            Ready事件数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ReadyData.Version">
+            <summary>
+            协议版本
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ReadyData.SessionId">
+            <summary>
+            会话ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ReadyData.User">
+            <summary>
+            当前机器人信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.ReadyData.Shard">
+            <summary>
+            分片信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Models.WebSocketSession">
+            <summary>
+            WebSocket会话状态
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketSession.SessionId">
+            <summary>
+            会话ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketSession.LastSequence">
+            <summary>
+            最后序列号
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketSession.HeartbeatInterval">
+            <summary>
+            心跳周期(毫秒)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketSession.IsAuthenticated">
+            <summary>
+            是否已鉴权
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketSession.GatewayUrl">
+            <summary>
+            网关URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Models.WebSocketSession.BotUser">
+            <summary>
+            机器人用户信息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.QQBotClient">
+            <summary>
+            QQ机器人客户端 - 整合HTTP和WebSocket功能
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.Options">
+            <summary>
+            配置选项
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.Api">
+            <summary>
+            HTTP API客户端
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.WebSocket">
+            <summary>
+            WebSocket客户端
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.Events">
+            <summary>
+            事件分发器
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.TokenManager">
+            <summary>
+            Token管理器
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.IsConnected">
+            <summary>
+            是否已连接(WebSocket)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClient.CurrentUser">
+            <summary>
+            当前机器人用户信息
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnReady">
+            <summary>
+            连接就绪事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnMessageCreate">
+            <summary>
+            频道消息事件(私域)
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnAtMessageCreate">
+            <summary>
+            @机器人消息事件(公域)
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnDirectMessageCreate">
+            <summary>
+            私信消息事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGroupAtMessageCreate">
+            <summary>
+            群@机器人消息事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnC2CMessageCreate">
+            <summary>
+            C2C消息事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnInteractionCreate">
+            <summary>
+            互动事件(按钮回调)
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGuildCreate">
+            <summary>
+            频道创建事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGuildDelete">
+            <summary>
+            频道删除事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGuildMemberAdd">
+            <summary>
+            成员加入事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGuildMemberRemove">
+            <summary>
+            成员离开事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGroupAddRobot">
+            <summary>
+            群添加机器人事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnGroupDelRobot">
+            <summary>
+            群删除机器人事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnFriendAdd">
+            <summary>
+            好友添加事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.QQBotClient.OnFriendDel">
+            <summary>
+            好友删除事件
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.#ctor(Luolan.QQBot.QQBotClientOptions,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            创建QQ机器人客户端
+            </summary>
+            <param name="options">配置选项</param>
+            <param name="loggerFactory">日志工厂(可选)</param>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.#ctor(Luolan.QQBot.QQBotClientOptions,System.Net.Http.HttpClient,Luolan.QQBot.Services.TokenManager,Luolan.QQBot.Services.QQBotHttpClient,Luolan.QQBot.Services.QQBotWebSocketClient,Luolan.QQBot.Events.EventDispatcher,Microsoft.Extensions.Logging.ILogger{Luolan.QQBot.QQBotClient})">
+            <summary>
+            内部构造函数 - 用于依赖注入
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            启动机器人(连接WebSocket)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.StopAsync">
+            <summary>
+            停止机器人
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.ReplyAsync(Luolan.QQBot.Models.Message,System.String)">
+            <summary>
+            回复频道消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.ReplyGroupAsync(Luolan.QQBot.Models.Message,System.String,System.Int32)">
+            <summary>
+            回复群消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.ReplyC2CAsync(Luolan.QQBot.Models.Message,System.String,System.Int32)">
+            <summary>
+            回复C2C消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendChannelMessageAsync(System.String,System.String,System.String)">
+            <summary>
+            发送频道消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendChannelMessageAsync(System.String,Luolan.QQBot.Models.SendMessageRequest)">
+            <summary>
+            发送频道消息(完整请求)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendDirectMessageAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            发送私信
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendGroupMessageAsync(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            发送群消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendGroupMessageAsync(System.String,Luolan.QQBot.Models.SendGroupMessageRequest)">
+            <summary>
+            发送群消息(完整请求)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendC2CMessageAsync(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            发送C2C消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.SendC2CMessageAsync(System.String,Luolan.QQBot.Models.SendGroupMessageRequest)">
+            <summary>
+            发送C2C消息(完整请求)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.GetGuildsAsync">
+            <summary>
+            获取机器人加入的频道列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.GetGuildAsync(System.String)">
+            <summary>
+            获取频道详情
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.GetChannelsAsync(System.String)">
+            <summary>
+            获取子频道列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClient.GetMembersAsync(System.String,System.String,System.Int32)">
+            <summary>
+            获取频道成员列表
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.QQBotClientBuilder">
+            <summary>
+            QQ机器人客户端构建器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithAppId(System.String)">
+            <summary>
+            设置AppId
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithClientSecret(System.String)">
+            <summary>
+            设置ClientSecret
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.UseSandbox(System.Boolean)">
+            <summary>
+            设置是否为沙箱环境
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithIntents(Luolan.QQBot.Intents)">
+            <summary>
+            设置订阅的事件类型
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.AddIntents(Luolan.QQBot.Intents)">
+            <summary>
+            添加订阅的事件类型
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithTokenRefreshBeforeExpire(System.Int32)">
+            <summary>
+            设置Token提前刷新时间(秒)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithWebSocketReconnectInterval(System.Int32)">
+            <summary>
+            设置WebSocket重连间隔(毫秒)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithWebSocketMaxReconnectAttempts(System.Int32)">
+            <summary>
+            设置WebSocket最大重连次数
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.WithLoggerFactory(Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            设置日志工厂
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.QQBotClientBuilder.Build">
+            <summary>
+            构建客户端
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.QQBotClientOptions">
+            <summary>
+            QQ机器人客户端配置选项
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.AppId">
+            <summary>
+            机器人AppId
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.ClientSecret">
+            <summary>
+            机器人ClientSecret
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.IsSandbox">
+            <summary>
+            是否为沙箱环境
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.ApiBaseUrl">
+            <summary>
+            API基础URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.AuthUrl">
+            <summary>
+            鉴权URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.TokenRefreshBeforeExpireSeconds">
+            <summary>
+            Token过期前提前刷新的秒数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.WebSocketReconnectIntervalMs">
+            <summary>
+            WebSocket重连间隔(毫秒)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.WebSocketMaxReconnectAttempts">
+            <summary>
+            WebSocket最大重连次数
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.QQBotClientOptions.Intents">
+            <summary>
+            订阅的事件类型(Intents)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Intents">
+            <summary>
+            事件订阅类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.Guilds">
+            <summary>
+            频道相关事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.GuildMembers">
+            <summary>
+            频道成员相关事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.GuildMessages">
+            <summary>
+            频道消息事件(私域)
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.GuildMessageReactions">
+            <summary>
+            频道消息表情表态事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.DirectMessage">
+            <summary>
+            私信事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.MessageAudit">
+            <summary>
+            消息审核事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.Forums">
+            <summary>
+            论坛事件(私域)
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.AudioAction">
+            <summary>
+            音频事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.PublicGuildMessages">
+            <summary>
+            公域消息事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.Interaction">
+            <summary>
+            互动事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.GroupAtMessages">
+            <summary>
+            群聊@消息事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.C2CMessages">
+            <summary>
+            C2C消息事件
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.Default">
+            <summary>
+            默认订阅(公域)
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Intents.PrivateAll">
+            <summary>
+            私域全部订阅
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Services.TokenManager">
+            <summary>
+            Token管理服务 - 自动刷新Token
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.TokenManager.GetAccessTokenAsync(System.Threading.CancellationToken)">
+            <summary>
+            获取有效的访问令牌
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.TokenManager.GetAuthorizationHeaderAsync(System.Threading.CancellationToken)">
+            <summary>
+            获取鉴权头格式的Token
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.TokenManager.RefreshTokenAsync(System.Threading.CancellationToken)">
+            <summary>
+            强制刷新Token
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Services.QQBotHttpClient">
+            <summary>
+            QQ Bot HTTP API 客户端
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            GET请求
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.PostAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            POST请求
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.PostAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            POST请求(无返回)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.PutAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            PUT请求
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.PutAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            PUT请求(无返回)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.PatchAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            PATCH请求
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            DELETE请求
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetCurrentUserAsync(System.Threading.CancellationToken)">
+            <summary>
+            获取当前用户(机器人)信息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetCurrentUserGuildsAsync(System.Threading.CancellationToken)">
+            <summary>
+            获取当前用户(机器人)加入的频道列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetGuildAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取频道详情
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetChannelsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取子频道列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetChannelAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取子频道详情
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.CreateChannelAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            创建子频道
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.ModifyChannelAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            修改子频道
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteChannelAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除子频道
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetGuildMembersAsync(System.String,System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            获取频道成员列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetGuildMemberAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取频道成员详情
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteGuildMemberAsync(System.String,System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            删除频道成员
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetGuildRolesAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取频道身份组列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.CreateGuildRoleAsync(System.String,Luolan.QQBot.Models.CreateRoleRequest,System.Threading.CancellationToken)">
+            <summary>
+            创建频道身份组
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.ModifyGuildRoleAsync(System.String,System.String,Luolan.QQBot.Models.CreateRoleRequest,System.Threading.CancellationToken)">
+            <summary>
+            修改频道身份组
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteGuildRoleAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除频道身份组
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.AddMemberToRoleAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            增加频道身份组成员
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.RemoveMemberFromRoleAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除频道身份组成员
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetChannelPermissionsAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取子频道用户权限
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.ModifyChannelPermissionsAsync(System.String,System.String,Luolan.QQBot.Models.UpdateChannelPermissionsRequest,System.Threading.CancellationToken)">
+            <summary>
+            修改子频道用户权限
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetChannelRolePermissionsAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取子频道角色权限
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.ModifyChannelRolePermissionsAsync(System.String,System.String,Luolan.QQBot.Models.UpdateChannelPermissionsRequest,System.Threading.CancellationToken)">
+            <summary>
+            修改子频道角色权限
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取指定消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendMessageAsync(System.String,Luolan.QQBot.Models.SendMessageRequest,System.Threading.CancellationToken)">
+            <summary>
+            发送消息到子频道
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendTextMessageAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送文本消息到子频道
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteMessageAsync(System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            撤回消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.CreateDmsAsync(Luolan.QQBot.Models.CreateDmsRequest,System.Threading.CancellationToken)">
+            <summary>
+            创建私信会话
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendDmsAsync(System.String,Luolan.QQBot.Models.SendMessageRequest,System.Threading.CancellationToken)">
+            <summary>
+            发送私信
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteDmsAsync(System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            撤回私信
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendGroupMessageAsync(System.String,Luolan.QQBot.Models.SendGroupMessageRequest,System.Threading.CancellationToken)">
+            <summary>
+            发送群消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendGroupTextMessageAsync(System.String,System.String,System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            发送群文本消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.UploadGroupMediaAsync(System.String,Luolan.QQBot.Models.UploadMediaRequest,System.Threading.CancellationToken)">
+            <summary>
+            上传群文件
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendC2CMessageAsync(System.String,Luolan.QQBot.Models.SendGroupMessageRequest,System.Threading.CancellationToken)">
+            <summary>
+            发送C2C消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.SendC2CTextMessageAsync(System.String,System.String,System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            发送C2C文本消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.UploadC2CMediaAsync(System.String,Luolan.QQBot.Models.UploadMediaRequest,System.Threading.CancellationToken)">
+            <summary>
+            上传C2C文件
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.AddReactionAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            对消息进行表情表态
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteReactionAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除表情表态
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.AddPinsMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            添加精华消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeletePinsMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除精华消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetPinsMessageAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取精华消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetSchedulesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取日程列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetScheduleAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            获取日程详情
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.CreateScheduleAsync(System.String,Luolan.QQBot.Models.Schedule,System.Threading.CancellationToken)">
+            <summary>
+            创建日程
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.ModifyScheduleAsync(System.String,System.String,Luolan.QQBot.Models.Schedule,System.Threading.CancellationToken)">
+            <summary>
+            修改日程
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteScheduleAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除日程
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.MuteGuildAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            频道全员禁言
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.MuteMemberAsync(System.String,System.String,System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            频道成员禁言
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.MuteMembersAsync(System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            批量频道成员禁言
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.CreateAnnouncesAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            创建频道公告
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.DeleteAnnouncesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            删除频道公告
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetGatewayAsync(System.Threading.CancellationToken)">
+            <summary>
+            获取WebSocket网关地址
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotHttpClient.GetGatewayBotAsync(System.Threading.CancellationToken)">
+            <summary>
+            获取带分片信息的WebSocket网关地址
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Services.QQBotApiException">
+            <summary>
+            QQ Bot API异常
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Services.QQBotWebSocketClient">
+            <summary>
+            QQ Bot WebSocket 客户端
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Services.QQBotWebSocketClient.OnStateChanged">
+            <summary>
+            连接状态改变事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Services.QQBotWebSocketClient.OnConnected">
+            <summary>
+            连接已建立事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Services.QQBotWebSocketClient.OnDisconnected">
+            <summary>
+            连接断开事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Services.QQBotWebSocketClient.State">
+            <summary>
+            当前连接状态
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Services.QQBotWebSocketClient.IsConnected">
+            <summary>
+            是否已连接并鉴权成功
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Services.QQBotWebSocketClient.Session">
+            <summary>
+            当前会话信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Services.QQBotWebSocketClient.Events">
+            <summary>
+            事件分发器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotWebSocketClient.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            启动WebSocket连接
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Services.QQBotWebSocketClient.StopAsync">
+            <summary>
+            停止WebSocket连接
+            </summary>
+        </member>
+    </members>
+</doc>

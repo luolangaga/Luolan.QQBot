@@ -1,0 +1,6 @@
+@Luolan.QQBot.AspNetExample_HostAddress = http://localhost:5030
+
+GET {{Luolan.QQBot.AspNetExample_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

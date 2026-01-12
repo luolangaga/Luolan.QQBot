@@ -1,0 +1,14 @@
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\bin\Release\net8.0\Luolan.QQBot.deps.json
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\bin\Release\net8.0\Luolan.QQBot.dll
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\bin\Release\net8.0\Luolan.QQBot.pdb
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\bin\Release\net8.0\Luolan.QQBot.xml
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.csproj.AssemblyReference.cache
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.AssemblyInfoInputs.cache
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.AssemblyInfo.cs
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.csproj.CoreCompileInputs.cache
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.dll
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\refint\Luolan.QQBot.dll
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.xml
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.pdb
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\ref\Luolan.QQBot.dll

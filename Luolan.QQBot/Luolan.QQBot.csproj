@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    
+    <!-- NuGet Package Info -->
+    <PackageId>Luolan.QQBot</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Luolan</Authors>
+    <Company>Luolan</Company>
+    <Description>简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，完美集成 ASP.NET Core。</Description>
+    <PackageTags>qq;bot;qqbot;qq-bot;qq-robot;tencent;sdk</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/luolan/Luolan.QQBot</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/luolan/Luolan.QQBot</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.1" />
+    <PackageReference Include="System.Text.Json" Version="10.0.1" />
+  </ItemGroup>
+
+</Project>
