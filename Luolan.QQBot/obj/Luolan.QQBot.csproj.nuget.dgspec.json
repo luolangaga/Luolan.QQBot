@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Luolan.QQBot.csproj": {
-      "version": "1.0.0",
+      "version": "1.4.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Luolan.QQBot.csproj",
         "projectName": "Luolan.QQBot",
@@ -46,7 +46,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -93,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

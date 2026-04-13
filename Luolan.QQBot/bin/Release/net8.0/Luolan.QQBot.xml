@@ -4,6 +4,92 @@
         <name>Luolan.QQBot</name>
     </assembly>
     <members>
+        <member name="T:Luolan.QQBot.Controllers.CommandAttribute">
+            <summary>
+            标记一个方法为命令处理方法
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.CommandAttribute.Name">
+            <summary>
+            命令名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.CommandAttribute.Aliases">
+            <summary>
+            命令别名
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Controllers.ControllerManager">
+            <summary>
+            控制器管理器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Controllers.ControllerManager.RegisterControllers(System.Reflection.Assembly)">
+            <summary>
+            注册程序集中的所有控制器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Controllers.ControllerManager.Bind(Luolan.QQBot.QQBotClient)">
+            <summary>
+            绑定到QQBotClient
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Controllers.ControllerManager.ConvertValue(System.String,System.Type)">
+            <summary>
+            增强的类型转换 - 支持 bool, enum, Guid 等
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Controllers.ControllerManager.GetDefault(System.Type)">
+            <summary>
+            获取类型默认值
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Controllers.ImageResult">
+            <summary>
+            图片结果
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.ImageResult.Url">
+            <summary>
+            图片URL
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Controllers.QQBotController">
+            <summary>
+            控制器基类
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.QQBotController.Client">
+            <summary>
+            当前机器人客户端
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.QQBotController.Message">
+            <summary>
+            当前消息上下文
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.QQBotController.User">
+            <summary>
+            发送消息的用户
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.QQBotController.RawContent">
+            <summary>
+            消息内容(去除了命令部分)
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Controllers.QQBotController.RawArguments">
+            <summary>
+            原始参数数组
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Controllers.QQBotController.ReplyAsync(System.String)">
+            <summary>
+            回复消息(并不结束执行，Return才是主要回复方式)
+            </summary>
+            <param name="content">回复内容</param>
+        </member>
         <member name="T:Luolan.QQBot.Events.EventDispatcher">
             <summary>
             事件分发器
@@ -314,6 +400,102 @@
             恢复成功事件
             </summary>
         </member>
+        <member name="M:Luolan.QQBot.Extensions.ControllerExtensions.UseControllers(Luolan.QQBot.QQBotClient,System.Reflection.Assembly)">
+            <summary>
+            启用控制器模式
+            </summary>
+            <param name="client">QQBotClient实例</param>
+            <param name="assembly">包含控制器的程序集，默认为EntryAssembly</param>
+            <returns></returns>
+        </member>
+        <member name="T:Luolan.QQBot.Extensions.HttpClientFactoryExtensions">
+            <summary>
+            IHttpClientFactory 扩展方法 - 优化 HttpClient 管理
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.HttpClientFactoryExtensions.AddQQBotWithHttpClientFactory(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Luolan.QQBot.QQBotClientOptions})">
+            <summary>
+            添加 QQBot 客户端到依赖注入容器 (使用 IHttpClientFactory)
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Extensions.MessageExtensions">
+            <summary>
+            消息发送扩展方法
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.SendMarkdownAsync(Luolan.QQBot.QQBotClient,System.String,Luolan.QQBot.Models.MessageMarkdown,Luolan.QQBot.Models.MessageKeyboard,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送Markdown消息到频道
+            </summary>
+            <param name="client">QQ机器人客户端</param>
+            <param name="channelId">子频道ID</param>
+            <param name="markdown">Markdown消息</param>
+            <param name="keyboard">按钮键盘(可选)</param>
+            <param name="msgId">消息ID(用于被动回复)</param>
+            <param name="eventId">事件ID(用于被动回复)</param>
+            <param name="cancellationToken">取消令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.SendMarkdownTemplateAsync(Luolan.QQBot.QQBotClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String[]},Luolan.QQBot.Models.MessageKeyboard,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送Markdown模板消息到频道
+            </summary>
+            <param name="client">QQ机器人客户端</param>
+            <param name="channelId">子频道ID</param>
+            <param name="customTemplateId">模板ID（custom_template_id）</param>
+            <param name="parameters">模板参数</param>
+            <param name="keyboard">按钮键盘(可选)</param>
+            <param name="msgId">消息ID(用于被动回复)</param>
+            <param name="eventId">事件ID(用于被动回复)</param>
+            <param name="cancellationToken">取消令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.SendMarkdownContentAsync(Luolan.QQBot.QQBotClient,System.String,System.String,Luolan.QQBot.Models.MessageKeyboard,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送原生Markdown内容到频道
+            </summary>
+            <param name="client">QQ机器人客户端</param>
+            <param name="channelId">子频道ID</param>
+            <param name="content">Markdown内容</param>
+            <param name="keyboard">按钮键盘(可选)</param>
+            <param name="msgId">消息ID(用于被动回复)</param>
+            <param name="eventId">事件ID(用于被动回复)</param>
+            <param name="cancellationToken">取消令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.ReplyMarkdownAsync(Luolan.QQBot.QQBotClient,Luolan.QQBot.Models.Message,Luolan.QQBot.Models.MessageMarkdown,Luolan.QQBot.Models.MessageKeyboard,System.Threading.CancellationToken)">
+            <summary>
+            回复消息时发送Markdown
+            </summary>
+            <param name="client">QQ机器人客户端</param>
+            <param name="message">原始消息</param>
+            <param name="markdown">Markdown消息</param>
+            <param name="keyboard">按钮键盘(可选)</param>
+            <param name="cancellationToken">取消令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.ReplyMarkdownTemplateAsync(Luolan.QQBot.QQBotClient,Luolan.QQBot.Models.Message,System.String,System.Collections.Generic.Dictionary{System.String,System.String[]},Luolan.QQBot.Models.MessageKeyboard,System.Threading.CancellationToken)">
+            <summary>
+            回复消息时发送Markdown模板
+            </summary>
+            <param name="client">QQ机器人客户端</param>
+            <param name="message">原始消息</param>
+            <param name="customTemplateId">模板ID（custom_template_id）</param>
+            <param name="parameters">模板参数</param>
+            <param name="keyboard">按钮键盘(可选)</param>
+            <param name="cancellationToken">取消令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.SendMarkdownTemplateAsync(Luolan.QQBot.QQBotClient,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String[]},Luolan.QQBot.Models.MessageKeyboard,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            兼容旧用法：将数字模板ID转为字符串。
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Extensions.MessageExtensions.ReplyMarkdownTemplateAsync(Luolan.QQBot.QQBotClient,Luolan.QQBot.Models.Message,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String[]},Luolan.QQBot.Models.MessageKeyboard,System.Threading.CancellationToken)">
+            <summary>
+            兼容旧用法：将数字模板ID转为字符串。
+            </summary>
+        </member>
         <member name="T:Luolan.QQBot.Extensions.QQBotServiceCollectionExtensions">
             <summary>
             QQ机器人服务扩展
@@ -351,6 +533,171 @@
         <member name="M:Luolan.QQBot.Extensions.QQBotHostedServiceExtensions.AddQQBotHostedService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             添加QQ机器人托管服务
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Helpers.CommandParser">
+            <summary>
+            命令参数解析器 - 支持引号
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.CommandParser.Parse(System.String)">
+            <summary>
+            解析命令字符串，支持引号
+            </summary>
+            <param name="input">输入字符串，如: cmd "hello world" test</param>
+            <returns>解析后的参数数组</returns>
+        </member>
+        <member name="T:Luolan.QQBot.Helpers.KeyboardBuilder">
+            <summary>
+            按钮键盘构建器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.KeyboardBuilder.NewRow">
+            <summary>
+            开始新的一行
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.KeyboardBuilder.AddButton(Luolan.QQBot.Models.Button)">
+            <summary>
+            添加按钮到当前行
+            </summary>
+            <param name="button">按钮</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.KeyboardBuilder.AddButton(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            添加文本按钮
+            </summary>
+            <param name="id">按钮ID</param>
+            <param name="label">按钮文本</param>
+            <param name="visitedLabel">点击后文本</param>
+            <param name="style">样式(0灰色 1蓝色)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.KeyboardBuilder.AddLinkButton(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            添加链接按钮
+            </summary>
+            <param name="id">按钮ID</param>
+            <param name="label">按钮文本</param>
+            <param name="url">跳转URL</param>
+            <param name="style">样式(0灰色 1蓝色)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.KeyboardBuilder.Build">
+            <summary>
+            构建键盘对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.KeyboardBuilder.FromButtons(Luolan.QQBot.Models.Button[])">
+            <summary>
+            快速创建单行按钮键盘
+            </summary>
+            <param name="buttons">按钮列表</param>
+            <returns></returns>
+        </member>
+        <member name="T:Luolan.QQBot.Helpers.MarkdownBuilder">
+            <summary>
+            Markdown消息构建器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.UseTemplate(System.String)">
+            <summary>
+            使用模板ID（custom_template_id）
+            </summary>
+            <param name="customTemplateId">模板ID（例如：101993071_1658748972）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.UseTemplate(System.Int32)">
+            <summary>
+            兼容旧用法：将数字模板ID转为字符串。
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.UseContent(System.String)">
+            <summary>
+            使用原生Markdown内容
+            </summary>
+            <param name="content">Markdown内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.AddParam(System.String,System.String)">
+            <summary>
+            添加模板参数(单个值)
+            </summary>
+            <param name="key">参数名</param>
+            <param name="value">参数值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.AddParam(System.String,System.String[])">
+            <summary>
+            添加模板参数(多个值)
+            </summary>
+            <param name="key">参数名</param>
+            <param name="values">参数值列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.SetParam(System.String,System.String[])">
+            <summary>
+            设置模板参数(覆盖已有值)
+            </summary>
+            <param name="key">参数名</param>
+            <param name="values">参数值列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.Build">
+            <summary>
+            构建Markdown对象
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.FromContent(System.String)">
+            <summary>
+            快速创建原生Markdown消息
+            </summary>
+            <param name="content">Markdown内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.FromTemplate(System.String)">
+            <summary>
+            快速创建模板消息(无参数)
+            </summary>
+            <param name="customTemplateId">模板ID（custom_template_id）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.FromTemplate(System.Int32)">
+            <summary>
+            兼容旧用法：将数字模板ID转为字符串。
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.FromTemplate(System.String,System.Collections.Generic.Dictionary{System.String,System.String[]})">
+            <summary>
+            快速创建模板消息(带参数)
+            </summary>
+            <param name="customTemplateId">模板ID（custom_template_id）</param>
+            <param name="parameters">参数字典</param>
+            <returns></returns>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.MarkdownBuilder.FromTemplate(System.Int32,System.Collections.Generic.Dictionary{System.String,System.String[]})">
+            <summary>
+            兼容旧用法：将数字模板ID转为字符串。
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Helpers.RateLimiter">
+            <summary>
+            速率限制器 - 使用 Token Bucket 算法
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.RateLimiter.TryAcquire(System.String)">
+            <summary>
+            尝试获取令牌 (非阻塞)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Helpers.RateLimiter.AcquireAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            等待直到可以获取令牌 (阻塞)
             </summary>
         </member>
         <member name="T:Luolan.QQBot.Models.AccessTokenResponse">
@@ -848,9 +1195,14 @@
             Markdown消息
             </summary>
         </member>
+        <member name="P:Luolan.QQBot.Models.MessageMarkdown.CustomTemplateId">
+            <summary>
+            模板ID(申请模板后获得)
+            </summary>
+        </member>
         <member name="P:Luolan.QQBot.Models.MessageMarkdown.TemplateId">
             <summary>
-            模板ID(和content二选一)
+            旧字段：不要使用。模板应使用 custom_template_id（字符串）。
             </summary>
         </member>
         <member name="P:Luolan.QQBot.Models.MessageMarkdown.Params">
@@ -860,7 +1212,7 @@
         </member>
         <member name="P:Luolan.QQBot.Models.MessageMarkdown.Content">
             <summary>
-            原生markdown内容(和template_id二选一)
+            原生 markdown 文本内容（与 custom_template_id 二选一；自定义 markdown 通常需要内邀权限）
             </summary>
         </member>
         <member name="T:Luolan.QQBot.Models.MessageMarkdownParam">

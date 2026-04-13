@@ -9,21 +9,18 @@
     
     <!-- NuGet Package Info -->
     <PackageId>Luolan.QQBot</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.4.0</Version>
     <Authors>Luolan</Authors>
     <Company>Luolan</Company>
-    <Description>简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，完美集成 ASP.NET Core。</Description>
-    <PackageTags>qq;bot;qqbot;qq-bot;qq-robot;tencent;sdk</PackageTags>
+    <Description>简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，性能极致优化。内置速率限制器、IHttpClientFactory 支持、增强型命令解析器及丰富的类型转换。</Description>
+    <PackageTags>qq;bot;qqbot;qq-bot;qq-robot;tencent;sdk;qq-official-bot;markdown;websocket;ratelimiter;httpclientfactory</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/luolan/Luolan.QQBot</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/luolan/Luolan.QQBot</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/luolangaga/Luolan.QQBot</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/luolangaga/Luolan.QQBot</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>v1.4.0: 核心性能架构优化！新增智能速率限制器、IHttpClientFactory 集成支持、增强型引号命令解析器，并支持 bool/enum/Guid/可空类型等多种参数自动转换。</PackageReleaseNotes>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />

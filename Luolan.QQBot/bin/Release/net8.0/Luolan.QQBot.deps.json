@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "Luolan.QQBot/1.0.0": {
+      "Luolan.QQBot/1.4.0": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.1",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.1",
@@ -248,7 +248,7 @@
     }
   },
   "libraries": {
-    "Luolan.QQBot/1.0.0": {
+    "Luolan.QQBot/1.4.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

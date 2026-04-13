@@ -320,9 +320,16 @@ public class MessageArkObjKv
 public class MessageMarkdown
 {
     /// <summary>
-    /// 模板ID(和content二选一)
+    /// 模板ID(申请模板后获得)
     /// </summary>
-    [JsonPropertyName("template_id")]
+    [JsonPropertyName("custom_template_id")]
+    public string? CustomTemplateId { get; set; }
+
+    /// <summary>
+    /// 旧字段：不要使用。模板应使用 custom_template_id（字符串）。
+    /// </summary>
+    [Obsolete("不要使用 TemplateId；请使用 CustomTemplateId(custom_template_id)。")]
+    [JsonIgnore]
     public int? TemplateId { get; set; }
 
     /// <summary>
@@ -332,7 +339,7 @@ public class MessageMarkdown
     public List<MessageMarkdownParam>? Params { get; set; }
 
     /// <summary>
-    /// 原生markdown内容(和template_id二选一)
+    /// 原生 markdown 文本内容（与 custom_template_id 二选一；自定义 markdown 通常需要内邀权限）
     /// </summary>
     [JsonPropertyName("content")]
     public string? Content { get; set; }

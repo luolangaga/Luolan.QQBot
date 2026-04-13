@@ -1,0 +1,799 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Luolan.QQBot.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Luolan.QQBot.Core.Abstractions.IBotClient">
+            <summary>
+            机器人客户端核心接口 - 所有协议实现必须实现此接口
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.IBotClient.IsConnected">
+            <summary>
+            是否已连接
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.IBotClient.CurrentUser">
+            <summary>
+            当前机器人用户信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.IBotClient.Events">
+            <summary>
+            事件分发器
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.IBotClient.Messages">
+            <summary>
+            消息发送器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Abstractions.IBotClient.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            启动机器人
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Abstractions.IBotClient.StopAsync">
+            <summary>
+            停止机器人
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Abstractions.IMessageSender">
+            <summary>
+            消息发送器接口
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Abstractions.IMessageSender.SendTextAsync(Luolan.QQBot.Core.Models.MessageTarget,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送文本消息到指定目标
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Abstractions.IMessageSender.SendImageAsync(Luolan.QQBot.Core.Models.MessageTarget,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送图片消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Abstractions.IMessageSender.SendMessageAsync(Luolan.QQBot.Core.Models.MessageTarget,System.Collections.Generic.IEnumerable{Luolan.QQBot.Core.Models.MessageSegment},System.String,System.Threading.CancellationToken)">
+            <summary>
+            发送复合消息（消息段列表）
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Abstractions.IMessageSender.DeleteMessageAsync(Luolan.QQBot.Core.Models.MessageTarget,System.String,System.Threading.CancellationToken)">
+            <summary>
+            撤回消息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Abstractions.IEventDispatcher">
+            <summary>
+            事件分发器接口
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Core.Abstractions.IEventDispatcher.OnReady">
+            <summary>
+            连接就绪事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Core.Abstractions.IEventDispatcher.OnMessageReceived">
+            <summary>
+            消息接收事件（统一的消息事件）
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Core.Abstractions.IEventDispatcher.OnMemberChanged">
+            <summary>
+            群/频道成员变动事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Core.Abstractions.IEventDispatcher.OnBotStatusChanged">
+            <summary>
+            机器人被添加/移除事件
+            </summary>
+        </member>
+        <member name="E:Luolan.QQBot.Core.Abstractions.IEventDispatcher.OnRawEvent">
+            <summary>
+            原始事件（用于访问协议特定的原始数据）
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Abstractions.MessageResult">
+            <summary>
+            消息发送结果
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.MessageResult.Success">
+            <summary>
+            是否成功
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.MessageResult.MessageId">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.MessageResult.Error">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Abstractions.MessageResult.RawResponse">
+            <summary>
+            协议特定的原始响应
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Controllers.BotController">
+            <summary>
+            控制器基类 - 所有机器人控制器必须继承此类
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.BotController.Client">
+            <summary>
+            机器人客户端
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.BotController.Message">
+            <summary>
+            当前消息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.BotController.EventArgs">
+            <summary>
+            当前消息事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.BotController.Sender">
+            <summary>
+            消息发送者
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.BotController.ReplyAsync(System.String)">
+            <summary>
+            快速回复当前消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.BotController.ReplyImageAsync(System.String)">
+            <summary>
+            快速回复图片
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.BotController.SendAsync(Luolan.QQBot.Core.Models.MessageSegment[])">
+            <summary>
+            发送复合消息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Controllers.CommandAttribute">
+            <summary>
+            命令特性 - 标记控制器方法为命令处理器
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.CommandAttribute.Name">
+            <summary>
+            命令名称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.CommandAttribute.Aliases">
+            <summary>
+            命令别名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.CommandAttribute.Description">
+            <summary>
+            命令描述
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.CommandAttribute.IgnoreCase">
+            <summary>
+            是否忽略大小写
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.CommandAttribute.Prefix">
+            <summary>
+            命令前缀（默认使用全局配置）
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Controllers.ImageResult">
+            <summary>
+            图片结果 - 控制器返回此类型将自动发送图片
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Controllers.SegmentResult">
+            <summary>
+            消息段结果 - 控制器返回此类型将发送复合消息
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Controllers.ControllerManager">
+            <summary>
+            控制器管理器 - 处理命令路由和执行
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Controllers.ControllerManager.CommandPrefix">
+            <summary>
+            命令前缀
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.ControllerManager.RegisterController``1">
+            <summary>
+            注册控制器类型
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.ControllerManager.RegisterController(System.Type)">
+            <summary>
+            注册控制器类型
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.ControllerManager.RegisterControllersFromAssembly(System.Reflection.Assembly)">
+            <summary>
+            从程序集自动扫描并注册所有控制器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.ControllerManager.HandleMessageAsync(Luolan.QQBot.Core.Events.MessageReceivedEventArgs)">
+            <summary>
+            处理消息事件
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Controllers.ControllerManager.ParseCommandLine(System.String)">
+            <summary>
+            解析命令行，支持引号参数
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.BotEventArgs">
+            <summary>
+            事件基类
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotEventArgs.Id">
+            <summary>
+            事件ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotEventArgs.Time">
+            <summary>
+            事件时间
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotEventArgs.Self">
+            <summary>
+            机器人自身信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotEventArgs.RawEvent">
+            <summary>
+            协议特定的原始事件数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.ReadyEventArgs">
+            <summary>
+            连接就绪事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.ReadyEventArgs.SessionId">
+            <summary>
+            会话ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.MessageReceivedEventArgs">
+            <summary>
+            消息接收事件 - 统一的消息事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.MessageReceivedEventArgs.Message">
+            <summary>
+            消息对象
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.MessageReceivedEventArgs.SourceType">
+            <summary>
+            消息来源类型
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.MessageSourceType">
+            <summary>
+            消息来源类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MessageSourceType.Channel">
+            <summary>
+            频道消息
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MessageSourceType.ChannelAt">
+            <summary>
+            频道@机器人消息
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MessageSourceType.Group">
+            <summary>
+            群消息
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MessageSourceType.GroupAt">
+            <summary>
+            群@机器人消息
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MessageSourceType.Private">
+            <summary>
+            私聊消息
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MessageSourceType.DirectMessage">
+            <summary>
+            频道私信
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.MemberChangedEventArgs">
+            <summary>
+            成员变动事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.MemberChangedEventArgs.ChangeType">
+            <summary>
+            变动类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.MemberChangedEventArgs.Member">
+            <summary>
+            成员信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.MemberChangedEventArgs.GroupId">
+            <summary>
+            群组/频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.MemberChangedEventArgs.OperatorId">
+            <summary>
+            操作者ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.MemberChangeType">
+            <summary>
+            成员变动类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MemberChangeType.Join">
+            <summary>
+            加入
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MemberChangeType.Leave">
+            <summary>
+            离开
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MemberChangeType.Kick">
+            <summary>
+            被踢出
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MemberChangeType.Mute">
+            <summary>
+            被禁言
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.MemberChangeType.Unmute">
+            <summary>
+            解除禁言
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.BotStatusChangedEventArgs">
+            <summary>
+            机器人状态变动事件
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotStatusChangedEventArgs.ChangeType">
+            <summary>
+            变动类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotStatusChangedEventArgs.GroupId">
+            <summary>
+            群组/频道ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.BotStatusChangedEventArgs.OperatorId">
+            <summary>
+            操作者ID
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.BotStatusChangeType">
+            <summary>
+            机器人状态变动类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.BotStatusChangeType.Added">
+            <summary>
+            被添加到群/频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.BotStatusChangeType.Removed">
+            <summary>
+            被移出群/频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.BotStatusChangeType.FriendAdd">
+            <summary>
+            好友添加
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Events.BotStatusChangeType.FriendRemove">
+            <summary>
+            好友删除
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Events.RawEventArgs">
+            <summary>
+            原始事件 - 用于访问协议特定数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.RawEventArgs.EventType">
+            <summary>
+            事件类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.RawEventArgs.DetailType">
+            <summary>
+            事件详细类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Events.RawEventArgs.RawJson">
+            <summary>
+            原始JSON数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Extensions.BotClientExtensions">
+            <summary>
+            机器人客户端扩展方法
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.UseControllers(Luolan.QQBot.Core.Abstractions.IBotClient,System.String)">
+            <summary>
+            启用控制器模式，自动扫描并注册调用程序集中的所有控制器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.ReplyAsync(Luolan.QQBot.Core.Abstractions.IBotClient,Luolan.QQBot.Core.Models.Message,System.String)">
+            <summary>
+            回复消息 (自动判断回复目标)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.ReplyGroupAsync(Luolan.QQBot.Core.Abstractions.IBotClient,Luolan.QQBot.Core.Models.Message,System.String)">
+            <summary>
+            回复群消息 (别名)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.ReplyC2CAsync(Luolan.QQBot.Core.Abstractions.IBotClient,Luolan.QQBot.Core.Models.Message,System.String)">
+            <summary>
+            回复私聊消息 (别名)
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.SendGroupMessageAsync(Luolan.QQBot.Core.Abstractions.IBotClient,System.String,System.String)">
+            <summary>
+            发送群消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.SendPrivateMessageAsync(Luolan.QQBot.Core.Abstractions.IBotClient,System.String,System.String)">
+            <summary>
+            发送私聊消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.SendChannelMessageAsync(Luolan.QQBot.Core.Abstractions.IBotClient,System.String,System.String)">
+            <summary>
+            发送频道消息
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.UseControllers(Luolan.QQBot.Core.Abstractions.IBotClient,System.Reflection.Assembly,System.String)">
+            <summary>
+            启用控制器模式，从指定程序集扫描控制器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.UseControllers(Luolan.QQBot.Core.Abstractions.IBotClient,System.IServiceProvider,System.String)">
+            <summary>
+            启用控制器模式，使用依赖注入
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.BotClientExtensions.UseControllers(Luolan.QQBot.Core.Abstractions.IBotClient,System.IServiceProvider,System.Reflection.Assembly,System.String)">
+            <summary>
+            启用控制器模式，使用依赖注入和指定程序集
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Extensions.ServiceCollectionExtensions">
+            <summary>
+            依赖注入扩展
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.ServiceCollectionExtensions.AddBotController``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注册控制器到依赖注入容器
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Extensions.ServiceCollectionExtensions.AddBotControllersFromAssembly(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly)">
+            <summary>
+            从程序集自动注册所有控制器
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.BotUser">
+            <summary>
+            机器人用户信息
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.BotUser.Id">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.BotUser.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.BotUser.Avatar">
+            <summary>
+            头像URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.BotUser.IsBot">
+            <summary>
+            是否是机器人
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.BotUser.Extra">
+            <summary>
+            协议特定的扩展数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.User">
+            <summary>
+            统一用户模型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.User.Id">
+            <summary>
+            用户ID（协议相关）
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.User.Username">
+            <summary>
+            用户名/昵称
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.User.Avatar">
+            <summary>
+            头像URL
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.User.IsBot">
+            <summary>
+            是否是机器人
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.User.Extra">
+            <summary>
+            协议特定的扩展数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.Message">
+            <summary>
+            统一消息模型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Id">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Source">
+            <summary>
+            消息来源
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Sender">
+            <summary>
+            消息发送者
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Content">
+            <summary>
+            纯文本内容
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Segments">
+            <summary>
+            消息段列表
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Timestamp">
+            <summary>
+            消息时间戳
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.ReplyToMessageId">
+            <summary>
+            引用的消息ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.RawMessage">
+            <summary>
+            协议特定的原始数据
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.Message.Extra">
+            <summary>
+            协议特定的扩展数据
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.MessageTarget">
+            <summary>
+            消息目标（发送/来源）
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageTarget.Type">
+            <summary>
+            目标类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageTarget.Platform">
+            <summary>
+            平台标识（如 "qq", "telegram" 等）
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageTarget.GuildId">
+            <summary>
+            频道/服务器ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageTarget.ChannelId">
+            <summary>
+            子频道/房间ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageTarget.GroupId">
+            <summary>
+            群组ID
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageTarget.UserId">
+            <summary>
+            用户ID（私聊时使用）
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageTarget.Channel(System.String,System.String)">
+            <summary>
+            创建频道消息目标
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageTarget.Group(System.String)">
+            <summary>
+            创建群组消息目标
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageTarget.Private(System.String)">
+            <summary>
+            创建私聊消息目标
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.MessageTargetType">
+            <summary>
+            消息目标类型
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Models.MessageTargetType.Channel">
+            <summary>
+            频道子频道
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Models.MessageTargetType.Group">
+            <summary>
+            群组
+            </summary>
+        </member>
+        <member name="F:Luolan.QQBot.Core.Models.MessageTargetType.Private">
+            <summary>
+            私聊
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.MessageSegment">
+            <summary>
+            消息段 - 参考 OneBot 12 标准
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageSegment.Type">
+            <summary>
+            消息段类型
+            </summary>
+        </member>
+        <member name="P:Luolan.QQBot.Core.Models.MessageSegment.Data">
+            <summary>
+            消息段数据
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageSegment.Text(System.String)">
+            <summary>
+            创建文本消息段
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageSegment.Image(System.String)">
+            <summary>
+            创建图片消息段
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageSegment.Face(System.String)">
+            <summary>
+            创建表情消息段
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageSegment.At(System.String)">
+            <summary>
+            创建@消息段
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageSegment.AtAll">
+            <summary>
+            创建@全体消息段
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageSegment.Reply(System.String)">
+            <summary>
+            创建回复消息段
+            </summary>
+        </member>
+        <member name="T:Luolan.QQBot.Core.Models.MessageBuilder">
+            <summary>
+            消息构建器 - 用于流式构建消息段列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Create">
+            <summary>
+            创建新的构建器实例
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Add(Luolan.QQBot.Core.Models.MessageSegment)">
+            <summary>
+            添加消息段
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Text(System.String)">
+            <summary>
+            添加纯文本
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Image(System.String)">
+            <summary>
+            添加图片
+            </summary>
+            <param name="url">图片链接 或 base64://...</param>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Face(System.String)">
+            <summary>
+            添加表情
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.At(System.String)">
+            <summary>
+            添加 @用户
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.AtAll">
+            <summary>
+            添加 @全体成员
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Reply(System.String)">
+            <summary>
+            添加回复
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.Build">
+            <summary>
+            构建消息列表
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.GetEnumerator">
+            <summary>
+            实现 IEnumerable 以支持直接传入发送方法
+            </summary>
+        </member>
+        <member name="M:Luolan.QQBot.Core.Models.MessageBuilder.op_Implicit(Luolan.QQBot.Core.Models.MessageBuilder)~System.Collections.Generic.List{Luolan.QQBot.Core.Models.MessageSegment}">
+            <summary>
+            隐式转换为 List&lt;MessageSegment&gt;
+            </summary>
+        </member>
+    </members>
+</doc>

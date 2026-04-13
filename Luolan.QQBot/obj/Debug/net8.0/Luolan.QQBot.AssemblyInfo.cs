@@ -12,13 +12,14 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("Luolan")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyDescriptionAttribute("简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，完美集成 ASP.NET Core。")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f6f342ccda5995a08f852790b3b9a197037ed1c7")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute(("简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，性能极致优化。内置速率限制器、IHttpCli" +
+    "entFactory 支持、增强型命令解析器及丰富的类型转换。"))]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.4.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.4.0+a319cad9b1e94765a6db8af603b883a88e841b4a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Luolan.QQBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Luolan.QQBot")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/luolan/Luolan.QQBot")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.4.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/luolangaga/Luolan.QQBot")]
 
 // 由 MSBuild WriteCodeFragment 类生成。
 

@@ -1,342 +1,373 @@
 # Luolan.QQBot
 
-一个简洁、高效、符合 .NET 哲学的 QQ 官方机器人 SDK。
+<p align="center">
+  <img src="https://img.shields.io/nuget/v/Luolan.QQBot.svg" alt="NuGet">
+  <img src="https://img.shields.io/github/license/luolangaga/Luolan.QQBot" alt="License">
+</p>
 
-## ✨ 特性
+一个简洁、高效、深度集成 .NET 依赖注入体系的 QQ 官方机器人 SDK。旨在提供最符合 .NET 开发者直觉的开发体验。
 
-- 🚀 **简单易用** - 符合 .NET 开发习惯，上手即用
-- 🔄 **自动Token刷新** - 无需手动管理Token生命周期
-- 🌐 **完整API支持** - 支持所有官方HTTP API
-- 📡 **WebSocket事件** - 实时接收消息和事件
-- 🔌 **依赖注入** - 完美集成 ASP.NET Core
-- 🛡️ **自动重连** - WebSocket断线自动重连
-- 📝 **强类型** - 完整的类型定义和智能提示
+## 🌟 特性
+
+- 🎮 **MVC 控制器模式** - **[NEW]** 类似 WebAPI 的开发体验，支持命令路由、参数自动解析、直接返回对象。
+- ⚡ **极致简单** - 采用 Builder 模式，几行代码即可让机器人上线。
+- 🔄 **全自动管理** - Token 自动刷新、WebSocket 自动重连，开发者只需关注业务逻辑。
+- 🧪 **深度集成** - 完美支持 ASP.NET Core 依赖注入和 IHostedService。
+- 🛡️ **强类型支持** - 完整的 API 模型定义，享受极致的 IDE 智能提示。
+- 📡 **事件驱动** - 清晰的事件分发机制，支持频道、群聊、私聊等多种场景。
+- 🚀 **性能优化** - **[NEW]** 内置速率限制器、共享 JSON 配置、增强的命令解析。
+- 🔧 **类型丰富** - **[NEW]** 支持 bool, enum, Guid, 可空类型等多种参数类型自动转换。
+
+---
 
 ## 📦 安装
+
+通过 NuGet 安装核心包：
 
 ```bash
 dotnet add package Luolan.QQBot
 ```
 
-## 🚀 快速开始
+---
 
-### 基础使用
+## 🎮 MVC控制器模式 (推荐)
 
+这是 v1.4.0 引入的全新架构优化模式，允许你像写 WebAPI 一样编写机器人指令。
+
+### 1. 启用控制器
+
+```csharp
+using Luolan.QQBot.Extensions;
+
+var bot = new QQBotClientBuilder()
+    // ... 基础配置
+    .Build();
+
+// 自动扫描并注册当前程序集中的所有控制器
+bot.UseControllers();
+
+await bot.StartAsync();
+```
+
+### 2. 编写控制器
+
+只需继承 `QQBotController` 并给方法加上 `[Command]` 特性。
+
+```csharp
+using Luolan.QQBot.Controllers;
+using Luolan.QQBot.Helpers;
+
+public class MyController : QQBotController
+{
+    // 基础文本命令
+    // 用户发送: /hello world
+    [Command("hello")]
+    public string Hello(string name)
+    {
+        return $"Hello {name}!";
+    }
+
+    // 参数自动转换
+    // 用户发送: /add 10 20
+    [Command("add")]
+    public string Add(int a, int b)
+    {
+        return $"Result: {a + b}";
+    }
+
+    // 返回图片
+    // 用户发送: /cat
+    [Command("cat")]
+    public ImageResult Cat()
+    {
+        return new ImageResult("https://example.com/cat.jpg");
+    }
+
+    // 返回 Markdown
+    // 用户发送: /md
+    [Command("md")]
+    public MessageMarkdown Markdown()
+    {
+        return MarkdownBuilder.FromContent("# 标题\n**加粗内容**");
+    }
+
+    // 异步任务
+    [Command("async")]
+    public async Task<string> AsyncWork()
+    {
+        await Task.Delay(1000);
+        return "Work done!";
+    }
+    
+    // 访问上下文
+    [Command("info")]
+    public string Info()
+    {
+        // 任何方法内都可以访问 User, Message, Client 等属性
+        return $"User: {User?.Username}, Channel: {Message.ChannelId}";
+    }
+    
+    // 支持引号参数 (新增)
+    // 用户发送: /say "hello world" test
+    [Command("say")]
+    public string Say(string message, string? target = null)
+    {
+        return target != null ? $"{target}: {message}" : message;
+    }
+    
+    // 支持枚举类型 (新增)
+    [Command("set")]
+    public string SetLevel(LogLevel level)
+    {
+        return $"Level set to: {level}";
+    }
+    
+    // 支持布尔值 (新增)
+    // 用户发送: /toggle true  或 /toggle 1  或 /toggle yes
+    [Command("toggle")]
+    public string Toggle(bool enabled)
+    {
+        return enabled ? "Enabled" : "Disabled";
+    }
+}
+```
+
+---
+
+## 🚀 经典模式快速开始
+
+如果你更喜欢直接监听事件：
+
+### 1. 控制台模式
 ```csharp
 using Luolan.QQBot;
 
-// 使用Builder模式创建客户端
 var bot = new QQBotClientBuilder()
     .WithAppId("你的AppId")
     .WithClientSecret("你的ClientSecret")
     .WithIntents(Intents.Default | Intents.GroupAtMessages)
     .Build();
 
-// 监听@机器人消息(频道)
-bot.OnAtMessageCreate += async e =>
-{
-    Console.WriteLine($"收到消息: {e.Message.Content}");
-    await bot.ReplyAsync(e.Message, $"你好! 你说的是: {e.Message.Content}");
-};
+bot.OnAtMessageCreate += async e => await bot.ReplyAsync(e.Message, "收到频道消息！");
+bot.OnGroupAtMessageCreate += async e => await bot.ReplyGroupAsync(e.Message, "收到群消息！");
 
-// 监听群@机器人消息
-bot.OnGroupAtMessageCreate += async e =>
-{
-    Console.WriteLine($"[群消息] {e.Message.Content}");
-    await bot.ReplyGroupAsync(e.Message, "收到群消息!");
-};
-
-// 监听C2C消息(私聊)
-bot.OnC2CMessageCreate += async e =>
-{
-    Console.WriteLine($"[私聊] {e.Message.Content}");
-    await bot.ReplyC2CAsync(e.Message, "收到私聊消息!");
-};
-
-// 启动机器人
 await bot.StartAsync();
-
-// 保持运行
-Console.WriteLine("机器人已启动, 按Ctrl+C退出");
 await Task.Delay(-1);
 ```
 
-### ASP.NET Core 集成
+### 2. ASP.NET Core 集成
 
+**方式一：标准集成**
 ```csharp
-// Program.cs
-using Luolan.QQBot;
-using Luolan.QQBot.Extensions;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// 添加QQ机器人服务
-builder.Services.AddQQBot(options =>
-{
+builder.Services.AddQQBot(options => {
     options.AppId = "你的AppId";
     options.ClientSecret = "你的ClientSecret";
-    options.Intents = Intents.Default | Intents.GroupAtMessages;
+    options.Intents = Intents.Default;
 });
-
-// 添加托管服务(自动启动机器人)
 builder.Services.AddQQBotHostedService();
-
-var app = builder.Build();
-
-// 配置事件处理
-var bot = app.Services.GetRequiredService<QQBotClient>();
-bot.OnAtMessageCreate += async e =>
-{
-    await bot.ReplyAsync(e.Message, "Hello from ASP.NET Core!");
-};
-
-app.Run();
 ```
 
-## 📖 API 文档
-
-### 消息发送
-
+**方式二：IHttpClientFactory 集成 (推荐，性能更优)**
 ```csharp
-// 发送频道消息
-await bot.SendChannelMessageAsync(channelId, "Hello!");
+using Luolan.QQBot.Extensions;
 
-// 发送带图片的消息
-await bot.Api.SendMessageAsync(channelId, new SendMessageRequest
-{
-    Content = "看这张图片",
-    Image = "https://example.com/image.png"
+builder.Services.AddQQBotWithHttpClientFactory(options => {
+    options.AppId = "你的AppId";
+    options.ClientSecret = "你的ClientSecret";
+    options.Intents = Intents.Default;
 });
-
-// 发送私信
-await bot.SendDirectMessageAsync(userId, sourceGuildId, "私信内容");
-
-// 发送群消息
-await bot.SendGroupMessageAsync(groupOpenId, "群消息内容");
-
-// 发送C2C消息
-await bot.SendC2CMessageAsync(userOpenId, "私聊消息");
-
-// 发送Markdown消息
-await bot.Api.SendGroupMessageAsync(groupOpenId, new SendGroupMessageRequest
-{
-    MsgType = 2,
-    Markdown = new MessageMarkdown
-    {
-        Content = "# 标题\n这是**Markdown**内容"
-    }
-});
-
-// 发送带按钮的消息
-await bot.Api.SendGroupMessageAsync(groupOpenId, new SendGroupMessageRequest
-{
-    MsgType = 2,
-    Markdown = new MessageMarkdown { Content = "请选择:" },
-    Keyboard = new MessageKeyboard
-    {
-        Content = new InlineKeyboard
-        {
-            Rows = new List<InlineKeyboardRow>
-            {
-                new InlineKeyboardRow
-                {
-                    Buttons = new List<Button>
-                    {
-                        new Button
-                        {
-                            RenderData = new ButtonRenderData { Label = "按钮1" },
-                            Action = new ButtonAction { Type = 2, Data = "/cmd1" }
-                        }
-                    }
-                }
-            }
-        }
-    }
-});
+builder.Services.AddQQBotHostedService();
 ```
 
-### 频道管理
+---
+
+## 💡 核心概念: Intents
+
+订阅相应的 `Intents` 才能接收到对应类型的事件。
+
+| Intent | 说明 |
+| :--- | :--- |
+| `Intents.Default` | **公域**推荐。包含 Guilds, Members, AtMessages (频道@) |
+| `Intents.GroupAtMessages` | **群聊** @机器人消息事件 |
+| `Intents.C2CMessages` | **C2C** (私聊) 消息事件 |
+| `Intents.GuildMessages` | **私域**特权。接收频道内所有普通消息 |
+| `Intents.PublicGuildMessages` | 公域接收频道 @ 消息 |
+
+---
+
+## 📖 API 详细说明
+
+### 1. 消息发送与回复
 
 ```csharp
-// 获取机器人加入的频道列表
+// 自动解析来源并回复 (支持频道/群/C2C)
+await bot.ReplyAsync(sourceMsg, "回复内容");
+await bot.ReplyGroupAsync(sourceMsg, "回复群内容");
+await bot.ReplyC2CAsync(sourceMsg, "回复私聊内容");
+
+// 主动发送
+await bot.SendChannelMessageAsync("channelId", "Hello!");
+await bot.SendGroupMessageAsync("groupOpenId", "Hello Group!");
+await bot.SendC2CMessageAsync("userOpenId", "Hello Private!");
+```
+
+### 2. Markdown 与 互动键盘
+
+```csharp
+using Luolan.QQBot.Helpers;
+using Luolan.QQBot.Extensions;
+
+// 方式一：Builder (推荐)
+var markdown = new MarkdownBuilder().UseContent("# 标题").Build();
+var keyboard = new KeyboardBuilder()
+    .NewRow().AddButton("btn1", "按钮").Build();
+
+await bot.SendMarkdownAsync(channelId, markdown, keyboard);
+
+// 方式二：扩展方法
+await bot.SendMarkdownContentAsync(channelId, "# Hello");
+
+// 方式三：Controller (见上文)
+```
+
+### 3. 频道与成员管理
+```csharp
+// 获取信息
 var guilds = await bot.GetGuildsAsync();
-
-// 获取子频道列表
-var channels = await bot.GetChannelsAsync(guildId);
-
-// 获取成员列表
 var members = await bot.GetMembersAsync(guildId);
 
-// 禁言成员
-await bot.Api.MuteMemberAsync(guildId, userId, 60); // 禁言60秒
-
-// 创建角色
-await bot.Api.CreateGuildRoleAsync(guildId, new CreateRoleRequest
-{
-    Name = "新角色",
-    Color = 0xFF0000
-});
+// 禁言与管理
+await bot.Api.MuteMemberAsync(guildId, userId, 60); 
+await bot.Api.CreateGuildRoleAsync(guildId, new() { Name = "新角色" });
 ```
 
-### 事件处理
+---
 
-```csharp
-// 频道事件
-bot.Events.OnGuildCreate += async e => { /* 加入新频道 */ };
-bot.Events.OnGuildDelete += async e => { /* 被移出频道 */ };
-bot.Events.OnChannelCreate += async e => { /* 子频道创建 */ };
+## 📡 事件列表
 
-// 成员事件
-bot.Events.OnGuildMemberAdd += async e => { /* 新成员加入 */ };
-bot.Events.OnGuildMemberRemove += async e => { /* 成员离开 */ };
+| 类型 | 事件名 | 说明 |
+| :--- | :--- | :--- |
+| **消息** | `OnAtMessageCreate` | 频道 @ 机器人 |
+| | `OnMessageCreate` | 频道全量消息 (私域) |
+| | `OnGroupAtMessageCreate` | 群聊 @ 机器人 |
+| | `OnC2CMessageCreate` | C2C 私聊 |
+| **管理** | `OnGuildCreate/Delete` | 机器人加入/退出频道 |
+| | `OnGuildMemberAdd/Remove` | 成员加入/退出 |
+| | `OnGroupAdd/DelRobot` | 机器人进/出群 |
+| **互动** | `OnInteractionCreate` | 按钮点击回调 |
 
-// 消息事件
-bot.Events.OnMessageCreate += async e => { /* 频道消息(私域) */ };
-bot.Events.OnAtMessageCreate += async e => { /* @机器人消息(公域) */ };
-bot.Events.OnDirectMessageCreate += async e => { /* 私信 */ };
-bot.Events.OnGroupAtMessageCreate += async e => { /* 群@消息 */ };
-bot.Events.OnC2CMessageCreate += async e => { /* C2C消息 */ };
-
-// 互动事件
-bot.Events.OnInteractionCreate += async e =>
-{
-    // 按钮点击回调
-    var buttonId = e.Interaction.Data?.Resolved?.ButtonId;
-    var buttonData = e.Interaction.Data?.Resolved?.ButtonData;
-};
-
-// 机器人管理事件
-bot.Events.OnGroupAddRobot += async e => { /* 被添加到群 */ };
-bot.Events.OnGroupDelRobot += async e => { /* 被移出群 */ };
-bot.Events.OnFriendAdd += async e => { /* 被添加为好友 */ };
-bot.Events.OnFriendDel += async e => { /* 被删除好友 */ };
-
-// 消息审核事件
-bot.Events.OnMessageAuditPass += async e => { /* 消息审核通过 */ };
-bot.Events.OnMessageAuditReject += async e => { /* 消息审核不通过 */ };
-
-// 原始事件(处理所有事件)
-bot.Events.OnRawEvent += async (eventType, data) =>
-{
-    Console.WriteLine($"原始事件: {eventType}");
-};
-```
-
-### Intents 配置
-
-```csharp
-// 公域机器人(推荐)
-Intents.Default
-
-// 私域机器人(需要申请)
-Intents.PrivateAll
-
-// 自定义组合
-Intents.Guilds | Intents.GuildMembers | Intents.PublicGuildMessages | Intents.GroupAtMessages
-
-// 可用的Intents:
-// Guilds - 频道事件
-// GuildMembers - 成员事件
-// GuildMessages - 频道消息(私域)
-// GuildMessageReactions - 表情表态
-// DirectMessage - 私信
-// MessageAudit - 消息审核
-// Forums - 论坛(私域)
-// AudioAction - 音频
-// PublicGuildMessages - 公域消息
-// Interaction - 互动事件
-// GroupAtMessages - 群@消息
-// C2CMessages - C2C消息
-```
+---
 
 ## 🔧 高级配置
 
 ```csharp
 var bot = new QQBotClientBuilder()
-    .WithAppId("你的AppId")
-    .WithClientSecret("你的ClientSecret")
-    .UseSandbox(true)                              // 使用沙箱环境
-    .WithIntents(Intents.Default)                  // 订阅事件
-    .WithTokenRefreshBeforeExpire(120)             // Token提前120秒刷新
-    .WithWebSocketReconnectInterval(3000)          // 重连间隔3秒
-    .WithWebSocketMaxReconnectAttempts(20)         // 最大重连20次
+    .WithAppId("...")
+    .WithClientSecret("...")
+    .UseSandbox(true)                              // 沙箱环境
+    .WithIntents(Intents.Default)                  // 事件订阅
+    .WithTokenRefreshBeforeExpire(120)             // Token 提前刷新
+    .WithWebSocketReconnectInterval(3000)          // 重连间隔
+    .WithWebSocketMaxReconnectAttempts(20)         // 最大尝试次数
     .WithLoggerFactory(loggerFactory)              // 自定义日志
     .Build();
 ```
 
-## 📋 完整示例
+---
 
+---
+
+## ⚡ 性能优化
+
+### 内置优化特性
+
+本 SDK 已经内置了多项性能优化，开箱即用：
+
+#### 1. 智能速率限制
+自动限制 API 请求频率，防止触发 QQ API 的速率限制（60次/分钟）：
 ```csharp
-using Luolan.QQBot;
-using Luolan.QQBot.Models;
-using Microsoft.Extensions.Logging;
-
-// 创建日志工厂
-using var loggerFactory = LoggerFactory.Create(builder =>
-{
-    builder.AddConsole();
-    builder.SetMinimumLevel(LogLevel.Debug);
-});
-
-// 创建机器人
-var bot = new QQBotClientBuilder()
-    .WithAppId(Environment.GetEnvironmentVariable("QQ_BOT_APP_ID")!)
-    .WithClientSecret(Environment.GetEnvironmentVariable("QQ_BOT_CLIENT_SECRET")!)
-    .WithIntents(Intents.Default | Intents.GroupAtMessages)
-    .WithLoggerFactory(loggerFactory)
-    .Build();
-
-// 就绪事件
-bot.OnReady += async e =>
-{
-    Console.WriteLine($"机器人已上线: {e.User?.Username}");
-};
-
-// 频道@消息
-bot.OnAtMessageCreate += async e =>
-{
-    var content = e.Message.Content?.Trim() ?? "";
-    
-    if (content.Contains("帮助"))
-    {
-        await bot.ReplyAsync(e.Message, "可用命令:\n/ping - 测试\n/info - 信息");
-    }
-    else if (content.Contains("ping"))
-    {
-        await bot.ReplyAsync(e.Message, "pong!");
-    }
-    else
-    {
-        await bot.ReplyAsync(e.Message, $"你说: {content}");
-    }
-};
-
-// 群消息
-bot.OnGroupAtMessageCreate += async e =>
-{
-    var content = e.Message.Content ?? "";
-    await bot.ReplyGroupAsync(e.Message, $"收到: {content}");
-};
-
-// 按钮回调
-bot.OnInteractionCreate += async e =>
-{
-    var data = e.Interaction.Data?.Resolved?.ButtonData;
-    Console.WriteLine($"按钮点击: {data}");
-};
-
-// 启动
-await bot.StartAsync();
-Console.WriteLine("按任意键退出...");
-Console.ReadKey();
-await bot.StopAsync();
+// 无需手动配置，SDK 自动处理
+await client.SendChannelMessageAsync(channelId, "消息内容");
 ```
 
-## 📄 License
+#### 2. 共享 JSON 配置
+所有 HTTP 请求共享同一个 `JsonSerializerOptions` 实例，减少内存分配。
 
-MIT License
+#### 3. IHttpClientFactory 支持
+使用 `AddQQBotWithHttpClientFactory` 可以更好地管理 HttpClient 生命周期：
+```csharp
+builder.Services.AddQQBotWithHttpClientFactory(options => { ... });
+```
 
-## 🔗 相关链接
+#### 4. 增强的命令解析
+支持引号参数，自动处理复杂参数：
+```csharp
+// 用户输入: /command "hello world" 123 true
+[Command("command")]
+public string MyCommand(string text, int number, bool flag)
+{
+    // text = "hello world"
+    // number = 123
+    // flag = true
+    return "OK";
+}
+```
 
-- [QQ机器人官方文档](https://bot.q.qq.com/wiki/develop/api-v2/)
-- [QQ开放平台](https://q.qq.com/)
+#### 5. 丰富的类型转换
+自动支持以下类型参数：
+- 基础类型: `int`, `long`, `double`, `decimal`, `string`
+- 布尔值: `bool` (支持 `true/false`, `1/0`, `yes/no`, `on/off`)
+- 枚举: `enum` (大小写不敏感)
+- Guid: `Guid`
+- 可空类型: `int?`, `bool?` 等
+
+---
+
+## 💡 最佳实践
+
+### 1. 使用 IHttpClientFactory
+在 ASP.NET Core 项目中，推荐使用 `AddQQBotWithHttpClientFactory`：
+```csharp
+builder.Services.AddQQBotWithHttpClientFactory(options => { ... });
+```
+
+### 2. 合理设置 Intents
+只订阅需要的事件类型，避免不必要的网络流量：
+```csharp
+var bot = new QQBotClientBuilder()
+    .WithIntents(Intents.GroupAtMessages | Intents.C2CMessages)  // 只订阅群聊和私聊
+    .Build();
+```
+
+### 3. 使用控制器模式
+控制器模式提供了更好的代码组织和参数解析：
+```csharp
+public class AdminController : QQBotController
+{
+    [Command("ban")]
+    public async Task<string> Ban(string userId, int duration)
+    {
+        await Client.Api.MuteMemberAsync(Message.GuildId!, userId, duration);
+        return $"已禁言用户 {duration} 秒";
+    }
+}
+```
+
+### 4. 充分利用类型转换
+让 SDK 自动处理参数类型转换：
+```csharp
+[Command("config")]
+public string Config(bool enabled, LogLevel level, int? timeout = null)
+{
+    // 所有参数自动从字符串转换
+    return $"Config: {enabled}, {level}, {timeout}";
+}
+```
+
+---
+
+## 🛡️ License & Feedback
+
+- **License**: MIT
+- **Issues**: [Github Issues](https://github.com/luolangaga/Luolan.QQBot/issues)
+- **Official Docs**: [QQ 机器人官方文档](https://bot.q.qq.com/wiki/develop/api-v2/)

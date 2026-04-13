@@ -1,0 +1,155 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\luolan\\Luolan.QQBot\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\qqbotclientoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\qqbotclientoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\controllers\\imageresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\controllers\\imageresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\controllers\\commandattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\controllers\\commandattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\events\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\events\\events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\events\\eventdispatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\events\\eventdispatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\extensions\\controllerextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\extensions\\controllerextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|c:\\users\\luolan\\luolan.qqbot\\luolan.qqbot\\qqbotclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6272EB1-6711-46EE-8AA2-C40B71877CB4}|Luolan.QQBot\\Luolan.QQBot.csproj|solutionrelative:luolan.qqbot\\qqbotclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{f96a0d64-71fd-316f-b663-924c78154f2a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{dcc4ea97-1c0c-482b-b205-e541c0df9728}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ImageResult.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Controllers\\ImageResult.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\Controllers\\ImageResult.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Controllers\\ImageResult.cs",
+              "RelativeToolTip": "Luolan.QQBot\\Controllers\\ImageResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:05:53.278Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CommandAttribute.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Controllers\\CommandAttribute.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\Controllers\\CommandAttribute.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Controllers\\CommandAttribute.cs",
+              "RelativeToolTip": "Luolan.QQBot\\Controllers\\CommandAttribute.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:05:46.79Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Events.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Events\\Events.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\Events\\Events.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Events\\Events.cs",
+              "RelativeToolTip": "Luolan.QQBot\\Events\\Events.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:05:44.283Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EventDispatcher.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Events\\EventDispatcher.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\Events\\EventDispatcher.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Events\\EventDispatcher.cs",
+              "RelativeToolTip": "Luolan.QQBot\\Events\\EventDispatcher.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:05:43.036Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "QQBotClientOptions.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\QQBotClientOptions.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\QQBotClientOptions.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\QQBotClientOptions.cs",
+              "RelativeToolTip": "Luolan.QQBot\\QQBotClientOptions.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:04:46.87Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ControllerExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Extensions\\ControllerExtensions.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\Extensions\\ControllerExtensions.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\Extensions\\ControllerExtensions.cs",
+              "RelativeToolTip": "Luolan.QQBot\\Extensions\\ControllerExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:05:32.594Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "QQBotClient.cs",
+              "DocumentMoniker": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\QQBotClient.cs",
+              "RelativeDocumentMoniker": "Luolan.QQBot\\QQBotClient.cs",
+              "ToolTip": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot\\QQBotClient.cs",
+              "RelativeToolTip": "Luolan.QQBot\\QQBotClient.cs",
+              "ViewState": "AgIAAO0BAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T16:04:49.671Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

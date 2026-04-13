@@ -12,3 +12,4 @@ C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\refint\Luolan.QQBot
 C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.xml
 C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.pdb
 C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\ref\Luolan.QQBot.dll
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\obj\Release\net8.0\Luolan.QQBot.sourcelink.json

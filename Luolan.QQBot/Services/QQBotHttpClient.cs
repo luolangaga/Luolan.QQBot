@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Luolan.QQBot.Helpers;
 using Luolan.QQBot.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -168,7 +169,16 @@ public class QQBotHttpClient : IDisposable
     private readonly TokenManager _tokenManager;
     private readonly ILogger<QQBotHttpClient>? _logger;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly RateLimiter _rateLimiter;
     private bool _disposed;
+
+    // 共享的 JsonSerializerOptions 实例以优化性能
+    private static readonly JsonSerializerOptions SharedJsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
 
     public QQBotHttpClient(
         QQBotClientOptions options,
@@ -180,12 +190,10 @@ public class QQBotHttpClient : IDisposable
         _httpClient = httpClient;
         _tokenManager = tokenManager;
         _logger = logger;
-        _jsonOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        };
+        _jsonOptions = SharedJsonOptions;
+        
+        // 初始化速率限制器 (QQ API 限制: 60次/分钟)
+        _rateLimiter = new RateLimiter(capacity: 60, refillRate: 1);
     }
 
     #region 基础请求方法
@@ -216,6 +224,9 @@ public class QQBotHttpClient : IDisposable
 
     private async Task<T> SendAsync<T>(HttpRequestMessage request, CancellationToken cancellationToken = default)
     {
+        // 速率限制检查
+        await _rateLimiter.AcquireAsync("api", cancellationToken);
+        
         var response = await _httpClient.SendAsync(request, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
@@ -238,6 +249,9 @@ public class QQBotHttpClient : IDisposable
 
     private async Task SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
     {
+        // 速率限制检查
+        await _rateLimiter.AcquireAsync("api", cancellationToken);
+        
         var response = await _httpClient.SendAsync(request, cancellationToken);
 
         if (!response.IsSuccessStatusCode)

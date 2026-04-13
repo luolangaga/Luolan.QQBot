@@ -1,0 +1,31 @@
+浠?C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.AspNetExample\Properties\launchSettings.json 浣跨敤鍚姩璁剧疆...
+馃殌 姝ｅ湪浣跨敤 Official 鍗忚鍚姩鏈哄櫒浜?..
+info: BotBackgroundService[0]
+      姝ｅ湪杩炴帴鏈哄櫒浜?..
+info: Luolan.QQBot.Official.OfficialBotClient[0]
+      姝ｅ湪鍚姩QQ瀹樻柟鏈哄櫒浜?..
+dbug: Luolan.QQBot.Official.Internal.TokenManager[0]
+      姝ｅ湪鍒锋柊璁块棶浠ょ墝...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5030
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.AspNetExample
+info: Luolan.QQBot.Official.Internal.TokenManager[0]
+      Token Response: {"code":100016,"message":"invalid appid or secret"}
+fail: BotBackgroundService[0]
+      鏈哄櫒浜烘湇鍔″彂鐢熼敊璇?
+      System.InvalidOperationException: 鑾峰彇璁块棶浠ょ墝澶辫触: 鍝嶅簲涓虹┖
+         at Luolan.QQBot.Official.Internal.TokenManager.RefreshTokenInternalAsync(CancellationToken cancellationToken) in C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Official\Internal\TokenManager.cs:line 105
+         at Luolan.QQBot.Official.Internal.TokenManager.GetAccessTokenAsync(CancellationToken cancellationToken) in C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Official\Internal\TokenManager.cs:line 47
+         at Luolan.QQBot.Official.Internal.OfficialHttpClient.CreateRequestAsync(HttpMethod method, String endpoint, Object body, CancellationToken cancellationToken) in C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Official\Internal\OfficialHttpClient.cs:line 55
+         at Luolan.QQBot.Official.Internal.OfficialHttpClient.GetAsync[T](String endpoint, CancellationToken cancellationToken) in C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Official\Internal\OfficialHttpClient.cs:line 118
+         at Luolan.QQBot.Official.Internal.OfficialWebSocketClient.StartAsync(CancellationToken cancellationToken) in C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Official\Internal\OfficialWebSocketClient.cs:line 58
+         at BotBackgroundService.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.AspNetExample\Program.cs:line 115
+info: BotBackgroundService[0]
+      姝ｅ湪鍋滄鏈哄櫒浜?..
+info: Luolan.QQBot.Official.OfficialBotClient[0]
+      姝ｅ湪鍋滄QQ瀹樻柟鏈哄櫒浜?..

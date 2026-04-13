@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Luolan.QQBot</id>
+    <version>1.1.0</version>
+    <authors>Luolan</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/luolangaga/Luolan.QQBot</projectUrl>
+    <description>简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，完美集成 ASP.NET Core。支持 Markdown 模板消息、按钮键盘等高级功能。</description>
+    <releaseNotes>v1.1.0: 添加 Markdown 模板构建器和按钮键盘构建器，优化消息发送体验</releaseNotes>
+    <tags>qq bot qqbot qq-bot qq-robot tencent sdk qq-official-bot markdown websocket</tags>
+    <repository type="git" url="https://github.com/luolangaga/Luolan.QQBot" commit="a319cad9b1e94765a6db8af603b883a88e841b4a" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Http" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Options" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="10.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\bin\Release\net8.0\Luolan.QQBot.dll" target="lib\net8.0\Luolan.QQBot.dll" />
+    <file src="C:\Users\luolan\Luolan.QQBot\Luolan.QQBot\bin\Release\net8.0\Luolan.QQBot.xml" target="lib\net8.0\Luolan.QQBot.xml" />
+    <file src="C:\Users\luolan\Luolan.QQBot\README.md" target="\README.md" />
+  </files>
+</package>
