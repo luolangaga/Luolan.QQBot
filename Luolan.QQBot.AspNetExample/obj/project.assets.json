@@ -455,6 +455,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj",
+      "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj",
       "Microsoft.AspNetCore.OpenApi >= 8.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
@@ -486,13 +488,19 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
-        "C:\\Users\\luolan\\cndemo\\EasyLanguageVSExtension": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj": {
+              "projectPath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj"
+            },
+            "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj": {
+              "projectPath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -539,8 +547,28 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project 'C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj'. Check that the project reference is valid and that the project file exists.",
+      "libraryId": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project 'C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj'. Check that the project reference is valid and that the project file exists.",
+      "libraryId": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

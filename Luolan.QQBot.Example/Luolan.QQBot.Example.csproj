@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Luolan.QQBot.Official\Luolan.QQBot.Official.csproj" />
-    <ProjectReference Include="..\Luolan.QQBot.OneBot\Luolan.QQBot.OneBot.csproj" />
+    <ProjectReference Include="..\Luolan.QQBot\Luolan.QQBot.csproj" />
   </ItemGroup>
 
   <ItemGroup>

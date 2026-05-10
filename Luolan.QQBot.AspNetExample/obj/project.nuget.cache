@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "Qif7B5KvmsY=",
-  "success": true,
+  "dgSpecHash": "Ln1gtd8TmQ4=",
+  "success": false,
   "projectFilePath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.AspNetExample\\Luolan.QQBot.AspNetExample.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\luolan\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.0\\microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
@@ -12,5 +12,28 @@
     "C:\\Users\\luolan\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
     "C:\\Users\\luolan\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project 'C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj'. Check that the project reference is valid and that the project file exists.",
+      "projectPath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.AspNetExample\\Luolan.QQBot.AspNetExample.csproj",
+      "filePath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.AspNetExample\\Luolan.QQBot.AspNetExample.csproj",
+      "libraryId": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.Official\\Luolan.QQBot.Official.csproj",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project 'C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj'. Check that the project reference is valid and that the project file exists.",
+      "projectPath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.AspNetExample\\Luolan.QQBot.AspNetExample.csproj",
+      "filePath": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.AspNetExample\\Luolan.QQBot.AspNetExample.csproj",
+      "libraryId": "C:\\Users\\luolan\\Luolan.QQBot\\Luolan.QQBot.OneBot\\Luolan.QQBot.OneBot.csproj",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

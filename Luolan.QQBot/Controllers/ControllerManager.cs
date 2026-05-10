@@ -84,7 +84,7 @@ public class ControllerManager
 
         // 处理内容: 去除可能的@部分
         var content = message.Content.Trim();
-        
+
         // 使用增强的命令解析器 (支持引号)
         var parts = CommandParser.Parse(content);
         if (parts.Length == 0) return;
@@ -100,6 +100,14 @@ public class ControllerManager
             commandName = parts[1];
             args = parts.Skip(2).ToArray();
         }
+
+        // 去掉命令前缀（/ ! ！等）
+        if (commandName.Length > 1 && commandName[0] is '/' or '!' or '！')
+        {
+            commandName = commandName[1..];
+        }
+
+        Console.WriteLine($"[ControllerManager] 解析命令: '{commandName}', 参数: [{string.Join(", ", args)}], 已注册命令: [{string.Join(", ", _commands.Keys)}]");
 
         if (_commands.TryGetValue(commandName, out var handler))
         {
@@ -189,13 +197,16 @@ public class ControllerManager
 
         if (result is Task task)
         {
+            Console.WriteLine($"[ControllerManager] 异步方法返回: {task.GetType().Name}");
             await task;
-            
-            var taskType = task.GetType();
-            if (taskType.IsGenericType && taskType.GetGenericTypeDefinition() == typeof(Task<>))
+
+            // 检查是否有 Result 属性（即 Task<T>），注意不能直接判断 GetGenericTypeDefinition() == typeof(Task<>)
+            // 因为 .NET 可能用 AsyncStateMachineBox<T> 等内部类型包装
+            var resultProp = task.GetType().GetProperty("Result");
+            if (resultProp != null)
             {
-                var resultProp = taskType.GetProperty("Result");
-                var taskResult = resultProp?.GetValue(task);
+                var taskResult = resultProp.GetValue(task);
+                Console.WriteLine($"[ControllerManager] Task<T> 结果: {taskResult} (类型: {taskResult?.GetType().Name})");
                 if (taskResult != null)
                 {
                     await ProcessCommandResultAsync(controller, taskResult);
@@ -204,6 +215,7 @@ public class ControllerManager
         }
         else if (result != null)
         {
+            Console.WriteLine($"[ControllerManager] 同步方法返回: {result.GetType().Name} = {result}");
             await ProcessCommandResultAsync(controller, result);
         }
     }
@@ -308,9 +320,14 @@ public class ControllerManager
 
             // 3. String (Default)
             var content = result.ToString();
+            Console.WriteLine($"[ControllerManager] 发送文本回复 (GroupOpenId: {msg.GroupOpenId}, ChannelId: {msg.ChannelId}): {content}");
             if (!string.IsNullOrEmpty(content))
             {
                 await controller.ReplyAsync(content);
+            }
+            else
+            {
+                Console.WriteLine($"[ControllerManager] 结果为空字符串，不发送");
             }
         }
         catch (Exception ex)

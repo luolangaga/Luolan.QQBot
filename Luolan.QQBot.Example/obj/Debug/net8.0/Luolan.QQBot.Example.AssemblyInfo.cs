@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Luolan.QQBot.Example")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a319cad9b1e94765a6db8af603b883a88e841b4a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c131b3b63bc08f6e5485cf58d6f16e3231817b9a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Luolan.QQBot.Example")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Luolan.QQBot.Example")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -37,12 +37,6 @@ C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\obj\Debug\net8.0\Luolan.QQBot.
 C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\obj\Debug\net8.0\Luolan.QQBot.Example.genruntimeconfig.cache
 C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\obj\Debug\net8.0\ref\Luolan.QQBot.Example.dll
 C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\obj\Debug\net8.0\Luolan.QQBot.Example.sourcelink.json
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.Core.dll
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.Official.dll
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.OneBot.dll
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.Official.pdb
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.Official.xml
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.OneBot.pdb
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.OneBot.xml
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.Core.pdb
-C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.Core.xml
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.dll
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.pdb
+C:\Users\luolan\Luolan.QQBot\Luolan.QQBot.Example\bin\Debug\net8.0\Luolan.QQBot.xml
