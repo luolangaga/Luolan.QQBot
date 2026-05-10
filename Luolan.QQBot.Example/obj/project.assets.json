@@ -428,7 +428,7 @@
           "buildTransitive/net8.0/System.Text.Json.targets": {}
         }
       },
-      "Luolan.QQBot/1.4.0": {
+      "Luolan.QQBot/1.4.1": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
@@ -1184,7 +1184,7 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Luolan.QQBot/1.4.0": {
+    "Luolan.QQBot/1.4.1": {
       "type": "project",
       "path": "../Luolan.QQBot/Luolan.QQBot.csproj",
       "msbuildProject": "../Luolan.QQBot/Luolan.QQBot.csproj"
@@ -1192,7 +1192,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Luolan.QQBot >= 1.4.0",
+      "Luolan.QQBot >= 1.4.1",
       "Microsoft.Extensions.Logging.Console >= 10.0.1"
     ]
   },
