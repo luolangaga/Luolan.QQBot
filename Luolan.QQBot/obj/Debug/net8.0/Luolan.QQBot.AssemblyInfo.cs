@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyDescriptionAttribute(("简洁高效的 QQ 官方机器人 SDK，支持 HTTP API 和 WebSocket 事件，自动 Token 刷新，性能极致优化。内置速率限制器、IHttpCli" +
     "entFactory 支持、增强型命令解析器及丰富的类型转换。"))]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.4.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.4.1+c131b3b63bc08f6e5485cf58d6f16e3231817b9a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.4.1+6c9300ef9ae47a48484c8d279ca7fb4d287e3002")]
 [assembly: System.Reflection.AssemblyProductAttribute("Luolan.QQBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Luolan.QQBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.4.1.0")]
