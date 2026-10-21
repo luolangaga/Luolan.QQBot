@@ -1,6 +1,7 @@
 using Luolan.QQBot.Controllers;
 using Luolan.QQBot.Events;
 using Luolan.QQBot.Services;
+using Luolan.QQBot.Webhook;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -93,6 +94,16 @@ public static class QQBotServiceCollectionExtensions
         services.TryAddSingleton(sp => new ControllerManager(
             sp.GetService<ILogger<ControllerManager>>(),
             sp));
+
+        // Webhook 处理器始终注册；只有 Mode=Webhook 时才会被使用
+        services.TryAddSingleton(sp =>
+        {
+            var options = sp.GetRequiredService<QQBotClientOptions>();
+            return new QQBotWebhook(
+                sp.GetRequiredService<QQBotClient>(),
+                options.ClientSecret,
+                sp.GetService<ILogger<QQBotWebhook>>());
+        });
 
         return services;
     }

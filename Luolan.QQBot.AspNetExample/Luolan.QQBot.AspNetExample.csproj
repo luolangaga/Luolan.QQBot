@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luolan.QQBot\Luolan.QQBot.csproj" />
+    <ProjectReference Include="..\Luolan.QQBot.AspNetCore\Luolan.QQBot.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

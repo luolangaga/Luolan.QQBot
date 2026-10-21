@@ -299,6 +299,22 @@ public class EventDispatcher
         }
     }
 
+    /// <summary>
+    /// 触发连接就绪事件(供 Webhook 模式在启动时合成 READY)
+    /// </summary>
+    internal async Task RaiseReadyAsync(User user)
+    {
+        if (OnReady == null) return;
+
+        await OnReady.Invoke(new ReadyEvent
+        {
+            Version = 1,
+            SessionId = string.Empty,
+            User = user,
+            Shard = new[] { 0, 1 }
+        });
+    }
+
     private async Task DispatchEventAsync<T>(Func<T, Task>? handler, Func<T> eventFactory) where T : QQBotEventBase
     {
         if (handler == null) return;

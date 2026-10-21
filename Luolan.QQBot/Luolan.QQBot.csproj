@@ -9,7 +9,7 @@
     
     <!-- NuGet Package Info -->
     <PackageId>Luolan.QQBot</PackageId>
-    <Version>1.5.0</Version>
+    <Version>1.5.1</Version>
     <Authors>Luolan</Authors>
     <Company>Luolan</Company>
     <Description>简洁高效的 QQ 官方机器人 SDK，支持 HTTP API、WebSocket 与 Webhook 接入，自动 Token 刷新。内置速率限制器、IHttpClientFactory 支持、MVC 控制器模式、群管理 API 及 Ed25519 回调签名校验。</Description>
@@ -19,7 +19,7 @@
     <RepositoryUrl>https://github.com/luolangaga/Luolan.QQBot</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>v1.5.0: 适配官方新域名 api.bot.qq.com；新增 Webhook 接入与 Ed25519 签名校验；新增群消息全量事件、群成员事件、入群申请事件、订阅消息授权事件；新增群信息/成员/入群审批/黑名单/禁言、单聊流式消息、分片上传、自定义菜单、指令面板、互动响应、分享链接等 API；控制器支持依赖注入构造。</PackageReleaseNotes>
+    <PackageReleaseNotes>v1.5.1: WebSocket / Webhook 改为 QQBotClientOptions.Mode 传输模式，切换模式无需修改事件订阅和控制器代码；同时包含 v1.5.0 的新域名适配、Webhook Ed25519 签名校验、群管理、单聊流式消息、分片上传、菜单/指令面板、互动响应等能力。</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

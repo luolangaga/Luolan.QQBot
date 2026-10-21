@@ -33,7 +33,7 @@ await bot.StartAsync();
 
 ## 构造函数注入
 
-v1.5.0 起，控制器由 `ActivatorUtilities` 从 DI 容器创建，可以直接注入任意已注册服务：
+v1.5.1 起，控制器由 `ActivatorUtilities` 从 DI 容器创建，可以直接注入任意已注册服务：
 
 ```csharp
 public class HelloController : QQBotController

@@ -7,7 +7,7 @@
 
 一个简洁、高效、深度集成 .NET 依赖注入体系的 QQ 官方机器人 SDK。旨在提供最符合 .NET 开发者直觉的开发体验。
 
-> **v1.5.0** 已适配官方新域名 `api.bot.qq.com`，新增 Webhook 接入、群管理 API、单聊流式消息、分片上传、自定义菜单/指令面板等能力。
+> **v1.5.1** 已适配官方新域名 `api.bot.qq.com`，新增 Webhook 接入、群管理 API、单聊流式消息、分片上传、自定义菜单/指令面板等能力。
 
 ## 🌟 特性
 
@@ -17,7 +17,7 @@
 - 🧪 **深度集成** - 完美支持 ASP.NET Core 依赖注入和 IHostedService。
 - 🛡️ **强类型支持** - 完整的 API 模型定义，享受极致的 IDE 智能提示。
 - 📡 **事件驱动** - 清晰的事件分发机制，支持频道、群聊、私聊等多种场景。
-- 🌐 **双接入方式** - 同时支持 WebSocket 与 Webhook(HTTP 回调)，内置 Ed25519 签名校验。
+- 🌐 **双接入方式** - WebSocket / Webhook 作为 `QQBotClientOptions.Mode` 模式切换，业务事件和控制器代码无需修改；内置 Ed25519 签名校验。
 - 👥 **群管理能力** - 群信息、群成员、入群审批、黑名单、禁言等管理接口。
 - 🚀 **性能优化** - 内置速率限制器、共享 JSON 配置、增强的命令解析。
 - 🔧 **类型丰富** - 支持 bool, enum, Guid, 可空类型等多种参数类型自动转换。
@@ -151,39 +151,48 @@ builder.Services.AddQQBotWithHttpClientFactory(options => {
 builder.Services.AddQQBotHostedService();
 ```
 
-### 3. Webhook 接入 (v1.5.0 新增)
+### 3. WebSocket / Webhook 模式切换 (v1.5.1)
 
-管理端将回调地址指向你的 HTTPS 接口（端口仅支持 80/443/8080/8443），然后用 `QQBotWebhook` 处理请求：
+Webhook 是 `QQBotClientOptions.Mode` 的一种传输模式。切换模式只改配置，**事件订阅、控制器和业务代码都不需要修改**。
 
-```csharp
-using Luolan.QQBot.Webhook;
+安装 ASP.NET Core 集成包：
 
-builder.Services.AddQQBotWebhook("你的ClientSecret");
-
-app.MapPost("/api/qqbot/webhook", async (
-    HttpContext context,
-    QQBotWebhook webhook,
-    CancellationToken ct) =>
-{
-    using var reader = new StreamReader(context.Request.Body);
-    var body = await reader.ReadToEndAsync(ct);
-
-    var signature = context.Request.Headers["X-Signature-Ed25519"].FirstOrDefault();
-    var timestamp = context.Request.Headers["X-Signature-Timestamp"].FirstOrDefault();
-
-    try
-    {
-        var response = await webhook.HandleAsync(body, signature, timestamp, ct);
-        return Results.Content(response, "application/json");
-    }
-    catch (UnauthorizedAccessException)
-    {
-        return Results.Unauthorized();
-    }
-});
+```bash
+dotnet add package Luolan.QQBot.AspNetCore
 ```
 
-`QQBotWebhook` 会自动处理回调地址验证 (OpCode 13)、Ed25519 签名校验、事件分发，并返回平台要求的 ACK (OpCode 12)。
+```csharp
+using Luolan.QQBot;
+using Luolan.QQBot.AspNetCore;
+using Luolan.QQBot.Extensions;
+
+builder.Services.AddQQBotWithHttpClientFactory(options =>
+{
+    options.AppId = "你的AppId";
+    options.ClientSecret = "你的ClientSecret";
+    options.Intents = Intents.Default | Intents.GroupAndC2C;
+
+    // 只改这一处：WebSocket（默认）或 Webhook
+    options.Mode = QQBotConnectionMode.Webhook;
+    options.WebhookPath = "/api/qqbot/webhook";
+});
+
+// 两种模式都保留，不用删
+builder.Services.AddQQBotHostedService();
+
+var app = builder.Build();
+
+// 两种模式都保留：WebSocket 模式下这行会自动跳过
+app.MapQQBotWebhook();
+
+// 事件订阅 / 控制器代码完全不变
+app.Services.GetRequiredService<QQBotClient>().UseControllers();
+app.Run();
+```
+
+管理端把回调地址配置为 `https://你的域名/api/qqbot/webhook`（端口仅支持 80/443/8080/8443）。
+
+`MapQQBotWebhook()` 会自动处理回调地址验证 (OpCode 13)、Ed25519 签名校验、事件分发和 ACK (OpCode 12)。
 
 ---
 
@@ -230,7 +239,7 @@ await bot.RevokeGroupMessageAsync(groupOpenId, messageId);
 await bot.RevokeC2CMessageAsync(userOpenId, messageId);
 ```
 
-### 2. 单聊流式消息 (v1.5.0 新增)
+### 2. 单聊流式消息 (v1.5.1 新增)
 
 ```csharp
 var first = await bot.SendC2CStreamMessageAsync(openId, new SendC2CStreamMessageRequest
@@ -255,7 +264,7 @@ await bot.SendC2CStreamMessageAsync(openId, new SendC2CStreamMessageRequest
 });
 ```
 
-### 3. 群管理 (v1.5.0 新增)
+### 3. 群管理 (v1.5.1 新增)
 
 ```csharp
 var info = await bot.GetGroupInfoAsync(groupOpenId);
@@ -295,7 +304,7 @@ await bot.SetGroupMemberMuteAsync(groupOpenId, new SetGroupMemberMuteRequest
 });
 ```
 
-### 4. 自定义菜单、指令面板与互动响应 (v1.5.0 新增)
+### 4. 自定义菜单、指令面板与互动响应 (v1.5.1 新增)
 
 ```csharp
 // 全局自定义菜单(仅 C2C)
@@ -360,17 +369,17 @@ await bot.Api.CreateGuildRoleAsync(guildId, new() { Name = "新角色" });
 | **消息** | `OnAtMessageCreate` | 频道 @ 机器人 |
 | | `OnMessageCreate` | 频道全量消息 (私域) |
 | | `OnGroupAtMessageCreate` | 群聊 @ 机器人 |
-| | `OnGroupMessageCreate` | 群聊全量消息 (v1.5.0) |
+| | `OnGroupMessageCreate` | 群聊全量消息 (v1.5.1) |
 | | `OnC2CMessageCreate` | C2C 私聊 |
 | | `OnDirectMessageCreate` | 频道私信 |
-| **群成员** | `OnGroupMemberAdd/Remove` | 群成员加入/退出 (v1.5.0) |
-| | `OnGroupJoinRequest` | 用户申请加群 (v1.5.0) |
+| **群成员** | `OnGroupMemberAdd/Remove` | 群成员加入/退出 (v1.5.1) |
+| | `OnGroupJoinRequest` | 用户申请加群 (v1.5.1) |
 | **管理** | `OnGuildCreate/Delete` | 机器人加入/退出频道 |
 | | `OnGuildMemberAdd/Remove` | 成员加入/退出 |
 | | `OnGroupAdd/DelRobot` | 机器人进/出群 |
 | **好友** | `OnFriendAdd/OnFriendDel` | 好友添加/删除 |
 | **互动** | `OnInteractionCreate` | 按钮点击回调 |
-| | `OnSubscribeMessageStatus` | 订阅消息授权状态 (v1.5.0) |
+| | `OnSubscribeMessageStatus` | 订阅消息授权状态 (v1.5.1) |
 | **其他** | `OnRawEvent` | 所有原始事件 |
 
 ---
@@ -382,6 +391,7 @@ var bot = new QQBotClientBuilder()
     .WithAppId("...")
     .WithClientSecret("...")
     .UseSandbox(true)                              // 沙箱环境
+    .UseWebhook("/api/qqbot/webhook")              // 切换为 Webhook 模式(默认 WebSocket)
     .WithIntents(Intents.Default | Intents.GroupAndC2C)
     .WithTokenRefreshBeforeExpire(120)             // Token 提前刷新
     .WithWebSocketReconnectInterval(3000)          // 重连间隔

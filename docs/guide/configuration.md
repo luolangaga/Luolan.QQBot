@@ -13,6 +13,9 @@ var bot = new QQBotClientBuilder()
     // --- 环境设置 ---
     .UseSandbox(true)                    // true=沙箱环境, false=正式环境
 
+    // --- 传输模式 ---
+    .UseWebhook("/api/qqbot/webhook")     // Webhook 模式；默认 WebSocket
+
     // --- Intents 事件订阅 ---
     .WithIntents(                        // 设置完整的 Intents
         Intents.Default                  // 公域默认事件
@@ -62,7 +65,7 @@ string clientSecret = Environment.GetEnvironmentVariable("QQBOT_SECRET") ?? "";
 - `true`（沙箱环境）— 开发和测试使用（沿用 `sandbox.api.sgroup.qq.com`）
 - `false`（正式环境）— 生产环境，使用官方新域名 `https://api.bot.qq.com`
 
-> v1.5.0 已适配官方 2026 年启用的新接口域名 `api.bot.qq.com`，鉴权地址同步为 `https://api.bot.qq.com/app/getAppAccessToken`。
+> v1.5.1 已适配官方 2026 年启用的新接口域名 `api.bot.qq.com`，鉴权地址同步为 `https://api.bot.qq.com/app/getAppAccessToken`。
 
 如果需要走代理或私有网关，可以覆盖地址：
 
@@ -149,6 +152,8 @@ Console.WriteLine($"限速补充: {options.RateLimitRefillPerSecond}/s");
 
 | 属性 | 默认值 | 说明 |
 |------|--------|------|
+| `Mode` | `WebSocket` | 传输模式：`WebSocket` / `Webhook` |
+| `WebhookPath` | `/api/qqbot/webhook` | Webhook 回调路径 |
 | `ApiBaseUrl` / `ApiBaseUrlOverride` | `https://api.bot.qq.com` | API 地址，可覆盖 |
 | `AuthUrl` / `AuthUrlOverride` | `https://api.bot.qq.com/app/getAppAccessToken` | 鉴权地址，可覆盖 |
 | `RateLimitCapacity` | `100` | 令牌桶容量 |

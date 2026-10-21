@@ -347,13 +347,13 @@ NuGet 是 .NET 的包管理器，类似 npm（Node.js）或 pip（Python）。
 dotnet add package Luolan.QQBot
 
 # 安装特定版本
-dotnet add package Luolan.QQBot --version 1.5.0
+dotnet add package Luolan.QQBot --version 1.5.1
 
 # 列出已安装的包
 dotnet list package
 
 # 更新包
-dotnet add package Luolan.QQBot --version 1.5.0
+dotnet add package Luolan.QQBot --version 1.5.1
 ```
 
 ## 常用 .NET CLI 命令

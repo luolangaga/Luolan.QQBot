@@ -36,19 +36,27 @@ Swagger: `https://localhost:7192/swagger`
 
 ## 🔌 接入方式
 
-### WebSocket (默认)
+Webhook 是一种传输模式，切换只需改配置，事件订阅和控制器代码不需要修改。
 
-`UseWebSocket = true` 时由 `QQBotHostedService` 自动连接网关。
+### WebSocket（默认）
+
+```json
+{ "Bot": { "Mode": "WebSocket" } }
+```
 
 ### Webhook
 
-将 `UseWebSocket` 设为 `false`，在开放平台管理端把回调地址配置为：
+```json
+{ "Bot": { "Mode": "Webhook", "WebhookPath": "/api/qqbot/webhook" } }
+```
+
+在开放平台管理端把回调地址配置为：
 
 ```
 https://你的域名/api/qqbot/webhook
 ```
 
-改由 `QQBotWebhook` 处理签名校验、回调地址验证和事件分发。
+`Program.cs` 中的 `AddQQBotHostedService()` 和 `app.MapQQBotWebhook()` 在两种模式下都保留：Webhook 模式不会连接 WebSocket，WebSocket 模式下端点映射会自动跳过。
 
 ## 📡 API 端点
 

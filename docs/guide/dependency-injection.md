@@ -77,16 +77,25 @@ builder.Services.AddQQBotWithHttpClientFactory(options =>
 builder.Services.AddQQBotHostedService();
 ```
 
-### AddQQBotWebhook
+### Webhook 模式
 
-Webhook（HTTP 回调）模式使用，注册 `QQBotWebhook`：
+`QQBotWebhook` 会由 `AddQQBot` / `AddQQBotWithHttpClientFactory` 自动注册，不需要额外调用。切换模式只需配置：
 
 ```csharp
-builder.Services.AddQQBotWebhook("你的ClientSecret");
+builder.Services.AddQQBotWithHttpClientFactory(options =>
+{
+    options.AppId = "...";
+    options.ClientSecret = "...";
+    options.Mode = QQBotConnectionMode.Webhook;
+});
+
+builder.Services.AddQQBotHostedService(); // 两种模式都保留
 ```
 
-::: tip WebSocket / Webhook 二选一
-Webhook 模式不要注册 `AddQQBotHostedService()`，否则会同时通过长连接接收事件。
+在 ASP.NET Core 中再加一行 `app.MapQQBotWebhook()`（需要 `Luolan.QQBot.AspNetCore` 包）。WebSocket 模式下这行会自动跳过。
+
+::: tip 模式切换
+`AddQQBotHostedService()` 在 Webhook 模式下不会连接 WebSocket，只做就绪初始化，所以两种模式的启动代码可以完全一致。
 :::
 
 ## 注入和使用
@@ -110,7 +119,7 @@ public class BotApiController : ControllerBase
 
 ### 在 Bot 命令控制器中
 
-`QQBotController` 子类同样支持构造函数注入（v1.5.0 修复了 DI 接线）：
+`QQBotController` 子类同样支持构造函数注入（v1.5.1 修复了 DI 接线）：
 
 ```csharp
 public class HelloController : QQBotController

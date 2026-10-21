@@ -168,7 +168,7 @@ builder.Services.AddHostedService<BotNotificationService>();
 
 ## 启用控制器模式
 
-在 ASP.NET Core 中也可以使用控制器模式。v1.5.0 起控制器会从 DI 容器构造，支持构造函数注入：
+在 ASP.NET Core 中也可以使用控制器模式。v1.5.1 起控制器会从 DI 容器构造，支持构造函数注入：
 
 ```csharp
 // 在 Program.cs 中，获取 bot 实例后启用
@@ -182,48 +182,38 @@ app.MapControllers();
 app.Run();
 ```
 
-## 使用 Webhook 替代 WebSocket
+## 使用 Webhook 模式
 
-如果应用已经暴露 HTTPS 端口，或部署在 Serverless 环境，可以使用 Webhook：
+Webhook 是 `QQBotClientOptions.Mode` 的一种传输模式，不是另一套代码。切换模式只改配置：
+
+```bash
+dotnet add package Luolan.QQBot.AspNetCore
+```
 
 ```csharp
-// 1. 注册 Bot 服务
+using Luolan.QQBot.AspNetCore;
+
 builder.Services.AddQQBotWithHttpClientFactory(options =>
 {
-    options.AppId = builder.Configuration["QQBot:AppId"]!;
-    options.ClientSecret = builder.Configuration["QQBot:ClientSecret"]!;
+    options.AppId = builder.Configuration["Bot:AppId"]!;
+    options.ClientSecret = builder.Configuration["Bot:ClientSecret"]!;
     options.Intents = Intents.Default | Intents.GroupAndC2C;
+
+    // 只改这一处：WebSocket（默认）或 Webhook
+    options.Mode = QQBotConnectionMode.Webhook;
+    options.WebhookPath = "/api/qqbot/webhook";
 });
 
-// 2. 注册 Webhook 处理器（不要再 AddQQBotHostedService）
-builder.Services.AddQQBotWebhook(builder.Configuration["QQBot:ClientSecret"]!);
+// 两种模式都保留
+builder.Services.AddQQBotHostedService();
 
 var app = builder.Build();
 
-// 3. 暴露回调端点
-app.MapPost("/api/qqbot/webhook", async (
-    HttpContext context,
-    QQBotWebhook webhook,
-    CancellationToken ct) =>
-{
-    using var reader = new StreamReader(context.Request.Body);
-    var body = await reader.ReadToEndAsync(ct);
+// 两种模式都保留：WebSocket 模式下自动跳过，不注册路由
+app.MapQQBotWebhook();
 
-    try
-    {
-        var response = await webhook.HandleAsync(
-            body,
-            context.Request.Headers["X-Signature-Ed25519"].FirstOrDefault(),
-            context.Request.Headers["X-Signature-Timestamp"].FirstOrDefault(),
-            ct);
-
-        return Results.Content(response, "application/json");
-    }
-    catch (UnauthorizedAccessException)
-    {
-        return Results.Unauthorized();
-    }
-});
+// 控制器、事件订阅、消息发送代码完全不变
+app.Services.GetRequiredService<QQBotClient>().UseControllers();
 ```
 
 开放平台回调地址填写 `https://你的域名/api/qqbot/webhook`，端口仅支持 80 / 443 / 8080 / 8443。

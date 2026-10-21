@@ -1,20 +1,20 @@
 # 从 v1.4 迁移
 
-v1.5.0 保持向后兼容，主要新增官方新域名适配、Webhook 接入、群管理 API 和新事件。
+v1.5.1 保持向后兼容，主要新增官方新域名适配、Webhook 接入、群管理 API 和新事件。
 
 ## 升级步骤
 
 ### 1. 更新 NuGet 包
 
 ```bash
-dotnet add package Luolan.QQBot --version 1.5.0
+dotnet add package Luolan.QQBot --version 1.5.1
 ```
 
 ### 2. 检查事件域名
 
-v1.5.0 默认使用官方新域名：
+v1.5.1 默认使用官方新域名：
 
-| 配置 | v1.4 | v1.5.0 |
+| 配置 | v1.4 | v1.5.1 |
 |------|------|--------|
 | API 地址 | `https://api.sgroup.qq.com` | `https://api.bot.qq.com` |
 | 鉴权地址 | `https://bots.qq.com/app/getAppAccessToken` | `https://api.bot.qq.com/app/getAppAccessToken` |
@@ -41,23 +41,22 @@ var options = new QQBotClientOptions
 )
 ```
 
-## v1.5.0 新增功能
+## v1.5.1 新增功能
 
-### Webhook 接入
+### Webhook 作为传输模式
+
+v1.5.1 的 Webhook 是 `QQBotClientOptions.Mode` 的一种模式，切换时业务代码不变：
 
 ```csharp
-builder.Services.AddQQBotWebhook("你的ClientSecret");
-
-app.MapPost("/api/qqbot/webhook", async (HttpContext ctx, QQBotWebhook webhook) =>
+builder.Services.AddQQBotWithHttpClientFactory(options =>
 {
-    using var reader = new StreamReader(ctx.Request.Body);
-    var body = await reader.ReadToEndAsync();
-    var response = await webhook.HandleAsync(
-        body,
-        ctx.Request.Headers["X-Signature-Ed25519"].FirstOrDefault(),
-        ctx.Request.Headers["X-Signature-Timestamp"].FirstOrDefault());
-    return Results.Content(response, "application/json");
+    options.AppId = "...";
+    options.ClientSecret = "...";
+    options.Mode = QQBotConnectionMode.Webhook;
 });
+
+builder.Services.AddQQBotHostedService(); // 两种模式都保留
+app.MapQQBotWebhook();                     // WebSocket 模式下自动跳过
 ```
 
 详见 [Webhook 接入](/guide/webhook)。
@@ -81,7 +80,7 @@ app.MapPost("/api/qqbot/webhook", async (HttpContext ctx, QQBotWebhook webhook) 
 
 ### 控制器构造函数注入
 
-v1.5.0 修复了 `UseControllers()` 未传递 DI 容器的问题：
+v1.5.1 修复了 `UseControllers()` 未传递 DI 容器的问题：
 
 ```csharp
 public class HelloController : QQBotController
@@ -98,14 +97,16 @@ public class HelloController : QQBotController
 
 ## 破坏性变更
 
-v1.5.0 **没有**破坏性变更，但有以下行为调整：
+v1.5.1 **没有**破坏性变更，但有以下行为调整：
 
 | 变更 | 说明 |
 |------|------|
 | 默认 API 域名 | 改为 `https://api.bot.qq.com`，可用 `ApiBaseUrlOverride` 覆盖 |
+| 传输模式 | WebSocket / Webhook 由 `QQBotClientOptions.Mode` 决定，默认 WebSocket |
 | 速率限制默认值 | 令牌桶容量 100 / 每秒补充 20（原 60 / 1），可通过 options 调整 |
 | `ControllerManager` 构造 | 新增可选 `IServiceProvider` 参数，旧调用方式仍可用 |
 | 新增依赖 | `BouncyCastle.Cryptography`（用于 Webhook Ed25519 签名校验） |
+| 新增包 | `Luolan.QQBot.AspNetCore` 提供 `MapQQBotWebhook()` |
 
 ## 从 v1.3 升级到 v1.4
 

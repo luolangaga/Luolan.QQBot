@@ -20,6 +20,8 @@ public class QQBotClient : IDisposable
     private readonly EventDispatcher _eventDispatcher;
     private readonly ILogger<QQBotClient>? _logger;
     private bool _disposed;
+    private bool _started;
+    private User? _webhookBotUser;
 
     /// <summary>
     /// 配置选项
@@ -47,14 +49,16 @@ public class QQBotClient : IDisposable
     public TokenManager TokenManager => _tokenManager;
 
     /// <summary>
-    /// 是否已连接(WebSocket)
+    /// 是否已就绪(WebSocket 已连接或 Webhook 模式已启动)
     /// </summary>
-    public bool IsConnected => _webSocketClient.IsConnected;
+    public bool IsConnected => _options.Mode == QQBotConnectionMode.Webhook
+        ? _started
+        : _webSocketClient.IsConnected;
 
     /// <summary>
     /// 当前机器人用户信息
     /// </summary>
-    public User? CurrentUser => _webSocketClient.Session.BotUser;
+    public User? CurrentUser => _webhookBotUser ?? _webSocketClient.Session.BotUser;
 
     /// <summary>
     /// 依赖注入容器(通过DI创建时可用)
@@ -314,21 +318,55 @@ public class QQBotClient : IDisposable
     }
 
     /// <summary>
-    /// 启动机器人(连接WebSocket)
+    /// 启动机器人。WebSocket 模式建立长连接，Webhook 模式只做就绪初始化。
     /// </summary>
-    public Task StartAsync(CancellationToken cancellationToken = default)
+    public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        _logger?.LogInformation("正在启动QQ机器人...");
-        return _webSocketClient.StartAsync(cancellationToken);
+        if (_started) return;
+        _started = true;
+
+        _logger?.LogInformation("正在启动QQ机器人(模式: {Mode})...", _options.Mode);
+
+        if (_options.Mode == QQBotConnectionMode.Webhook)
+        {
+            // Webhook 模式由平台主动推送事件，这里不需要建立长连接。
+            // 为了保持与 WebSocket 模式一致的行为，尝试拉取机器人信息并触发 OnReady。
+            await RaiseWebhookReadyAsync(cancellationToken);
+            return;
+        }
+
+        await _webSocketClient.StartAsync(cancellationToken);
     }
 
     /// <summary>
     /// 停止机器人
     /// </summary>
-    public Task StopAsync()
+    public async Task StopAsync()
     {
         _logger?.LogInformation("正在停止QQ机器人...");
-        return _webSocketClient.StopAsync();
+        _started = false;
+
+        if (_options.Mode == QQBotConnectionMode.Webhook)
+            return;
+
+        await _webSocketClient.StopAsync();
+    }
+
+    private async Task RaiseWebhookReadyAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            timeout.CancelAfter(TimeSpan.FromSeconds(5));
+
+            var user = await _apiClient.GetCurrentUserAsync(timeout.Token);
+            _webhookBotUser = user;
+            await _eventDispatcher.RaiseReadyAsync(user);
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Webhook 模式拉取机器人信息失败，OnReady 不会触发。事件仍会正常分发。");
+        }
     }
 
     #region 消息发送快捷方法
@@ -650,6 +688,8 @@ public class QQBotClientBuilder
     private int _tokenRefreshBeforeExpireSeconds = 60;
     private int _webSocketReconnectIntervalMs = 5000;
     private int _webSocketMaxReconnectAttempts = 10;
+    private QQBotConnectionMode _mode = QQBotConnectionMode.WebSocket;
+    private string _webhookPath = "/api/qqbot/webhook";
     private ILoggerFactory? _loggerFactory;
 
     /// <summary>
@@ -725,6 +765,34 @@ public class QQBotClientBuilder
     }
 
     /// <summary>
+    /// 使用 Webhook 模式(HTTP 回调)
+    /// </summary>
+    public QQBotClientBuilder UseWebhook(string webhookPath = "/api/qqbot/webhook")
+    {
+        _mode = QQBotConnectionMode.Webhook;
+        _webhookPath = webhookPath;
+        return this;
+    }
+
+    /// <summary>
+    /// 使用 WebSocket 模式(默认)
+    /// </summary>
+    public QQBotClientBuilder UseWebSocket()
+    {
+        _mode = QQBotConnectionMode.WebSocket;
+        return this;
+    }
+
+    /// <summary>
+    /// 设置事件传输模式
+    /// </summary>
+    public QQBotClientBuilder WithMode(QQBotConnectionMode mode)
+    {
+        _mode = mode;
+        return this;
+    }
+
+    /// <summary>
     /// 设置日志工厂
     /// </summary>
     public QQBotClientBuilder WithLoggerFactory(ILoggerFactory loggerFactory)
@@ -749,6 +817,8 @@ public class QQBotClientBuilder
             ClientSecret = _clientSecret,
             IsSandbox = _isSandbox,
             Intents = _intents,
+            Mode = _mode,
+            WebhookPath = _webhookPath,
             TokenRefreshBeforeExpireSeconds = _tokenRefreshBeforeExpireSeconds,
             WebSocketReconnectIntervalMs = _webSocketReconnectIntervalMs,
             WebSocketMaxReconnectAttempts = _webSocketMaxReconnectAttempts

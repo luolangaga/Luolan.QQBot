@@ -29,7 +29,7 @@ bool useSandbox = false; // 是否使用沙箱环境
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.WriteLine("╔══════════════════════════════════════════╗");
-Console.WriteLine("║     Luolan.QQBot 完整示例程序 v1.5.0      ║");
+Console.WriteLine("║     Luolan.QQBot 完整示例程序 v1.5.1      ║");
 Console.WriteLine("╚══════════════════════════════════════════╝");
 Console.WriteLine();
 
@@ -464,7 +464,7 @@ async Task DemonstrateAllApis()
         // await bot.SendGroupMessageAsync("groupOpenId", "主动发群消息");
         // await bot.SendC2CMessageAsync("userOpenId", "主动发私聊消息");
 
-        // --- 5.18 群管理 API (v1.5.0 新增) ---
+        // --- 5.18 群管理 API (v1.5.1 新增) ---
         // var groupInfo = await bot.GetGroupInfoAsync("groupOpenId");             // 群基本信息
         // var botState = await bot.GetGroupBotStateAsync("groupOpenId");          // 机器人群内状态
         // var groupMembers = await bot.GetGroupMembersAsync("groupOpenId");       // 群成员列表(需内邀权限)
@@ -488,7 +488,7 @@ async Task DemonstrateAllApis()
         //     }
         // });
 
-        // --- 5.19 单聊流式消息 (v1.5.0 新增) ---
+        // --- 5.19 单聊流式消息 (v1.5.1 新增) ---
         // var first = await bot.SendC2CStreamMessageAsync("userOpenId", new SendC2CStreamMessageRequest
         // {
         //     InputState = 1, Index = 0, ContentType = "markdown",
@@ -501,7 +501,7 @@ async Task DemonstrateAllApis()
         //     StreamMsgId = first.Id
         // });
 
-        // --- 5.20 互动响应 / 菜单 / 指令面板 (v1.5.0 新增) ---
+        // --- 5.20 互动响应 / 菜单 / 指令面板 (v1.5.1 新增) ---
         // await bot.Api.RespondInteractionAsync(interactionId, code: 0);
         // await bot.Api.UpdateMenuAsync(new QQBotMenu { Items = new List<MenuItem> { ... } });
         // await bot.Api.CreatePanelAsync(new CreatePanelRequest { Scope = "group", TargetType = "all", Panel = new Panel { ... } });

@@ -23,6 +23,16 @@ public class QQBotClientOptions
     public bool IsSandbox { get; set; } = false;
 
     /// <summary>
+    /// 事件传输模式。切换模式只需修改配置，事件订阅和控制器代码无需改动。
+    /// </summary>
+    public QQBotConnectionMode Mode { get; set; } = QQBotConnectionMode.WebSocket;
+
+    /// <summary>
+    /// Webhook 模式下平台回调的路径(需与管理端配置一致)
+    /// </summary>
+    public string WebhookPath { get; set; } = "/api/qqbot/webhook";
+
+    /// <summary>
     /// API基础URL。官方已于 2026 年切换至 api.bot.qq.com。
     /// </summary>
     public string ApiBaseUrl => !string.IsNullOrWhiteSpace(ApiBaseUrlOverride)
@@ -77,6 +87,22 @@ public class QQBotClientOptions
     /// 订阅的事件类型(Intents)
     /// </summary>
     public Intents Intents { get; set; } = Intents.Default;
+}
+
+/// <summary>
+/// 事件传输模式
+/// </summary>
+public enum QQBotConnectionMode
+{
+    /// <summary>
+    /// 通过 WebSocket 长连接接收事件(默认)
+    /// </summary>
+    WebSocket = 0,
+
+    /// <summary>
+    /// 通过 Webhook HTTP 回调接收事件
+    /// </summary>
+    Webhook = 1
 }
 
 /// <summary>

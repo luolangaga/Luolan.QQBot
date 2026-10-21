@@ -207,7 +207,7 @@ public partial class QQBotHttpClient : IDisposable
         CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(method, $"{_options.ApiBaseUrl}{endpoint}");
-        request.Headers.UserAgent.ParseAdd("Luolan.QQBot/1.5.0");
+        request.Headers.UserAgent.ParseAdd("Luolan.QQBot/1.5.1");
         request.Headers.Authorization = new AuthenticationHeaderValue(
             "QQBot",
             await _tokenManager.GetAccessTokenAsync(cancellationToken)

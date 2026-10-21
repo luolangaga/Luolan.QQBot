@@ -18,7 +18,7 @@ public class Message
     public DateTime Timestamp { get; set; }    // 发送时间
     public int Seq { get; set; }               // 消息序号（群/C2C）
 
-    // v1.5.0：全量群消息字段
+    // v1.5.1：全量群消息字段
     public int MessageType { get; set; }
     public MessageScene? MessageScene { get; set; }
     public ArkData? ArkData { get; set; }

@@ -90,7 +90,7 @@ hero:
   <div class="feature-card">
     <div class="feature-icon"><Icon icon="ph:cloud-arrow-up-duotone" width="24" /></div>
     <h3>WebSocket / Webhook</h3>
-    <p>同时支持长连接和 HTTP 回调两种接入方式。Webhook 内置 Ed25519 签名校验、回调地址验证和 ACK 响应。</p>
+    <p>WebSocket 与 Webhook 由客户端 Mode 配置切换，事件订阅和控制器代码无需修改。Webhook 内置 Ed25519 签名校验、回调地址验证和 ACK 响应。</p>
   </div>
   <div class="feature-card">
     <div class="feature-icon"><Icon icon="ph:users-three-duotone" width="24" /></div>
@@ -120,7 +120,7 @@ dotnet add package Luolan.QQBot
 Install-Package Luolan.QQBot
 ```
 ```bash [Package Reference]
-<PackageReference Include="Luolan.QQBot" Version="1.5.0" />
+<PackageReference Include="Luolan.QQBot" Version="1.5.1" />
 ```
 :::
 

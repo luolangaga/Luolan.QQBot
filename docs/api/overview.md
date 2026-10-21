@@ -54,7 +54,8 @@ Luolan.QQBot SDK 的 API 分为以下几个层次：
 | `QQBotServiceCollectionExtensions` | `Luolan.QQBot.Extensions` | `AddQQBot()` |
 | `QQBotHostedServiceExtensions` | `Luolan.QQBot.Extensions` | `AddQQBotHostedService()` |
 | `HttpClientFactoryExtensions` | `Luolan.QQBot.Extensions` | `AddQQBotWithHttpClientFactory()` |
-| `WebhookExtensions` | `Luolan.QQBot.Extensions` | `AddQQBotWebhook()` |
+| `WebhookExtensions` | `Luolan.QQBot.Extensions` | `AddQQBotWebhook()`（通常无需手动调用） |
+| `QQBotWebhookEndpointExtensions` | `Luolan.QQBot.AspNetCore` | `MapQQBotWebhook()` |
 
 ## 使用建议
 

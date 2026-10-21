@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.5.11612.153 insiders
+VisualStudioVersion = 18.5.11612.153
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luolan.QQBot", "Luolan.QQBot\Luolan.QQBot.csproj", "{A6272EB1-6711-46EE-8AA2-C40B71877CB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luolan.QQBot.Example", "Luolan.QQBot.Example\Luolan.QQBot.Example.csproj", "{AC5646D2-EA18-4795-B608-16E4CA1A156F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luolan.QQBot.AspNetExample", "Luolan.QQBot.AspNetExample\Luolan.QQBot.AspNetExample.csproj", "{A83B834B-758A-4915-9B7B-0634AC9D0C5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luolan.QQBot.AspNetCore", "Luolan.QQBot.AspNetCore\Luolan.QQBot.AspNetCore.csproj", "{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{A83B834B-758A-4915-9B7B-0634AC9D0C5A}.Release|x64.Build.0 = Release|Any CPU
 		{A83B834B-758A-4915-9B7B-0634AC9D0C5A}.Release|x86.ActiveCfg = Release|Any CPU
 		{A83B834B-758A-4915-9B7B-0634AC9D0C5A}.Release|x86.Build.0 = Release|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Debug|x64.Build.0 = Debug|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Debug|x86.Build.0 = Debug|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Release|x64.ActiveCfg = Release|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Release|x64.Build.0 = Release|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Release|x86.ActiveCfg = Release|Any CPU
+		{CEBDE141-7DFC-4F2E-AF64-8A53F093AB3F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

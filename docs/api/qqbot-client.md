@@ -13,7 +13,7 @@
 | `WebSocket` | `QQBotWebSocketClient` | WebSocket 客户端 |
 | `Events` | `EventDispatcher` | 事件分发器 |
 | `TokenManager` | `TokenManager` | Token 管理器 |
-| `IsConnected` | `bool` | 是否已连接 |
+| `IsConnected` | `bool` | 是否已就绪（WebSocket 已连接 / Webhook 已启动） |
 | `CurrentUser` | `User?` | 当前机器人用户信息 |
 
 ## 生命周期方法

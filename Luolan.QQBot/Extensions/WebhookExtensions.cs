@@ -1,5 +1,6 @@
 using Luolan.QQBot.Webhook;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace Luolan.QQBot.Extensions;
@@ -16,7 +17,7 @@ public static class WebhookExtensions
     /// <param name="clientSecret">机器人 ClientSecret，用于 Ed25519 签名校验</param>
     public static IServiceCollection AddQQBotWebhook(this IServiceCollection services, string clientSecret)
     {
-        services.AddSingleton(sp => new QQBotWebhook(
+        services.TryAddSingleton(sp => new QQBotWebhook(
             sp.GetRequiredService<QQBotClient>(),
             clientSecret,
             sp.GetService<ILogger<QQBotWebhook>>()));

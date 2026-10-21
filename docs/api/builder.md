@@ -13,6 +13,9 @@
 | `WithAppId` | `string` | 设置 AppId（必填） |
 | `WithClientSecret` | `string` | 设置 ClientSecret（必填） |
 | `UseSandbox` | `bool` (默认 true) | 是否使用沙箱环境 |
+| `UseWebhook` | `string?` path | 切换为 Webhook 模式 |
+| `UseWebSocket` | — | 切换为 WebSocket 模式（默认） |
+| `WithMode` | `QQBotConnectionMode` | 设置传输模式 |
 | `WithIntents` | `Intents` | 设置事件订阅（替换式） |
 | `AddIntents` | `Intents` | 添加事件订阅（追加式） |
 | `WithTokenRefreshBeforeExpire` | `int` 秒 | Token 提前刷新时间（默认 60） |
@@ -20,6 +23,26 @@
 | `WithWebSocketMaxReconnectAttempts` | `int` | 最大重连次数（默认 10） |
 | `WithLoggerFactory` | `ILoggerFactory` | 日志工厂 |
 | `Build` | — | 构建 QQBotClient 实例 |
+
+## 传输模式
+
+```csharp
+// Webhook 模式
+var bot = new QQBotClientBuilder()
+    .WithAppId("...")
+    .WithClientSecret("...")
+    .UseWebhook("/api/qqbot/webhook")
+    .Build();
+
+// 显式指定 WebSocket（默认）
+bot = new QQBotClientBuilder()
+    .WithAppId("...")
+    .WithClientSecret("...")
+    .UseWebSocket()
+    .Build();
+```
+
+事件订阅与控制器代码在两种模式下完全一致。
 
 ## 使用示例
 

@@ -1,6 +1,6 @@
 # QQBotWebhook
 
-Webhook（HTTP 回调）接入处理器。
+Webhook（HTTP 回调）接入处理器。Webhook 是 `QQBotClientOptions.Mode` 的一种传输模式，切换模式时业务代码无需修改。
 
 **命名空间**: `Luolan.QQBot.Webhook`
 
@@ -80,19 +80,34 @@ QQBotWebhook.OpCallbackAck  // 12，回调 ACK
 
 ## 依赖注入
 
+`AddQQBot` / `AddQQBotWithHttpClientFactory` 会自动注册 `QQBotWebhook`，无需额外调用。只有需要手动指定 secret 时才使用：
+
 ```csharp
 using Luolan.QQBot.Extensions;
 
 builder.Services.AddQQBotWebhook("你的ClientSecret");
 ```
 
-等价于：
+## 模式切换
 
 ```csharp
-builder.Services.AddSingleton(sp => new QQBotWebhook(
-    sp.GetRequiredService<QQBotClient>(),
-    "你的ClientSecret",
-    sp.GetService<ILogger<QQBotWebhook>>()));
+builder.Services.AddQQBotWithHttpClientFactory(options =>
+{
+    options.AppId = "...";
+    options.ClientSecret = "...";
+    options.Mode = QQBotConnectionMode.Webhook; // 默认 WebSocket
+    options.WebhookPath = "/api/qqbot/webhook";
+});
+
+builder.Services.AddQQBotHostedService(); // 两种模式都保留
+```
+
+ASP.NET Core 项目使用 `Luolan.QQBot.AspNetCore` 包：
+
+```csharp
+using Luolan.QQBot.AspNetCore;
+
+app.MapQQBotWebhook(); // WebSocket 模式下自动跳过
 ```
 
 ## 示例
