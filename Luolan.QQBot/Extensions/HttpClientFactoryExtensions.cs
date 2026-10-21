@@ -79,7 +79,7 @@ public static class HttpClientFactoryExtensions
         services.AddSingleton<ControllerManager>(sp =>
         {
             var logger = sp.GetService<ILogger<ControllerManager>>();
-            return new ControllerManager(logger);
+            return new ControllerManager(logger, sp);
         });
         
         return services;
