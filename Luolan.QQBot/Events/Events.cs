@@ -337,6 +337,27 @@ public class FriendAddEvent : QQBotEventBase
 
     [JsonPropertyName("openid")]
     public string OpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("scene")]
+    public int Scene { get; set; }
+
+    [JsonPropertyName("scene_param")]
+    public string SceneParam { get; set; } = string.Empty;
+
+    [JsonPropertyName("author")]
+    public FriendAuthor Author { get; set; } = new();
+
+    [JsonPropertyName("short_code")]
+    public string ShortCode { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 用户信息
+/// </summary>
+public class FriendAuthor
+{
+    [JsonPropertyName("union_openid")]
+    public string UnionOpenId { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -351,6 +372,9 @@ public class FriendDelEvent : QQBotEventBase
 
     [JsonPropertyName("openid")]
     public string OpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("author")]
+    public FriendAuthor Author { get; set; } = new();
 }
 
 /// <summary>
