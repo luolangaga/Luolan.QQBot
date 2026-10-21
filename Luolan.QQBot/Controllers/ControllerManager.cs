@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Luolan.QQBot.Events;
 using Luolan.QQBot.Helpers;
 using Luolan.QQBot.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Luolan.QQBot.Controllers;
@@ -19,10 +20,12 @@ public class ControllerManager
     private readonly Dictionary<string, (Type ControllerType, MethodInfo Method)> _commands = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<ControllerManager>? _logger;
     private QQBotClient? _client;
+    private IServiceProvider? _serviceProvider;
 
-    public ControllerManager(ILogger<ControllerManager>? logger = null)
+    public ControllerManager(ILogger<ControllerManager>? logger = null, IServiceProvider? serviceProvider = null)
     {
         _logger = logger;
+        _serviceProvider = serviceProvider;
     }
 
     /// <summary>
@@ -127,7 +130,7 @@ public class ControllerManager
     private async Task ExecuteCommandAsync(Type controllerType, MethodInfo method, Message message, string[] args)
     {
         // 创建控制器实例
-        var controller = Activator.CreateInstance(controllerType) as QQBotController;
+        var controller = (_serviceProvider is not null ? ActivatorUtilities.CreateInstance(_serviceProvider, controllerType) : Activator.CreateInstance(controllerType)) as QQBotController;
         if (controller == null) return;
 
         // 初始化上下文
