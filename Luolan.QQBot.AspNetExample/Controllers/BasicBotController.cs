@@ -1,19 +1,42 @@
-using Luolan.QQBot.Core.Controllers;
-using Luolan.QQBot.Core.Models;
+using Luolan.QQBot.Controllers;
+using Microsoft.Extensions.Logging;
 
 namespace Luolan.QQBot.AspNetExample.Controllers;
 
-public class BasicBotController : BotController
+/// <summary>
+/// 基础命令控制器 —— 演示控制器模式的依赖注入
+/// </summary>
+public class BasicBotController : QQBotController
 {
-    [Command("/ping")]
-    public async Task Ping()
+    private readonly ILogger<BasicBotController> _logger;
+
+    // 控制器由 ControllerManager 通过依赖注入创建，可直接注入任意注册服务
+    public BasicBotController(ILogger<BasicBotController> logger)
     {
-        await ReplyAsync("🏓 Pong from Controller!");
+        _logger = logger;
     }
 
-    [Command("/time")]
-    public async Task Time()
+    [Command("ping")]
+    public Task Ping()
     {
-        await ReplyAsync($"Current Time: {DateTime.Now}");
+        _logger.LogInformation("收到 ping 命令, 来源: {User}", User?.Username);
+        return ReplyAsync("🏓 Pong from Controller!");
+    }
+
+    [Command("time")]
+    public Task Time()
+    {
+        return ReplyAsync($"Current Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+    }
+
+    [Command("info")]
+    public string Info()
+    {
+        return $"""
+            👤 用户: {User?.Username}
+            📺 频道: {Message.GuildId ?? "无"}
+            📁 子频道: {Message.ChannelId ?? "无"}
+            👥 群: {Message.GroupOpenId ?? "无"}
+            """;
     }
 }

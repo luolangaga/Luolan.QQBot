@@ -38,11 +38,11 @@ public abstract class QQBotController
     /// 回复消息(并不结束执行，Return才是主要回复方式)
     /// </summary>
     /// <param name="content">回复内容</param>
-    public async Task ReplyAsync(string content)
+    /// <param name="msgSeq">回复序号(相同消息多次回复时需递增)</param>
+    public async Task ReplyAsync(string content, int msgSeq = 0)
     {
         if (Client == null || Message == null)
         {
-            Console.WriteLine($"[QQBotController.ReplyAsync] Client或Message为空");
             return;
         }
 
@@ -50,30 +50,21 @@ public abstract class QQBotController
         {
             if (!string.IsNullOrEmpty(Message.ChannelId))
             {
-                Console.WriteLine($"[QQBotController.ReplyAsync] 发送频道回复到 ChannelId: {Message.ChannelId}");
                 await Client.SendChannelMessageAsync(Message.ChannelId, content, Message.Id);
-                Console.WriteLine($"[QQBotController.ReplyAsync] 频道回复成功");
             }
             else if (!string.IsNullOrEmpty(Message.GroupOpenId))
             {
-                Console.WriteLine($"[QQBotController.ReplyAsync] 发送群回复到 GroupOpenId: {Message.GroupOpenId}");
-                await Client.SendGroupMessageAsync(Message.GroupOpenId, content, Message.Id);
-                Console.WriteLine($"[QQBotController.ReplyAsync] 群回复成功");
+                await Client.SendGroupMessageAsync(Message.GroupOpenId, content, Message.Id, msgSeq);
             }
             else if (Message.Author != null && !string.IsNullOrEmpty(Message.Author.UserOpenId))
             {
-                Console.WriteLine($"[QQBotController.ReplyAsync] 发送C2C回复到 UserOpenId: {Message.Author.UserOpenId}");
-                 await Client.SendC2CMessageAsync(Message.Author.UserOpenId, content, Message.Id);
-                Console.WriteLine($"[QQBotController.ReplyAsync] C2C回复成功");
-            }
-            else
-            {
-                Console.WriteLine($"[QQBotController.ReplyAsync] 无法确定消息来源类型");
+                await Client.SendC2CMessageAsync(Message.Author.UserOpenId, content, Message.Id, msgSeq);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            Console.WriteLine($"Reply Error: {ex.GetType().Name} - {ex.Message}");
+            // 回复失败不应中断命令执行，调用方可从日志/返回值排查
+            System.Diagnostics.Debug.WriteLine($"Reply Error: {ex.GetType().Name} - {ex.Message}");
         }
     }
 }

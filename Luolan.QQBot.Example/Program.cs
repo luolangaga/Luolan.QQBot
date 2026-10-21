@@ -23,13 +23,13 @@ using Microsoft.Extensions.Logging;
 
 string appId = Environment.GetEnvironmentVariable("QQBOT_APPID") ?? "xxx";
 string clientSecret = Environment.GetEnvironmentVariable("QQBOT_SECRET") ?? "xxxx";
-bool useSandbox = true; // 是否使用沙箱环境
+bool useSandbox = false; // 是否使用沙箱环境
 
 #endregion
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.WriteLine("╔══════════════════════════════════════════╗");
-Console.WriteLine("║     Luolan.QQBot 完整示例程序 v1.4.0      ║");
+Console.WriteLine("║     Luolan.QQBot 完整示例程序 v1.5.0      ║");
 Console.WriteLine("╚══════════════════════════════════════════╝");
 Console.WriteLine();
 
@@ -64,9 +64,9 @@ var bot = new QQBotClientBuilder()
         Intents.Default                 // 公域默认: Guilds | GuildMembers | PublicGuildMessages
                                         //           | GuildMessageReactions | DirectMessage
                                         //           | Interaction | MessageAudit
-        | Intents.GroupAtMessages       // 群聊 @ 机器人消息 (需要单独申请)
+        | Intents.GroupAndC2C           // 群聊 @ / 全量群消息 / C2C 私聊 / 好友事件 (1<<25)
+        | Intents.GroupMembers          // 群成员加入/退出、入群申请 (1<<24)
         // 以下 Intents 需要额外权限，没有权限会导致 4014 错误：
-        // | Intents.C2CMessages        // C2C 私聊消息
         // | Intents.GuildMessages      // 频道全量消息 (仅私域)
         // | Intents.Forums             // 论坛事件
         // | Intents.AudioAction        // 音频事件
@@ -238,7 +238,45 @@ bot.OnFriendDel += async e =>
     await Task.CompletedTask;
 };
 
-logger.LogInformation("事件处理器注册完成！共注册 15 个事件。");
+// 3.16 群全量消息(需机器人开启"接收所有消息")
+bot.OnGroupMessageCreate += async e =>
+{
+    var msg = e.Message;
+    logger.LogInformation("[群全量消息] 群:{GroupOpenId} {Author}: {Content}",
+        msg.GroupOpenId, msg.Author?.Username, msg.Content);
+    await Task.CompletedTask;
+};
+
+// 3.17 群成员加入/退出
+bot.OnGroupMemberAdd += async e =>
+{
+    logger.LogInformation("[群成员加入] 群:{GroupOpenId} 成员:{MemberOpenId}", e.GroupOpenId, e.MemberOpenId);
+    await Task.CompletedTask;
+};
+
+bot.OnGroupMemberRemove += async e =>
+{
+    logger.LogInformation("[群成员退出] 群:{GroupOpenId} 成员:{MemberOpenId}", e.GroupOpenId, e.MemberOpenId);
+    await Task.CompletedTask;
+};
+
+// 3.18 入群申请(机器人需为群管理员)
+bot.OnGroupJoinRequest += async e =>
+{
+    logger.LogInformation("[入群申请] 群:{GroupOpenId} 申请人:{Username} 验证:{Method}",
+        e.GroupOpenId, e.Username, e.VerifyInfo?.Method);
+    await Task.CompletedTask;
+};
+
+// 3.19 订阅消息授权状态
+bot.OnSubscribeMessageStatus += async e =>
+{
+    logger.LogInformation("[订阅消息授权] OpenId:{OpenId} 结果数:{Count}",
+        e.OpenId, e.Result?.Count ?? 0);
+    await Task.CompletedTask;
+};
+
+logger.LogInformation("事件处理器注册完成！共注册 19 个事件。");
 
 // ============================================================
 // 4. 启用控制器模式 (推荐)
@@ -426,6 +464,52 @@ async Task DemonstrateAllApis()
         // await bot.SendGroupMessageAsync("groupOpenId", "主动发群消息");
         // await bot.SendC2CMessageAsync("userOpenId", "主动发私聊消息");
 
+        // --- 5.18 群管理 API (v1.5.0 新增) ---
+        // var groupInfo = await bot.GetGroupInfoAsync("groupOpenId");             // 群基本信息
+        // var botState = await bot.GetGroupBotStateAsync("groupOpenId");          // 机器人群内状态
+        // var groupMembers = await bot.GetGroupMembersAsync("groupOpenId");       // 群成员列表(需内邀权限)
+        // var groupMember = await bot.GetGroupMemberAsync("groupOpenId", "memberOpenId");
+        // var joinRequests = await bot.Api.GetGroupJoinRequestsAsync("groupOpenId"); // 入群申请列表
+        // await bot.ApproveGroupJoinRequestAsync("groupOpenId", "memberOpenId", new ApproveJoinRequestRequest
+        // {
+        //     Op = "approve",
+        //     JoinRequestId = "requestId"
+        // });
+        // await bot.Api.UpdateGroupBlacklistAsync("groupOpenId", new GroupBlacklistRequest
+        // {
+        //     Op = "add",
+        //     MemberOpenIds = new List<string> { "memberOpenId" }
+        // });
+        // await bot.SetGroupMemberMuteAsync("groupOpenId", new SetGroupMemberMuteRequest
+        // {
+        //     Members = new List<SetMemberMuteState>
+        //     {
+        //         new() { Op = "add", MemberOpenId = "memberOpenId", MuteExpireAt = DateTimeOffset.Now.AddHours(1).ToString("O") }
+        //     }
+        // });
+
+        // --- 5.19 单聊流式消息 (v1.5.0 新增) ---
+        // var first = await bot.SendC2CStreamMessageAsync("userOpenId", new SendC2CStreamMessageRequest
+        // {
+        //     InputState = 1, Index = 0, ContentType = "markdown",
+        //     ContentRaw = "正在生成回答…", MsgId = "messageId", MsgSeq = 1
+        // });
+        // await bot.SendC2CStreamMessageAsync("userOpenId", new SendC2CStreamMessageRequest
+        // {
+        //     InputState = 10, Index = 1, ContentType = "markdown",
+        //     ContentRaw = "正在生成回答…完成！", MsgId = "messageId", MsgSeq = 1,
+        //     StreamMsgId = first.Id
+        // });
+
+        // --- 5.20 互动响应 / 菜单 / 指令面板 (v1.5.0 新增) ---
+        // await bot.Api.RespondInteractionAsync(interactionId, code: 0);
+        // await bot.Api.UpdateMenuAsync(new QQBotMenu { Items = new List<MenuItem> { ... } });
+        // await bot.Api.CreatePanelAsync(new CreatePanelRequest { Scope = "group", TargetType = "all", Panel = new Panel { ... } });
+
+        // --- 5.21 分享链接 / 撤回群消息 ---
+        // var share = await bot.Api.GenerateUrlLinkAsync("callback_data");
+        // await bot.RevokeGroupMessageAsync("groupOpenId", "messageId");
+
         Console.WriteLine("--- API 功能演示结束 ---");
     }
     catch (Exception ex)
@@ -560,8 +644,8 @@ void DemonstrateIntents()
     Console.WriteLine($"  Forums               = {(int)Intents.Forums}          (1<<28) 论坛");
     Console.WriteLine($"  AudioAction          = {(int)Intents.AudioAction}     (1<<29) 音频");
     Console.WriteLine($"  PublicGuildMessages  = {(int)Intents.PublicGuildMessages} (1<<30) 公域@消息");
-    Console.WriteLine($"  GroupAtMessages      = {(int)Intents.GroupAtMessages} (1<<25) 群@消息");
-    Console.WriteLine($"  C2CMessages          = {(int)Intents.C2CMessages}     (1<<25) C2C消息");
+    Console.WriteLine($"  GroupMembers         = {(int)Intents.GroupMembers}    (1<<24) 群成员/入群申请");
+    Console.WriteLine($"  GroupAndC2C          = {(int)Intents.GroupAndC2C}     (1<<25) 群@/全量群消息/C2C");
     Console.WriteLine();
     Console.WriteLine($"  Default              = {(int)Intents.Default}");
     Console.WriteLine($"  PrivateAll           = {(int)Intents.PrivateAll}");

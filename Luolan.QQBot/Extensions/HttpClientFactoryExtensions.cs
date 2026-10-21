@@ -72,7 +72,7 @@ public static class HttpClientFactoryExtensions
             var eventDispatcher = sp.GetRequiredService<EventDispatcher>();
             var logger = sp.GetService<ILogger<QQBotClient>>();
             
-            return new QQBotClient(options, httpClient, tokenManager, apiClient, webSocketClient, eventDispatcher, logger);
+            return new QQBotClient(options, httpClient, tokenManager, apiClient, webSocketClient, eventDispatcher, logger, sp);
         });
         
         // 注册控制器管理器 (可选)

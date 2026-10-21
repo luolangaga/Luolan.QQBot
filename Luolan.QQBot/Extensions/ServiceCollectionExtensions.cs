@@ -1,3 +1,4 @@
+using Luolan.QQBot.Controllers;
 using Luolan.QQBot.Events;
 using Luolan.QQBot.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,9 +85,14 @@ public static class QQBotServiceCollectionExtensions
                 apiClient,
                 webSocketClient,
                 eventDispatcher,
-                logger
+                logger,
+                sp
             );
         });
+
+        services.TryAddSingleton(sp => new ControllerManager(
+            sp.GetService<ILogger<ControllerManager>>(),
+            sp));
 
         return services;
     }

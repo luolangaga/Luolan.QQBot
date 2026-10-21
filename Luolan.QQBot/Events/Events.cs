@@ -258,6 +258,136 @@ public class C2CMessageCreateEvent : MessageEventBase
 }
 
 /// <summary>
+/// 群消息事件(全量模式, 需机器人开启"接收所有消息")
+/// </summary>
+public class GroupMessageCreateEvent : MessageEventBase
+{
+    public override string EventType => "GROUP_MESSAGE_CREATE";
+}
+
+/// <summary>
+/// 群成员加入事件
+/// </summary>
+public class GroupMemberAddEvent : QQBotEventBase
+{
+    public override string EventType => "GROUP_MEMBER_ADD";
+
+    [JsonPropertyName("timestamp")]
+    public long Timestamp { get; set; }
+
+    [JsonPropertyName("group_openid")]
+    public string GroupOpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("member_openid")]
+    public string MemberOpenId { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 群成员退出事件
+/// </summary>
+public class GroupMemberRemoveEvent : QQBotEventBase
+{
+    public override string EventType => "GROUP_MEMBER_REMOVE";
+
+    [JsonPropertyName("timestamp")]
+    public long Timestamp { get; set; }
+
+    [JsonPropertyName("group_openid")]
+    public string GroupOpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("member_openid")]
+    public string MemberOpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("user_openid")]
+    public string? UserOpenId { get; set; }
+}
+
+/// <summary>
+/// 用户申请加群事件(仅机器人是群管理员时收到)
+/// </summary>
+public class GroupJoinRequestEvent : QQBotEventBase
+{
+    public override string EventType => "GROUP_JOIN_REQUEST";
+
+    [JsonPropertyName("group_openid")]
+    public string GroupOpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("join_request_id")]
+    public string JoinRequestId { get; set; } = string.Empty;
+
+    [JsonPropertyName("risk_tips")]
+    public string? RiskTips { get; set; }
+
+    [JsonPropertyName("union_openid")]
+    public string? UnionOpenId { get; set; }
+
+    [JsonPropertyName("member_openid")]
+    public string MemberOpenId { get; set; } = string.Empty;
+
+    [JsonPropertyName("username")]
+    public string? Username { get; set; }
+
+    [JsonPropertyName("apply_at")]
+    public string? ApplyAt { get; set; }
+
+    [JsonPropertyName("apply_source")]
+    public string? ApplySource { get; set; }
+
+    [JsonPropertyName("invited_by")]
+    public string? InvitedBy { get; set; }
+
+    [JsonPropertyName("bot")]
+    public bool Bot { get; set; }
+
+    [JsonPropertyName("verify_info")]
+    public JoinVerifyInfo? VerifyInfo { get; set; }
+
+    [JsonPropertyName("auto_approved")]
+    public AutoApprovedInfo? AutoApproved { get; set; }
+}
+
+/// <summary>
+/// 订阅消息授权状态变更事件
+/// </summary>
+public class SubscribeMessageStatusEvent : QQBotEventBase
+{
+    public override string EventType => "SUBSCRIBE_MESSAGE_STATUS";
+
+    [JsonPropertyName("group_openid")]
+    public string? GroupOpenId { get; set; }
+
+    [JsonPropertyName("openid")]
+    public string? OpenId { get; set; }
+
+    [JsonPropertyName("result")]
+    public List<SubscribeMsgTemplateResult>? Result { get; set; }
+}
+
+/// <summary>
+/// 订阅消息模板授权结果
+/// </summary>
+public class SubscribeMsgTemplateResult
+{
+    [JsonPropertyName("template_id")]
+    public long TemplateId { get; set; }
+
+    [JsonPropertyName("custom_template_id")]
+    public string? CustomTemplateId { get; set; }
+
+    [JsonPropertyName("op")]
+    public int Op { get; set; }
+
+    [JsonPropertyName("subscribe_id")]
+    public string? SubscribeId { get; set; }
+
+    [JsonPropertyName("subscribe_ts")]
+    public long SubscribeTs { get; set; }
+
+    [JsonPropertyName("update_ts")]
+    public long UpdateTs { get; set; }
+}
+
+/// <summary>
 /// 群添加机器人事件
 /// </summary>
 public class GroupAddRobotEvent : QQBotEventBase

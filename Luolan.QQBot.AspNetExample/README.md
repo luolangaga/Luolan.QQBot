@@ -1,211 +1,87 @@
 # ASP.NET Core QQ Bot 示例
 
-这是一个完整的 ASP.NET Core Web API 项目，展示如何将 QQ 机器人集成到 ASP.NET Core 应用中。
+展示如何将 Luolan.QQBot 集成到 ASP.NET Core 应用，包含控制器模式、依赖注入、WebSocket 与 Webhook 两种接入方式。
 
 ## 🚀 快速开始
 
 ### 1. 配置机器人凭据
 
-**方式一：使用环境变量（推荐）**
+推荐使用 User Secrets 或环境变量，不要提交真实密钥：
 
 ```bash
-# Windows PowerShell
-$env:QQ_BOT_APP_ID="你的AppId"
-$env:QQ_BOT_CLIENT_SECRET="你的ClientSecret"
-
-# Linux/Mac
-export QQ_BOT_APP_ID="你的AppId"
-export QQ_BOT_CLIENT_SECRET="你的ClientSecret"
+dotnet user-secrets set "Bot:AppId" "你的AppId"
+dotnet user-secrets set "Bot:ClientSecret" "你的ClientSecret"
 ```
 
-**方式二：修改 appsettings.json**
+或修改 `appsettings.json`：
 
 ```json
 {
-  "QQBot": {
+  "Bot": {
     "AppId": "你的AppId",
-    "ClientSecret": "你的ClientSecret"
+    "ClientSecret": "你的ClientSecret",
+    "IsSandbox": false,
+    "UseWebSocket": true
   }
 }
 ```
 
-### 2. 运行项目
+### 2. 运行
 
 ```bash
-cd Luolan.QQBot.AspNetExample
 dotnet run
 ```
 
-或者使用热重载：
+Swagger: `https://localhost:7192/swagger`
 
-```bash
-dotnet watch run
+## 🔌 接入方式
+
+### WebSocket (默认)
+
+`UseWebSocket = true` 时由 `QQBotHostedService` 自动连接网关。
+
+### Webhook
+
+将 `UseWebSocket` 设为 `false`，在开放平台管理端把回调地址配置为：
+
+```
+https://你的域名/api/qqbot/webhook
 ```
 
-### 3. 访问 API 文档
-
-打开浏览器访问：`https://localhost:5001/swagger`
+改由 `QQBotWebhook` 处理签名校验、回调地址验证和事件分发。
 
 ## 📡 API 端点
 
 | 端点 | 方法 | 说明 |
 |------|------|------|
 | `/health` | GET | 健康检查 |
-| `/api/bot/status` | GET | 获取机器人状态 |
-| `/api/bot/guilds` | GET | 获取机器人加入的频道列表 |
-| `/api/bot/guilds/{guildId}/channels` | GET | 获取指定频道的子频道列表 |
-| `/api/bot/send` | POST | 发送消息到指定频道 |
+| `/api/bot/status` | GET | 机器人连接状态 |
+| `/api/bot/send` | POST | 发送群/单聊/频道消息 |
+| `/api/bot/groups/{groupOpenId}/info` | GET | 群基本信息 |
+| `/api/bot/groups/{groupOpenId}/bot-state` | GET | 机器人群内状态 |
+| `/api/bot/groups/{groupOpenId}/members` | GET | 群成员列表 |
+| `/api/qqbot/webhook` | POST | Webhook 回调入口 |
 
-## 📝 示例请求
-
-### 检查机器人状态
-
-```bash
-curl https://localhost:5001/api/bot/status
-```
-
-### 发送消息
+### 发送消息示例
 
 ```bash
-curl -X POST https://localhost:5001/api/bot/send \
+curl -X POST https://localhost:7192/api/bot/send \
   -H "Content-Type: application/json" \
   -d '{
-    "channelId": "你的子频道ID",
-    "content": "Hello from API!"
+    "targetId": "群OpenID或用户OpenID",
+    "content": "Hello from API!",
+    "targetType": "group"
   }'
 ```
 
-### 获取频道列表
-
-```bash
-curl https://localhost:5001/api/bot/guilds
-```
-
-## 🎯 核心功能
-
-### 1. 依赖注入集成
-
-```csharp
-// 添加 QQ 机器人服务
-builder.Services.AddQQBot(options =>
-{
-    options.AppId = "你的AppId";
-    options.ClientSecret = "你的ClientSecret";
-    options.Intents = Intents.Default | Intents.GroupAtMessages;
-});
-
-// 添加托管服务（自动启动）
-builder.Services.AddQQBotHostedService();
-```
-
-### 2. 事件处理
-
-```csharp
-var bot = app.Services.GetRequiredService<QQBotClient>();
-
-// 处理@消息
-bot.OnAtMessageCreate += async e =>
-{
-    await bot.ReplyAsync(e.Message, "Hello from ASP.NET Core!");
-};
-
-// 处理群消息
-bot.OnGroupAtMessageCreate += async e =>
-{
-    await bot.ReplyGroupAsync(e.Message, "收到群消息!");
-};
-```
-
-### 3. HTTP API 调用
-
-```csharp
-// 获取频道列表
-app.MapGet("/api/bot/guilds", async (QQBotClient bot) =>
-{
-    var guilds = await bot.Api.GetCurrentUserGuildsAsync();
-    return Results.Ok(guilds);
-});
-```
-
-## 🔧 配置说明
-
-### appsettings.json
-
-```json
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning",
-      "Luolan.QQBot": "Debug"  // QQ机器人日志级别
-    }
-  },
-  "QQBot": {
-    "AppId": "YOUR_APP_ID_HERE",
-    "ClientSecret": "YOUR_CLIENT_SECRET_HERE"
-  }
-}
-```
-
-### 环境变量
-
-支持的环境变量：
-- `QQ_BOT_APP_ID` - 机器人 AppId
-- `QQ_BOT_CLIENT_SECRET` - 机器人 ClientSecret
-
-## 🌟 功能特性
-
-- ✅ **自动启动** - 使用 IHostedService 在应用启动时自动启动机器人
-- ✅ **自动停止** - 应用关闭时自动停止机器人
-- ✅ **依赖注入** - 所有组件都可以通过 DI 获取
-- ✅ **日志集成** - 使用 ASP.NET Core 日志系统
-- ✅ **配置系统** - 支持 appsettings.json 和环境变量
-- ✅ **Swagger 文档** - 自动生成 API 文档
-- ✅ **健康检查** - 内置健康检查端点
+`targetType` 支持 `group` / `c2c` / `channel`。
 
 ## 🎮 机器人命令
 
-在频道中 @ 机器人并发送以下命令：
+在频道或群中 @ 机器人：
 
 - `/ping` - 测试连接
 - `/time` - 查看服务器时间
-- `/status` - 查看机器人状态
-- `/help` - 显示帮助
+- `/info` - 查看当前消息上下文
 
-## 🔒 生产环境建议
-
-1. **使用 User Secrets** 存储敏感信息：
-   ```bash
-   dotnet user-secrets set "QQBot:AppId" "你的AppId"
-   dotnet user-secrets set "QQBot:ClientSecret" "你的ClientSecret"
-   ```
-
-2. **配置 HTTPS**：
-   ```json
-   {
-     "Kestrel": {
-       "Endpoints": {
-         "Https": {
-           "Url": "https://localhost:5001"
-         }
-       }
-     }
-   }
-   ```
-
-3. **配置 CORS**（如果需要前端调用）：
-   ```csharp
-   builder.Services.AddCors(options =>
-   {
-       options.AddDefaultPolicy(policy =>
-       {
-           policy.WithOrigins("https://your-frontend.com")
-                 .AllowAnyHeader()
-                 .AllowAnyMethod();
-       });
-   });
-   ```
-
-## 📚 更多示例
-
-查看主项目的 README.md 获取更多使用示例和文档。
+控制器示例同时演示了构造函数注入 `ILogger<BasicBotController>`。

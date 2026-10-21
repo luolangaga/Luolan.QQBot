@@ -1,0 +1,32 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+*.ncb
+*.sdf
+*.opensdf
+
+# Test / coverage
+TestResults/
+coverage/
+*.coverage
+*.trx
+
+# Node / VitePress
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# Local tooling
+.commandcode/
+
+# Logs
+*.log
+run_log.txt

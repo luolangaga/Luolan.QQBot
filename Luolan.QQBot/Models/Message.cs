@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Luolan.QQBot.Models;
@@ -114,6 +115,30 @@ public class Message
     /// </summary>
     [JsonPropertyName("group_openid")]
     public string? GroupOpenId { get; set; }
+
+    /// <summary>
+    /// 消息内容类型(群消息全量模式)
+    /// </summary>
+    [JsonPropertyName("message_type")]
+    public int MessageType { get; set; }
+
+    /// <summary>
+    /// 消息场景上下文(群消息全量模式)
+    /// </summary>
+    [JsonPropertyName("message_scene")]
+    public MessageScene? MessageScene { get; set; }
+
+    /// <summary>
+    /// 结构化卡片消息数据(群消息全量模式)
+    /// </summary>
+    [JsonPropertyName("ark_data")]
+    public ArkData? ArkData { get; set; }
+
+    /// <summary>
+    /// 消息元素列表(群消息全量模式)
+    /// </summary>
+    [JsonPropertyName("msg_elements")]
+    public List<MsgElement>? MsgElements { get; set; }
 }
 
 /// <summary>
@@ -162,6 +187,18 @@ public class MessageAttachment
     /// </summary>
     [JsonPropertyName("content_type")]
     public string? ContentType { get; set; }
+
+    /// <summary>
+    /// 语音消息转换后的 WAV 文件 URL
+    /// </summary>
+    [JsonPropertyName("voice_wav_url")]
+    public string? VoiceWavUrl { get; set; }
+
+    /// <summary>
+    /// 语音消息 ASR 参考结果
+    /// </summary>
+    [JsonPropertyName("asr_refer_text")]
+    public string? AsrReferText { get; set; }
 }
 
 /// <summary>
@@ -239,6 +276,7 @@ public class MessageReference
     /// 是否忽略获取引用消息详情错误
     /// </summary>
     [JsonPropertyName("ignore_get_message_error")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool IgnoreGetMessageError { get; set; }
 }
 
@@ -343,6 +381,12 @@ public class MessageMarkdown
     /// </summary>
     [JsonPropertyName("content")]
     public string? Content { get; set; }
+
+    /// <summary>
+    /// 是否校验图片转存结果
+    /// </summary>
+    [JsonPropertyName("force_verify_image_resource")]
+    public bool? ForceVerifyImageResource { get; set; }
 }
 
 /// <summary>
@@ -427,6 +471,12 @@ public class Button
     /// </summary>
     [JsonPropertyName("action")]
     public ButtonAction? Action { get; set; }
+
+    /// <summary>
+    /// 分组ID, 同一分组内有一个按钮操作后其它按钮变灰不可点击(action.type=1 时有效)
+    /// </summary>
+    [JsonPropertyName("group_id")]
+    public string? GroupId { get; set; }
 }
 
 /// <summary>
@@ -480,12 +530,14 @@ public class ButtonAction
     /// 是否在输入框回填
     /// </summary>
     [JsonPropertyName("at_bot_show_channel_list")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool AtBotShowChannelList { get; set; }
 
     /// <summary>
     /// 指令是否弹框
     /// </summary>
     [JsonPropertyName("enter")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool Enter { get; set; }
 
     /// <summary>
@@ -493,6 +545,25 @@ public class ButtonAction
     /// </summary>
     [JsonPropertyName("unsupport_tips")]
     public string? UnsupportTips { get; set; }
+
+    /// <summary>
+    /// 指令按钮可用，指令是否带引用回复本消息
+    /// </summary>
+    [JsonPropertyName("reply")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool Reply { get; set; }
+
+    /// <summary>
+    /// 指令按钮可用，点击后自动唤起选图器(1=选图器)
+    /// </summary>
+    [JsonPropertyName("anchor")]
+    public int? Anchor { get; set; }
+
+    /// <summary>
+    /// 用户点击二次确认操作
+    /// </summary>
+    [JsonPropertyName("modal")]
+    public ButtonModal? Modal { get; set; }
 }
 
 /// <summary>
@@ -541,4 +612,124 @@ public class DirectMessageSession
     /// </summary>
     [JsonPropertyName("create_time")]
     public DateTime CreateTime { get; set; }
+}
+
+/// <summary>
+/// 消息场景上下文
+/// </summary>
+public class MessageScene
+{
+    /// <summary>
+    /// 场景来源
+    /// </summary>
+    [JsonPropertyName("source")]
+    public string? Source { get; set; }
+
+    /// <summary>
+    /// 扩展数据列表(key=value)
+    /// </summary>
+    [JsonPropertyName("ext")]
+    public List<string>? Ext { get; set; }
+}
+
+/// <summary>
+/// 结构化卡片消息数据
+/// </summary>
+public class ArkData
+{
+    /// <summary>
+    /// 卡片消息中的用户操作提示文本
+    /// </summary>
+    [JsonPropertyName("prompt")]
+    public string? Prompt { get; set; }
+
+    /// <summary>
+    /// 卡片消息类型标识
+    /// </summary>
+    [JsonPropertyName("ark_type")]
+    public string? ArkType { get; set; }
+
+    /// <summary>
+    /// 卡片消息类型中文名称
+    /// </summary>
+    [JsonPropertyName("ark_name")]
+    public string? ArkName { get; set; }
+
+    /// <summary>
+    /// 卡片消息字段
+    /// </summary>
+    [JsonPropertyName("fields")]
+    public Dictionary<string, JsonElement>? Fields { get; set; }
+}
+
+/// <summary>
+/// 消息元素
+/// </summary>
+public class MsgElement
+{
+    /// <summary>
+    /// 消息元素引用消息索引
+    /// </summary>
+    [JsonPropertyName("msg_idx")]
+    public string? MsgIdx { get; set; }
+
+    /// <summary>
+    /// 该元素对应的消息发送者
+    /// </summary>
+    [JsonPropertyName("author")]
+    public User? Author { get; set; }
+
+    /// <summary>
+    /// 消息内容类型: 0=文本 3=卡片 101=并行消息 102=聊天记录 103=引用消息
+    /// </summary>
+    [JsonPropertyName("message_type")]
+    public int MessageType { get; set; }
+
+    /// <summary>
+    /// 消息正文内容
+    /// </summary>
+    [JsonPropertyName("content")]
+    public string? Content { get; set; }
+
+    /// <summary>
+    /// 该元素携带的附件
+    /// </summary>
+    [JsonPropertyName("attachments")]
+    public List<MessageAttachment>? Attachments { get; set; }
+
+    /// <summary>
+    /// 结构化卡片消息数据
+    /// </summary>
+    [JsonPropertyName("ark_data")]
+    public ArkData? ArkData { get; set; }
+
+    /// <summary>
+    /// 嵌套消息元素列表
+    /// </summary>
+    [JsonPropertyName("msg_elements")]
+    public List<MsgElement>? MsgElements { get; set; }
+}
+
+/// <summary>
+/// 按钮二次确认配置
+/// </summary>
+public class ButtonModal
+{
+    /// <summary>
+    /// 二次确认提示文本(最多40字符)
+    /// </summary>
+    [JsonPropertyName("content")]
+    public string? Content { get; set; }
+
+    /// <summary>
+    /// 确认按钮文字(最多4字符)
+    /// </summary>
+    [JsonPropertyName("confirm_text")]
+    public string? ConfirmText { get; set; }
+
+    /// <summary>
+    /// 取消按钮文字(最多4字符)
+    /// </summary>
+    [JsonPropertyName("cancel_text")]
+    public string? CancelText { get; set; }
 }

@@ -39,7 +39,16 @@ public class EventDispatcher
 
     // 群/C2C消息事件
     public event Func<GroupAtMessageCreateEvent, Task>? OnGroupAtMessageCreate;
+    public event Func<GroupMessageCreateEvent, Task>? OnGroupMessageCreate;
     public event Func<C2CMessageCreateEvent, Task>? OnC2CMessageCreate;
+
+    // 群成员事件
+    public event Func<GroupMemberAddEvent, Task>? OnGroupMemberAdd;
+    public event Func<GroupMemberRemoveEvent, Task>? OnGroupMemberRemove;
+    public event Func<GroupJoinRequestEvent, Task>? OnGroupJoinRequest;
+
+    // 订阅消息授权状态
+    public event Func<SubscribeMessageStatusEvent, Task>? OnSubscribeMessageStatus;
 
     // 群/C2C机器人事件
     public event Func<GroupAddRobotEvent, Task>? OnGroupAddRobot;
@@ -171,34 +180,51 @@ public class EventDispatcher
                 case "GROUP_AT_MESSAGE_CREATE":
                     await DispatchEventAsync(OnGroupAtMessageCreate, () => ParseMessageEvent<GroupAtMessageCreateEvent>(data, eventId));
                     break;
+                case "GROUP_MESSAGE_CREATE":
+                    await DispatchEventAsync(OnGroupMessageCreate, () => ParseMessageEvent<GroupMessageCreateEvent>(data, eventId));
+                    break;
                 case "C2C_MESSAGE_CREATE":
                     await DispatchEventAsync(OnC2CMessageCreate, () => ParseMessageEvent<C2CMessageCreateEvent>(data, eventId));
                     break;
 
+                // 群成员事件
+                case "GROUP_MEMBER_ADD":
+                    await DispatchEventAsync(OnGroupMemberAdd, () => ParseDirectEvent<GroupMemberAddEvent>(data, eventId));
+                    break;
+                case "GROUP_MEMBER_REMOVE":
+                    await DispatchEventAsync(OnGroupMemberRemove, () => ParseDirectEvent<GroupMemberRemoveEvent>(data, eventId));
+                    break;
+                case "GROUP_JOIN_REQUEST":
+                    await DispatchEventAsync(OnGroupJoinRequest, () => ParseDirectEvent<GroupJoinRequestEvent>(data, eventId));
+                    break;
+                case "SUBSCRIBE_MESSAGE_STATUS":
+                    await DispatchEventAsync(OnSubscribeMessageStatus, () => ParseDirectEvent<SubscribeMessageStatusEvent>(data, eventId));
+                    break;
+
                 // 群/C2C机器人事件
                 case "GROUP_ADD_ROBOT":
-                    await DispatchEventAsync(OnGroupAddRobot, () => data.Deserialize<GroupAddRobotEvent>(_jsonOptions) ?? new GroupAddRobotEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnGroupAddRobot, () => ParseDirectEvent<GroupAddRobotEvent>(data, eventId));
                     break;
                 case "GROUP_DEL_ROBOT":
-                    await DispatchEventAsync(OnGroupDelRobot, () => data.Deserialize<GroupDelRobotEvent>(_jsonOptions) ?? new GroupDelRobotEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnGroupDelRobot, () => ParseDirectEvent<GroupDelRobotEvent>(data, eventId));
                     break;
                 case "GROUP_MSG_REJECT":
-                    await DispatchEventAsync(OnGroupMsgReject, () => data.Deserialize<GroupMsgRejectEvent>(_jsonOptions) ?? new GroupMsgRejectEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnGroupMsgReject, () => ParseDirectEvent<GroupMsgRejectEvent>(data, eventId));
                     break;
                 case "GROUP_MSG_RECEIVE":
-                    await DispatchEventAsync(OnGroupMsgReceive, () => data.Deserialize<GroupMsgReceiveEvent>(_jsonOptions) ?? new GroupMsgReceiveEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnGroupMsgReceive, () => ParseDirectEvent<GroupMsgReceiveEvent>(data, eventId));
                     break;
                 case "FRIEND_ADD":
-                    await DispatchEventAsync(OnFriendAdd, () => data.Deserialize<FriendAddEvent>(_jsonOptions) ?? new FriendAddEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnFriendAdd, () => ParseDirectEvent<FriendAddEvent>(data, eventId));
                     break;
                 case "FRIEND_DEL":
-                    await DispatchEventAsync(OnFriendDel, () => data.Deserialize<FriendDelEvent>(_jsonOptions) ?? new FriendDelEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnFriendDel, () => ParseDirectEvent<FriendDelEvent>(data, eventId));
                     break;
                 case "C2C_MSG_REJECT":
-                    await DispatchEventAsync(OnC2CMsgReject, () => data.Deserialize<C2CMsgRejectEvent>(_jsonOptions) ?? new C2CMsgRejectEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnC2CMsgReject, () => ParseDirectEvent<C2CMsgRejectEvent>(data, eventId));
                     break;
                 case "C2C_MSG_RECEIVE":
-                    await DispatchEventAsync(OnC2CMsgReceive, () => data.Deserialize<C2CMsgReceiveEvent>(_jsonOptions) ?? new C2CMsgReceiveEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnC2CMsgReceive, () => ParseDirectEvent<C2CMsgReceiveEvent>(data, eventId));
                     break;
 
                 // 表情表态事件
@@ -224,42 +250,42 @@ public class EventDispatcher
 
                 // 音频事件
                 case "AUDIO_START":
-                    await DispatchEventAsync(OnAudioStart, () => data.Deserialize<AudioStartEvent>(_jsonOptions) ?? new AudioStartEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnAudioStart, () => ParseDirectEvent<AudioStartEvent>(data, eventId));
                     break;
                 case "AUDIO_FINISH":
-                    await DispatchEventAsync(OnAudioFinish, () => data.Deserialize<AudioFinishEvent>(_jsonOptions) ?? new AudioFinishEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnAudioFinish, () => ParseDirectEvent<AudioFinishEvent>(data, eventId));
                     break;
                 case "AUDIO_ON_MIC":
-                    await DispatchEventAsync(OnAudioOnMic, () => data.Deserialize<AudioOnMicEvent>(_jsonOptions) ?? new AudioOnMicEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnAudioOnMic, () => ParseDirectEvent<AudioOnMicEvent>(data, eventId));
                     break;
                 case "AUDIO_OFF_MIC":
-                    await DispatchEventAsync(OnAudioOffMic, () => data.Deserialize<AudioOffMicEvent>(_jsonOptions) ?? new AudioOffMicEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnAudioOffMic, () => ParseDirectEvent<AudioOffMicEvent>(data, eventId));
                     break;
 
                 // 论坛事件
                 case "FORUM_THREAD_CREATE":
-                    await DispatchEventAsync(OnForumThreadCreate, () => data.Deserialize<ForumThreadCreateEvent>(_jsonOptions) ?? new ForumThreadCreateEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumThreadCreate, () => ParseDirectEvent<ForumThreadCreateEvent>(data, eventId));
                     break;
                 case "FORUM_THREAD_UPDATE":
-                    await DispatchEventAsync(OnForumThreadUpdate, () => data.Deserialize<ForumThreadUpdateEvent>(_jsonOptions) ?? new ForumThreadUpdateEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumThreadUpdate, () => ParseDirectEvent<ForumThreadUpdateEvent>(data, eventId));
                     break;
                 case "FORUM_THREAD_DELETE":
-                    await DispatchEventAsync(OnForumThreadDelete, () => data.Deserialize<ForumThreadDeleteEvent>(_jsonOptions) ?? new ForumThreadDeleteEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumThreadDelete, () => ParseDirectEvent<ForumThreadDeleteEvent>(data, eventId));
                     break;
                 case "FORUM_POST_CREATE":
-                    await DispatchEventAsync(OnForumPostCreate, () => data.Deserialize<ForumPostCreateEvent>(_jsonOptions) ?? new ForumPostCreateEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumPostCreate, () => ParseDirectEvent<ForumPostCreateEvent>(data, eventId));
                     break;
                 case "FORUM_POST_DELETE":
-                    await DispatchEventAsync(OnForumPostDelete, () => data.Deserialize<ForumPostDeleteEvent>(_jsonOptions) ?? new ForumPostDeleteEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumPostDelete, () => ParseDirectEvent<ForumPostDeleteEvent>(data, eventId));
                     break;
                 case "FORUM_REPLY_CREATE":
-                    await DispatchEventAsync(OnForumReplyCreate, () => data.Deserialize<ForumReplyCreateEvent>(_jsonOptions) ?? new ForumReplyCreateEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumReplyCreate, () => ParseDirectEvent<ForumReplyCreateEvent>(data, eventId));
                     break;
                 case "FORUM_REPLY_DELETE":
-                    await DispatchEventAsync(OnForumReplyDelete, () => data.Deserialize<ForumReplyDeleteEvent>(_jsonOptions) ?? new ForumReplyDeleteEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumReplyDelete, () => ParseDirectEvent<ForumReplyDeleteEvent>(data, eventId));
                     break;
                 case "FORUM_PUBLISH_AUDIT_RESULT":
-                    await DispatchEventAsync(OnForumPublishAuditResult, () => data.Deserialize<ForumPublishAuditResultEvent>(_jsonOptions) ?? new ForumPublishAuditResultEvent { EventId = eventId, RawData = data });
+                    await DispatchEventAsync(OnForumPublishAuditResult, () => ParseDirectEvent<ForumPublishAuditResultEvent>(data, eventId));
                     break;
 
                 default:
@@ -350,6 +376,14 @@ public class EventDispatcher
             RawData = data,
             Message = message ?? new Message()
         };
+    }
+
+    private T ParseDirectEvent<T>(JsonElement data, string? eventId) where T : QQBotEventBase, new()
+    {
+        var evt = data.Deserialize<T>(_jsonOptions) ?? new T();
+        evt.EventId = eventId;
+        evt.RawData = data;
+        return evt;
     }
 
     private T ParseDeletedMessageEvent<T>(JsonElement data, string? eventId) where T : QQBotEventBase, new()

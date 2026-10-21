@@ -42,6 +42,24 @@ public class User
     /// </summary>
     [JsonPropertyName("user_openid")]
     public string? UserOpenId { get; set; }
+
+    /// <summary>
+    /// 跨应用统一用户OpenID(需特殊申请)
+    /// </summary>
+    [JsonPropertyName("union_openid")]
+    public string? UnionOpenId { get; set; }
+
+    /// <summary>
+    /// 跨应用统一用户账号(需特殊申请)
+    /// </summary>
+    [JsonPropertyName("union_user_account")]
+    public string? UnionUserAccount { get; set; }
+
+    /// <summary>
+    /// 群内角色: member/admin/owner
+    /// </summary>
+    [JsonPropertyName("member_role")]
+    public string? MemberRole { get; set; }
 }
 
 /// <summary>
@@ -80,14 +98,14 @@ public class Member
 public class BotInfo : User
 {
     /// <summary>
-    /// 开放平台 union_openid
+    /// 机器人分享链接
     /// </summary>
-    [JsonPropertyName("union_openid")]
-    public string? UnionOpenId { get; set; }
+    [JsonPropertyName("share_url")]
+    public string? ShareUrl { get; set; }
 
     /// <summary>
-    /// 开放平台 union_user_account
+    /// 机器人欢迎语
     /// </summary>
-    [JsonPropertyName("union_user_account")]
-    public string? UnionUserAccount { get; set; }
+    [JsonPropertyName("welcome_msg")]
+    public string? WelcomeMsg { get; set; }
 }

@@ -146,7 +146,12 @@ public enum OpCode
     /// <summary>
     /// 服务端要求客户端发送HTTP回调ACK
     /// </summary>
-    HttpCallbackAck = 12
+    HttpCallbackAck = 12,
+
+    /// <summary>
+    /// Webhook 回调地址验证
+    /// </summary>
+    CallbackValidation = 13
 }
 
 /// <summary>

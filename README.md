@@ -7,22 +7,24 @@
 
 一个简洁、高效、深度集成 .NET 依赖注入体系的 QQ 官方机器人 SDK。旨在提供最符合 .NET 开发者直觉的开发体验。
 
+> **v1.5.0** 已适配官方新域名 `api.bot.qq.com`，新增 Webhook 接入、群管理 API、单聊流式消息、分片上传、自定义菜单/指令面板等能力。
+
 ## 🌟 特性
 
-- 🎮 **MVC 控制器模式** - **[NEW]** 类似 WebAPI 的开发体验，支持命令路由、参数自动解析、直接返回对象。
+- 🎮 **MVC 控制器模式** - 类似 WebAPI 的开发体验，支持命令路由、参数自动解析、直接返回对象，控制器支持依赖注入构造。
 - ⚡ **极致简单** - 采用 Builder 模式，几行代码即可让机器人上线。
 - 🔄 **全自动管理** - Token 自动刷新、WebSocket 自动重连，开发者只需关注业务逻辑。
 - 🧪 **深度集成** - 完美支持 ASP.NET Core 依赖注入和 IHostedService。
 - 🛡️ **强类型支持** - 完整的 API 模型定义，享受极致的 IDE 智能提示。
 - 📡 **事件驱动** - 清晰的事件分发机制，支持频道、群聊、私聊等多种场景。
-- 🚀 **性能优化** - **[NEW]** 内置速率限制器、共享 JSON 配置、增强的命令解析。
-- 🔧 **类型丰富** - **[NEW]** 支持 bool, enum, Guid, 可空类型等多种参数类型自动转换。
+- 🌐 **双接入方式** - 同时支持 WebSocket 与 Webhook(HTTP 回调)，内置 Ed25519 签名校验。
+- 👥 **群管理能力** - 群信息、群成员、入群审批、黑名单、禁言等管理接口。
+- 🚀 **性能优化** - 内置速率限制器、共享 JSON 配置、增强的命令解析。
+- 🔧 **类型丰富** - 支持 bool, enum, Guid, 可空类型等多种参数类型自动转换。
 
 ---
 
 ## 📦 安装
-
-通过 NuGet 安装核心包：
 
 ```bash
 dotnet add package Luolan.QQBot
@@ -31,8 +33,6 @@ dotnet add package Luolan.QQBot
 ---
 
 ## 🎮 MVC控制器模式 (推荐)
-
-这是 v1.4.0 引入的全新架构优化模式，允许你像写 WebAPI 一样编写机器人指令。
 
 ### 1. 启用控制器
 
@@ -49,47 +49,44 @@ bot.UseControllers();
 await bot.StartAsync();
 ```
 
+在 ASP.NET Core 中，控制器会自动从 DI 容器创建，可注入任意注册服务：
+
+```csharp
+public class MyController : QQBotController
+{
+    private readonly ILogger<MyController> _logger;
+
+    public MyController(ILogger<MyController> logger) => _logger = logger;
+
+    [Command("hello")]
+    public string Hello(string name) => $"Hello {name}!";
+}
+
+// Program.cs
+app.Services.GetRequiredService<QQBotClient>().UseControllers();
+```
+
 ### 2. 编写控制器
 
 只需继承 `QQBotController` 并给方法加上 `[Command]` 特性。
 
 ```csharp
-using Luolan.QQBot.Controllers;
-using Luolan.QQBot.Helpers;
-
 public class MyController : QQBotController
 {
-    // 基础文本命令
-    // 用户发送: /hello world
     [Command("hello")]
-    public string Hello(string name)
-    {
-        return $"Hello {name}!";
-    }
+    public string Hello(string name) => $"Hello {name}!";
 
     // 参数自动转换
-    // 用户发送: /add 10 20
     [Command("add")]
-    public string Add(int a, int b)
-    {
-        return $"Result: {a + b}";
-    }
+    public string Add(int a, int b) => $"Result: {a + b}";
 
     // 返回图片
-    // 用户发送: /cat
     [Command("cat")]
-    public ImageResult Cat()
-    {
-        return new ImageResult("https://example.com/cat.jpg");
-    }
+    public ImageResult Cat() => new("https://example.com/cat.jpg");
 
     // 返回 Markdown
-    // 用户发送: /md
     [Command("md")]
-    public MessageMarkdown Markdown()
-    {
-        return MarkdownBuilder.FromContent("# 标题\n**加粗内容**");
-    }
+    public MessageMarkdown Markdown() => MarkdownBuilder.FromContent("# 标题\n**加粗内容**");
 
     // 异步任务
     [Command("async")]
@@ -98,45 +95,22 @@ public class MyController : QQBotController
         await Task.Delay(1000);
         return "Work done!";
     }
-    
-    // 访问上下文
-    [Command("info")]
-    public string Info()
-    {
-        // 任何方法内都可以访问 User, Message, Client 等属性
-        return $"User: {User?.Username}, Channel: {Message.ChannelId}";
-    }
-    
-    // 支持引号参数 (新增)
-    // 用户发送: /say "hello world" test
+
+    // 支持引号参数: /say "hello world" test
     [Command("say")]
     public string Say(string message, string? target = null)
-    {
-        return target != null ? $"{target}: {message}" : message;
-    }
-    
-    // 支持枚举类型 (新增)
+        => target != null ? $"{target}: {message}" : message;
+
+    // 枚举 / 布尔 / Guid / 可空类型自动转换
     [Command("set")]
-    public string SetLevel(LogLevel level)
-    {
-        return $"Level set to: {level}";
-    }
-    
-    // 支持布尔值 (新增)
-    // 用户发送: /toggle true  或 /toggle 1  或 /toggle yes
-    [Command("toggle")]
-    public string Toggle(bool enabled)
-    {
-        return enabled ? "Enabled" : "Disabled";
-    }
+    public string SetLevel(LogLevel level, bool enabled, int? timeout = null)
+        => $"level={level}, enabled={enabled}, timeout={timeout}";
 }
 ```
 
 ---
 
 ## 🚀 经典模式快速开始
-
-如果你更喜欢直接监听事件：
 
 ### 1. 控制台模式
 ```csharp
@@ -145,11 +119,11 @@ using Luolan.QQBot;
 var bot = new QQBotClientBuilder()
     .WithAppId("你的AppId")
     .WithClientSecret("你的ClientSecret")
-    .WithIntents(Intents.Default | Intents.GroupAtMessages)
+    .WithIntents(Intents.Default | Intents.GroupAndC2C)
     .Build();
 
-bot.OnAtMessageCreate += async e => await bot.ReplyAsync(e.Message, "收到频道消息！");
 bot.OnGroupAtMessageCreate += async e => await bot.ReplyGroupAsync(e.Message, "收到群消息！");
+bot.OnGroupMessageCreate += async e => Console.WriteLine($"[群全量] {e.Message.Content}");
 
 await bot.StartAsync();
 await Task.Delay(-1);
@@ -169,27 +143,60 @@ builder.Services.AddQQBotHostedService();
 
 **方式二：IHttpClientFactory 集成 (推荐，性能更优)**
 ```csharp
-using Luolan.QQBot.Extensions;
-
 builder.Services.AddQQBotWithHttpClientFactory(options => {
     options.AppId = "你的AppId";
     options.ClientSecret = "你的ClientSecret";
-    options.Intents = Intents.Default;
+    options.Intents = Intents.Default | Intents.GroupAndC2C;
 });
 builder.Services.AddQQBotHostedService();
 ```
+
+### 3. Webhook 接入 (v1.5.0 新增)
+
+管理端将回调地址指向你的 HTTPS 接口（端口仅支持 80/443/8080/8443），然后用 `QQBotWebhook` 处理请求：
+
+```csharp
+using Luolan.QQBot.Webhook;
+
+builder.Services.AddQQBotWebhook("你的ClientSecret");
+
+app.MapPost("/api/qqbot/webhook", async (
+    HttpContext context,
+    QQBotWebhook webhook,
+    CancellationToken ct) =>
+{
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync(ct);
+
+    var signature = context.Request.Headers["X-Signature-Ed25519"].FirstOrDefault();
+    var timestamp = context.Request.Headers["X-Signature-Timestamp"].FirstOrDefault();
+
+    try
+    {
+        var response = await webhook.HandleAsync(body, signature, timestamp, ct);
+        return Results.Content(response, "application/json");
+    }
+    catch (UnauthorizedAccessException)
+    {
+        return Results.Unauthorized();
+    }
+});
+```
+
+`QQBotWebhook` 会自动处理回调地址验证 (OpCode 13)、Ed25519 签名校验、事件分发，并返回平台要求的 ACK (OpCode 12)。
 
 ---
 
 ## 💡 核心概念: Intents
 
-订阅相应的 `Intents` 才能接收到对应类型的事件。
+订阅相应的 `Intents` 才能接收到对应的事件。
 
 | Intent | 说明 |
 | :--- | :--- |
 | `Intents.Default` | **公域**推荐。包含 Guilds, Members, AtMessages (频道@) |
-| `Intents.GroupAtMessages` | **群聊** @机器人消息事件 |
-| `Intents.C2CMessages` | **C2C** (私聊) 消息事件 |
+| `Intents.GroupAndC2C` | `1<<25`，群@消息、全量群消息、C2C 私聊、好友事件 |
+| `Intents.GroupMembers` | `1<<24`，群成员加入/退出、入群申请 |
+| `Intents.C2CMessages` | `1<<25`，等同 `GroupAndC2C` |
 | `Intents.GuildMessages` | **私域**特权。接收频道内所有普通消息 |
 | `Intents.PublicGuildMessages` | 公域接收频道 @ 消息 |
 
@@ -209,35 +216,138 @@ await bot.ReplyC2CAsync(sourceMsg, "回复私聊内容");
 await bot.SendChannelMessageAsync("channelId", "Hello!");
 await bot.SendGroupMessageAsync("groupOpenId", "Hello Group!");
 await bot.SendC2CMessageAsync("userOpenId", "Hello Private!");
+
+// Markdown + 键盘
+await bot.SendGroupMarkdownAsync(groupOpenId, markdown, keyboard, msgId: msg.Id);
+await bot.SendC2CMarkdownAsync(userOpenId, markdown, keyboard, msgId: msg.Id);
+
+// 富媒体(自动上传并发送)
+await bot.SendGroupMediaAsync(groupOpenId, "https://example.com/a.png", fileType: 1);
+await bot.SendC2CMediaAsync(userOpenId, "https://example.com/a.png", fileType: 1);
+
+// 撤回
+await bot.RevokeGroupMessageAsync(groupOpenId, messageId);
+await bot.RevokeC2CMessageAsync(userOpenId, messageId);
 ```
 
-### 2. Markdown 与 互动键盘
+### 2. 单聊流式消息 (v1.5.0 新增)
+
+```csharp
+var first = await bot.SendC2CStreamMessageAsync(openId, new SendC2CStreamMessageRequest
+{
+    InputState = 1,           // 1=生成中 10=生成结束
+    Index = 0,
+    ContentType = "markdown",
+    ContentRaw = "正在生成回答…",
+    MsgId = sourceMsg.Id,
+    MsgSeq = 1
+});
+
+await bot.SendC2CStreamMessageAsync(openId, new SendC2CStreamMessageRequest
+{
+    InputState = 10,
+    Index = 1,
+    ContentType = "markdown",
+    ContentRaw = "正在生成回答…完成！",
+    MsgId = sourceMsg.Id,
+    MsgSeq = 1,
+    StreamMsgId = first.Id
+});
+```
+
+### 3. 群管理 (v1.5.0 新增)
+
+```csharp
+var info = await bot.GetGroupInfoAsync(groupOpenId);
+var state = await bot.GetGroupBotStateAsync(groupOpenId);
+var members = await bot.GetGroupMembersAsync(groupOpenId);          // 需内邀权限
+var member = await bot.GetGroupMemberAsync(groupOpenId, memberOpenId);
+
+// 入群申请
+var requests = await bot.Api.GetGroupJoinRequestsAsync(groupOpenId);
+await bot.ApproveGroupJoinRequestAsync(groupOpenId, memberOpenId, new ApproveJoinRequestRequest
+{
+    Op = "approve",                 // approve / decline
+    JoinRequestId = requestId,
+    RejectReason = null,
+    AddToMemberBlacklist = false
+});
+
+// 黑名单
+await bot.Api.UpdateGroupBlacklistAsync(groupOpenId, new GroupBlacklistRequest
+{
+    Op = "add",                     // add / del
+    MemberOpenIds = new() { memberOpenId }
+});
+
+// 禁言
+await bot.SetGroupMemberMuteAsync(groupOpenId, new SetGroupMemberMuteRequest
+{
+    Members = new()
+    {
+        new SetMemberMuteState
+        {
+            Op = "add",             // add / update / del
+            MemberOpenId = memberOpenId,
+            MuteExpireAt = DateTimeOffset.Now.AddHours(1).ToString("O")
+        }
+    }
+});
+```
+
+### 4. 自定义菜单、指令面板与互动响应 (v1.5.0 新增)
+
+```csharp
+// 全局自定义菜单(仅 C2C)
+await bot.Api.UpdateMenuAsync(new QQBotMenu
+{
+    Items = new()
+    {
+        new MenuItem { Type = "send_message", Name = "帮助", SendMessage = "/help" },
+        new MenuItem { Type = "link", Name = "官网", Link = "https://example.com" }
+    }
+});
+
+// 指令面板
+var panel = await bot.Api.CreatePanelAsync(new CreatePanelRequest
+{
+    Scope = "group",
+    TargetType = "all",
+    Panel = new Panel
+    {
+        Items = new()
+        {
+            new PanelItem { Type = "command", Name = "签到", Desc = "每日签到" }
+        }
+    }
+});
+
+// 回应按钮互动，避免客户端一直 loading
+await bot.Api.RespondInteractionAsync(interactionId, code: 0);
+
+// 生成邀请分享链接
+var share = await bot.Api.GenerateUrlLinkAsync("callback_data");
+```
+
+### 5. Markdown 与 互动键盘
 
 ```csharp
 using Luolan.QQBot.Helpers;
-using Luolan.QQBot.Extensions;
 
-// 方式一：Builder (推荐)
 var markdown = new MarkdownBuilder().UseContent("# 标题").Build();
 var keyboard = new KeyboardBuilder()
     .NewRow().AddButton("btn1", "按钮").Build();
 
 await bot.SendMarkdownAsync(channelId, markdown, keyboard);
-
-// 方式二：扩展方法
 await bot.SendMarkdownContentAsync(channelId, "# Hello");
-
-// 方式三：Controller (见上文)
 ```
 
-### 3. 频道与成员管理
+### 6. 频道与成员管理
 ```csharp
-// 获取信息
 var guilds = await bot.GetGuildsAsync();
 var members = await bot.GetMembersAsync(guildId);
 
-// 禁言与管理
-await bot.Api.MuteMemberAsync(guildId, userId, 60); 
+await bot.Api.MuteMemberAsync(guildId, userId, 60);
 await bot.Api.CreateGuildRoleAsync(guildId, new() { Name = "新角色" });
 ```
 
@@ -250,11 +360,18 @@ await bot.Api.CreateGuildRoleAsync(guildId, new() { Name = "新角色" });
 | **消息** | `OnAtMessageCreate` | 频道 @ 机器人 |
 | | `OnMessageCreate` | 频道全量消息 (私域) |
 | | `OnGroupAtMessageCreate` | 群聊 @ 机器人 |
+| | `OnGroupMessageCreate` | 群聊全量消息 (v1.5.0) |
 | | `OnC2CMessageCreate` | C2C 私聊 |
+| | `OnDirectMessageCreate` | 频道私信 |
+| **群成员** | `OnGroupMemberAdd/Remove` | 群成员加入/退出 (v1.5.0) |
+| | `OnGroupJoinRequest` | 用户申请加群 (v1.5.0) |
 | **管理** | `OnGuildCreate/Delete` | 机器人加入/退出频道 |
 | | `OnGuildMemberAdd/Remove` | 成员加入/退出 |
 | | `OnGroupAdd/DelRobot` | 机器人进/出群 |
+| **好友** | `OnFriendAdd/OnFriendDel` | 好友添加/删除 |
 | **互动** | `OnInteractionCreate` | 按钮点击回调 |
+| | `OnSubscribeMessageStatus` | 订阅消息授权状态 (v1.5.0) |
+| **其他** | `OnRawEvent` | 所有原始事件 |
 
 ---
 
@@ -265,7 +382,7 @@ var bot = new QQBotClientBuilder()
     .WithAppId("...")
     .WithClientSecret("...")
     .UseSandbox(true)                              // 沙箱环境
-    .WithIntents(Intents.Default)                  // 事件订阅
+    .WithIntents(Intents.Default | Intents.GroupAndC2C)
     .WithTokenRefreshBeforeExpire(120)             // Token 提前刷新
     .WithWebSocketReconnectInterval(3000)          // 重连间隔
     .WithWebSocketMaxReconnectAttempts(20)         // 最大尝试次数
@@ -273,96 +390,27 @@ var bot = new QQBotClientBuilder()
     .Build();
 ```
 
----
+自定义服务器地址（例如代理或私有网关）：
+
+```csharp
+var options = new QQBotClientOptions
+{
+    AppId = "...",
+    ClientSecret = "...",
+    ApiBaseUrlOverride = "https://api.bot.qq.com",
+    AuthUrlOverride = "https://api.bot.qq.com/app/getAppAccessToken"
+};
+```
 
 ---
 
 ## ⚡ 性能优化
 
-### 内置优化特性
-
-本 SDK 已经内置了多项性能优化，开箱即用：
-
-#### 1. 智能速率限制
-自动限制 API 请求频率，防止触发 QQ API 的速率限制（60次/分钟）：
-```csharp
-// 无需手动配置，SDK 自动处理
-await client.SendChannelMessageAsync(channelId, "消息内容");
-```
-
-#### 2. 共享 JSON 配置
-所有 HTTP 请求共享同一个 `JsonSerializerOptions` 实例，减少内存分配。
-
-#### 3. IHttpClientFactory 支持
-使用 `AddQQBotWithHttpClientFactory` 可以更好地管理 HttpClient 生命周期：
-```csharp
-builder.Services.AddQQBotWithHttpClientFactory(options => { ... });
-```
-
-#### 4. 增强的命令解析
-支持引号参数，自动处理复杂参数：
-```csharp
-// 用户输入: /command "hello world" 123 true
-[Command("command")]
-public string MyCommand(string text, int number, bool flag)
-{
-    // text = "hello world"
-    // number = 123
-    // flag = true
-    return "OK";
-}
-```
-
-#### 5. 丰富的类型转换
-自动支持以下类型参数：
-- 基础类型: `int`, `long`, `double`, `decimal`, `string`
-- 布尔值: `bool` (支持 `true/false`, `1/0`, `yes/no`, `on/off`)
-- 枚举: `enum` (大小写不敏感)
-- Guid: `Guid`
-- 可空类型: `int?`, `bool?` 等
-
----
-
-## 💡 最佳实践
-
-### 1. 使用 IHttpClientFactory
-在 ASP.NET Core 项目中，推荐使用 `AddQQBotWithHttpClientFactory`：
-```csharp
-builder.Services.AddQQBotWithHttpClientFactory(options => { ... });
-```
-
-### 2. 合理设置 Intents
-只订阅需要的事件类型，避免不必要的网络流量：
-```csharp
-var bot = new QQBotClientBuilder()
-    .WithIntents(Intents.GroupAtMessages | Intents.C2CMessages)  // 只订阅群聊和私聊
-    .Build();
-```
-
-### 3. 使用控制器模式
-控制器模式提供了更好的代码组织和参数解析：
-```csharp
-public class AdminController : QQBotController
-{
-    [Command("ban")]
-    public async Task<string> Ban(string userId, int duration)
-    {
-        await Client.Api.MuteMemberAsync(Message.GuildId!, userId, duration);
-        return $"已禁言用户 {duration} 秒";
-    }
-}
-```
-
-### 4. 充分利用类型转换
-让 SDK 自动处理参数类型转换：
-```csharp
-[Command("config")]
-public string Config(bool enabled, LogLevel level, int? timeout = null)
-{
-    // 所有参数自动从字符串转换
-    return $"Config: {enabled}, {level}, {timeout}";
-}
-```
+- **智能速率限制** - 默认令牌桶 100 容量 / 20 QPS 补充，可通过 `RateLimitCapacity`、`RateLimitRefillPerSecond` 调整。
+- **共享 JSON 配置** - 所有 HTTP 请求共享 `JsonSerializerOptions` 实例。
+- **IHttpClientFactory 支持** - `AddQQBotWithHttpClientFactory` 管理 HttpClient 生命周期。
+- **增强的命令解析** - 支持引号参数、bool/enum/Guid/可空类型转换。
+- **富媒体分片上传** - 支持 `upload_prepare` + `upload_part_finish` 大文件上传流程。
 
 ---
 

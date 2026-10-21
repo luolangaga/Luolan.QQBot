@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using Luolan.QQBot.Controllers;
 using Luolan.QQBot.Events;
 using Luolan.QQBot.Models;
 using Luolan.QQBot.Services;
@@ -55,6 +56,16 @@ public class QQBotClient : IDisposable
     /// </summary>
     public User? CurrentUser => _webSocketClient.Session.BotUser;
 
+    /// <summary>
+    /// 依赖注入容器(通过DI创建时可用)
+    /// </summary>
+    internal IServiceProvider? Services { get; private set; }
+
+    /// <summary>
+    /// 控制器管理器(启用控制器模式后可用)
+    /// </summary>
+    internal ControllerManager? ControllerManager { get; set; }
+
     #region 快捷事件访问
 
     /// <summary>
@@ -109,6 +120,51 @@ public class QQBotClient : IDisposable
     {
         add => _eventDispatcher.OnC2CMessageCreate += value;
         remove => _eventDispatcher.OnC2CMessageCreate -= value;
+    }
+
+    /// <summary>
+    /// 群消息事件(全量模式)
+    /// </summary>
+    public event Func<GroupMessageCreateEvent, Task>? OnGroupMessageCreate
+    {
+        add => _eventDispatcher.OnGroupMessageCreate += value;
+        remove => _eventDispatcher.OnGroupMessageCreate -= value;
+    }
+
+    /// <summary>
+    /// 群成员加入事件
+    /// </summary>
+    public event Func<GroupMemberAddEvent, Task>? OnGroupMemberAdd
+    {
+        add => _eventDispatcher.OnGroupMemberAdd += value;
+        remove => _eventDispatcher.OnGroupMemberAdd -= value;
+    }
+
+    /// <summary>
+    /// 群成员退出事件
+    /// </summary>
+    public event Func<GroupMemberRemoveEvent, Task>? OnGroupMemberRemove
+    {
+        add => _eventDispatcher.OnGroupMemberRemove += value;
+        remove => _eventDispatcher.OnGroupMemberRemove -= value;
+    }
+
+    /// <summary>
+    /// 用户申请加群事件
+    /// </summary>
+    public event Func<GroupJoinRequestEvent, Task>? OnGroupJoinRequest
+    {
+        add => _eventDispatcher.OnGroupJoinRequest += value;
+        remove => _eventDispatcher.OnGroupJoinRequest -= value;
+    }
+
+    /// <summary>
+    /// 订阅消息授权状态变更事件
+    /// </summary>
+    public event Func<SubscribeMessageStatusEvent, Task>? OnSubscribeMessageStatus
+    {
+        add => _eventDispatcher.OnSubscribeMessageStatus += value;
+        remove => _eventDispatcher.OnSubscribeMessageStatus -= value;
     }
 
     /// <summary>
@@ -244,7 +300,8 @@ public class QQBotClient : IDisposable
         QQBotHttpClient apiClient,
         QQBotWebSocketClient webSocketClient,
         EventDispatcher eventDispatcher,
-        ILogger<QQBotClient>? logger = null)
+        ILogger<QQBotClient>? logger = null,
+        IServiceProvider? services = null)
     {
         _options = options;
         _httpClient = httpClient;
@@ -253,6 +310,7 @@ public class QQBotClient : IDisposable
         _webSocketClient = webSocketClient;
         _eventDispatcher = eventDispatcher;
         _logger = logger;
+        Services = services;
     }
 
     /// <summary>
@@ -378,6 +436,163 @@ public class QQBotClient : IDisposable
     /// </summary>
     public Task<SendGroupMessageResponse> SendC2CMessageAsync(string openId, SendGroupMessageRequest request)
         => _apiClient.SendC2CMessageAsync(openId, request);
+
+    /// <summary>
+    /// 发送群 Markdown 消息(可带键盘)
+    /// </summary>
+    public Task<SendGroupMessageResponse> SendGroupMarkdownAsync(
+        string groupOpenId,
+        MessageMarkdown markdown,
+        MessageKeyboard? keyboard = null,
+        string? msgId = null,
+        int msgSeq = 0)
+        => _apiClient.SendGroupMessageAsync(groupOpenId, new SendGroupMessageRequest
+        {
+            MsgType = 2,
+            Markdown = markdown,
+            Keyboard = keyboard,
+            MsgId = msgId,
+            MsgSeq = msgSeq
+        });
+
+    /// <summary>
+    /// 发送C2C Markdown 消息(可带键盘)
+    /// </summary>
+    public Task<SendGroupMessageResponse> SendC2CMarkdownAsync(
+        string openId,
+        MessageMarkdown markdown,
+        MessageKeyboard? keyboard = null,
+        string? msgId = null,
+        int msgSeq = 0)
+        => _apiClient.SendC2CMessageAsync(openId, new SendGroupMessageRequest
+        {
+            MsgType = 2,
+            Markdown = markdown,
+            Keyboard = keyboard,
+            MsgId = msgId,
+            MsgSeq = msgSeq
+        });
+
+    /// <summary>
+    /// 上传并发送群富媒体消息
+    /// </summary>
+    /// <param name="groupOpenId">群 OpenID</param>
+    /// <param name="url">文件URL</param>
+    /// <param name="fileType">1=图片 2=视频 3=语音 4=文件</param>
+    /// <param name="msgId">被动回复消息ID</param>
+    /// <param name="msgSeq">回复序号</param>
+    public async Task<SendGroupMessageResponse?> SendGroupMediaAsync(
+        string groupOpenId,
+        string url,
+        int fileType = 1,
+        string? msgId = null,
+        int msgSeq = 1)
+    {
+        var upload = await _apiClient.UploadGroupMediaAsync(groupOpenId, new UploadMediaRequest
+        {
+            FileType = fileType,
+            Url = url
+        });
+
+        if (upload?.FileInfo == null)
+            return null;
+
+        return await _apiClient.SendGroupMessageAsync(groupOpenId, new SendGroupMessageRequest
+        {
+            MsgType = 7,
+            Media = new MediaInfo { FileInfo = upload.FileInfo },
+            MsgId = msgId,
+            MsgSeq = msgSeq
+        });
+    }
+
+    /// <summary>
+    /// 上传并发送C2C富媒体消息
+    /// </summary>
+    public async Task<SendGroupMessageResponse?> SendC2CMediaAsync(
+        string openId,
+        string url,
+        int fileType = 1,
+        string? msgId = null,
+        int msgSeq = 1)
+    {
+        var upload = await _apiClient.UploadC2CMediaAsync(openId, new UploadMediaRequest
+        {
+            FileType = fileType,
+            Url = url
+        });
+
+        if (upload?.FileInfo == null)
+            return null;
+
+        return await _apiClient.SendC2CMessageAsync(openId, new SendGroupMessageRequest
+        {
+            MsgType = 7,
+            Media = new MediaInfo { FileInfo = upload.FileInfo },
+            MsgId = msgId,
+            MsgSeq = msgSeq
+        });
+    }
+
+    /// <summary>
+    /// 流式发送C2C消息(首片)
+    /// </summary>
+    public Task<StreamMessageResponse> SendC2CStreamMessageAsync(
+        string openId,
+        SendC2CStreamMessageRequest request)
+        => _apiClient.SendC2CStreamMessageAsync(openId, request);
+
+    /// <summary>
+    /// 撤回群聊消息
+    /// </summary>
+    public Task RevokeGroupMessageAsync(string groupOpenId, string messageId)
+        => _apiClient.DeleteGroupMessageAsync(groupOpenId, messageId);
+
+    /// <summary>
+    /// 撤回单聊消息
+    /// </summary>
+    public Task RevokeC2CMessageAsync(string openId, string messageId)
+        => _apiClient.DeleteC2CMessageAsync(openId, messageId);
+
+    #endregion
+
+    #region 群管理快捷方法
+
+    /// <summary>
+    /// 获取群基本信息
+    /// </summary>
+    public Task<GroupInfo> GetGroupInfoAsync(string groupOpenId)
+        => _apiClient.GetGroupInfoAsync(groupOpenId);
+
+    /// <summary>
+    /// 获取机器人群内状态
+    /// </summary>
+    public Task<GroupBotState> GetGroupBotStateAsync(string groupOpenId)
+        => _apiClient.GetGroupBotStateAsync(groupOpenId);
+
+    /// <summary>
+    /// 获取群成员列表
+    /// </summary>
+    public Task<GroupMemberListResponse> GetGroupMembersAsync(string groupOpenId, string? cursor = null)
+        => _apiClient.GetGroupMembersAsync(groupOpenId, cursor);
+
+    /// <summary>
+    /// 获取群成员信息
+    /// </summary>
+    public Task<GroupMember> GetGroupMemberAsync(string groupOpenId, string memberOpenId)
+        => _apiClient.GetGroupMemberAsync(groupOpenId, memberOpenId);
+
+    /// <summary>
+    /// 审批入群申请
+    /// </summary>
+    public Task ApproveGroupJoinRequestAsync(string groupOpenId, string memberOpenId, ApproveJoinRequestRequest request)
+        => _apiClient.ApproveGroupJoinRequestAsync(groupOpenId, memberOpenId, request);
+
+    /// <summary>
+    /// 设置群成员禁言
+    /// </summary>
+    public Task SetGroupMemberMuteAsync(string groupOpenId, SetGroupMemberMuteRequest request)
+        => _apiClient.SetGroupMemberMuteAsync(groupOpenId, request);
 
     #endregion
 

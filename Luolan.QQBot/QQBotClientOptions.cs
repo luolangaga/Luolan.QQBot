@@ -23,16 +23,40 @@ public class QQBotClientOptions
     public bool IsSandbox { get; set; } = false;
 
     /// <summary>
-    /// API基础URL
+    /// API基础URL。官方已于 2026 年切换至 api.bot.qq.com。
     /// </summary>
-    public string ApiBaseUrl => IsSandbox
-        ? "https://sandbox.api.sgroup.qq.com"
-        : "https://api.sgroup.qq.com";
+    public string ApiBaseUrl => !string.IsNullOrWhiteSpace(ApiBaseUrlOverride)
+        ? ApiBaseUrlOverride.TrimEnd('/')
+        : IsSandbox
+            ? "https://sandbox.api.sgroup.qq.com"
+            : "https://api.bot.qq.com";
+
+    /// <summary>
+    /// 自定义API基础URL(为空时使用官方地址)
+    /// </summary>
+    public string? ApiBaseUrlOverride { get; set; }
 
     /// <summary>
     /// 鉴权URL
     /// </summary>
-    public string AuthUrl => "https://bots.qq.com/app/getAppAccessToken";
+    public string AuthUrl => !string.IsNullOrWhiteSpace(AuthUrlOverride)
+        ? AuthUrlOverride
+        : "https://api.bot.qq.com/app/getAppAccessToken";
+
+    /// <summary>
+    /// 自定义鉴权URL(为空时使用官方地址)
+    /// </summary>
+    public string? AuthUrlOverride { get; set; }
+
+    /// <summary>
+    /// 速率限制器容量(令牌桶容量)
+    /// </summary>
+    public int RateLimitCapacity { get; set; } = 100;
+
+    /// <summary>
+    /// 速率限制器每秒补充的令牌数
+    /// </summary>
+    public int RateLimitRefillPerSecond { get; set; } = 20;
 
     /// <summary>
     /// Token过期前提前刷新的秒数
@@ -114,14 +138,24 @@ public enum Intents
     Interaction = 1 << 26,
 
     /// <summary>
+    /// 群成员事件(群成员加入/退出、入群申请)
+    /// </summary>
+    GroupMembers = 1 << 24,
+
+    /// <summary>
+    /// 群与C2C消息事件(官方 GROUP_AND_C2C_EVENT)
+    /// </summary>
+    GroupAndC2C = 1 << 25,
+
+    /// <summary>
     /// 群聊@消息事件
     /// </summary>
-    GroupAtMessages = 1 << 25,
+    GroupAtMessages = GroupAndC2C,
 
     /// <summary>
     /// C2C消息事件
     /// </summary>
-    C2CMessages = 1 << 25,
+    C2CMessages = GroupAndC2C,
 
     /// <summary>
     /// 默认订阅(公域)

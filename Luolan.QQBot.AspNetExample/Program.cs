@@ -1,134 +1,83 @@
-using Luolan.QQBot.Core.Abstractions;
-using Luolan.QQBot.Core.Extensions;
-using Luolan.QQBot.Core.Models;
-using Luolan.QQBot.Official;
-using Luolan.QQBot.OneBot;
-using Microsoft.Extensions.DependencyInjection;
+using Luolan.QQBot;
+using Luolan.QQBot.Extensions;
+using Luolan.QQBot.Webhook;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
 
-// ==================== 配置机器人 ====================
-var botConfig = builder.Configuration.GetSection("Bot");
-var protocol = botConfig["Protocol"] ?? "Official";
+var botSection = builder.Configuration.GetSection("Bot");
+var appId = botSection["AppId"] ?? botSection["Official:AppId"];
+var clientSecret = botSection["ClientSecret"] ?? botSection["Official:ClientSecret"];
+var useWebSocket = botSection.GetValue("UseWebSocket", true);
 
-Console.WriteLine($"🚀 正在使用 {protocol} 协议启动机器人...");
-
-if (protocol.Equals("Official", StringComparison.OrdinalIgnoreCase))
+if (string.IsNullOrWhiteSpace(appId) || string.IsNullOrWhiteSpace(clientSecret))
 {
-    builder.Services.AddOfficialBot(options =>
-    {
-        var officialConfig = botConfig.GetSection("Official");
-        options.AppId = officialConfig["AppId"] ?? throw new InvalidOperationException("未配置 AppId");
-        options.ClientSecret = officialConfig["ClientSecret"] ?? throw new InvalidOperationException("未配置 ClientSecret");
-        options.IsSandbox = officialConfig.GetValue<bool>("IsSandbox");
-        
-        // 订阅所有事件
-        options.Intents = Intents.Default | Intents.GroupAtMessages | Intents.PublicGuildMessages;
-    });
-}
-else
-{
-    builder.Services.AddOneBot(options =>
-    {
-        var oneBotConfig = botConfig.GetSection("OneBot");
-        options.WebSocketUrl = oneBotConfig["WebSocketUrl"] ?? "ws://127.0.0.1:3001";
-        options.AccessToken = oneBotConfig["AccessToken"];
-    });
+    throw new InvalidOperationException("请在 appsettings.json 或环境变量中配置 Bot:AppId 与 Bot:ClientSecret");
 }
 
-// 注册启动服务 (负责启动机器人)
-builder.Services.AddHostedService<BotBackgroundService>();
+builder.Services.AddQQBotWithHttpClientFactory(options =>
+{
+    options.AppId = appId;
+    options.ClientSecret = clientSecret;
+    options.IsSandbox = botSection.GetValue("IsSandbox", false);
+    options.Intents = Intents.Default
+        | Intents.GroupAtMessages
+        | Intents.GroupMembers
+        | Intents.GroupAndC2C;
+});
+
+builder.Services.AddQQBotWebhook(clientSecret);
+
+if (useWebSocket)
+{
+    builder.Services.AddQQBotHostedService();
+}
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// 启用控制器模式：控制器通过依赖注入构造，可直接注入 ILogger、HttpClient 等服务
+var bot = app.Services.GetRequiredService<QQBotClient>();
+bot.UseControllers();
 
-// ==================== 配置机器人事件 ====================
-// 获取 IBotClient (通用接口)
-var bot = app.Services.GetRequiredService<IBotClient>();
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-
-// ------ 通用事件处理 (适用于所有协议) ------
-
-bot.Events.OnReady += async e =>
+// Webhook 回调入口(管理端配置的回调地址指向 /api/qqbot/webhook)
+app.MapPost("/api/qqbot/webhook", async (
+    HttpContext context,
+    [FromServices] QQBotWebhook webhook,
+    CancellationToken cancellationToken) =>
 {
-    logger.LogInformation("✅ 机器人已上线!");
-    logger.LogInformation("   用户: {Username} ({UserId})", e.Self?.Username, e.Self?.Id);
-    logger.LogInformation("   平台: {Platform}", e.Self?.Extra?["platform"] ?? "QQ");
-};
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync(cancellationToken);
 
-bot.Events.OnMessageReceived += async e =>
-{
-    var msg = e.Message;
-    var content = msg.Content?.Trim() ?? "";
-    var sender = msg.Sender?.Username ?? "未知用户";
-    
-    logger.LogInformation("[{Source}] {Sender}: {Content}", e.SourceType, sender, content);
-};
+    var signature = context.Request.Headers["X-Signature-Ed25519"].FirstOrDefault();
+    var timestamp = context.Request.Headers["X-Signature-Timestamp"].FirstOrDefault();
 
-bot.Events.OnMemberChanged += async e =>
-{
-    logger.LogInformation("[成员变动] {Type}: {Member} in {Group}", e.ChangeType, e.Member?.Username, e.GroupId);
-};
+    try
+    {
+        var response = await webhook.HandleAsync(body, signature, timestamp, cancellationToken);
+        return Results.Content(response, "application/json");
+    }
+    catch (UnauthorizedAccessException)
+    {
+        return Results.Unauthorized();
+    }
+    catch (System.Text.Json.JsonException)
+    {
+        return Results.BadRequest();
+    }
+});
 
-// ------ 启用控制器模式 ------
-// 这将扫描当前程序集中的 BotController
-bot.UseControllers("/");
+app.MapGet("/health", () => Results.Ok(new { status = "ok", time = DateTimeOffset.Now }));
 
-// ==================== API 端点 ====================
 app.MapControllers();
 
 app.Run();
-
-
-
-// 此时我们需要定义一个后台服务来启动机器人
-public class BotBackgroundService : BackgroundService
-{
-    private readonly IBotClient _botClient;
-    private readonly ILogger<BotBackgroundService> _logger;
-
-    public BotBackgroundService(IBotClient botClient, ILogger<BotBackgroundService> logger)
-    {
-        _botClient = botClient;
-        _logger = logger;
-    }
-
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        try
-        {
-            _logger.LogInformation("正在连接机器人...");
-            await _botClient.StartAsync(stoppingToken);
-            
-            // 保持运行直到取消
-            await Task.Delay(Timeout.Infinite, stoppingToken);
-        }
-        catch (OperationCanceledException)
-        {
-            // 正常停止
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "机器人服务发生错误");
-        }
-        finally
-        {
-            _logger.LogInformation("正在停止机器人...");
-            await _botClient.StopAsync();
-        }
-    }
-}

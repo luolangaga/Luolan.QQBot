@@ -162,7 +162,7 @@ public class TokenManager : IDisposable
 /// <summary>
 /// QQ Bot HTTP API 客户端
 /// </summary>
-public class QQBotHttpClient : IDisposable
+public partial class QQBotHttpClient : IDisposable
 {
     private readonly QQBotClientOptions _options;
     private readonly HttpClient _httpClient;
@@ -192,8 +192,10 @@ public class QQBotHttpClient : IDisposable
         _logger = logger;
         _jsonOptions = SharedJsonOptions;
         
-        // 初始化速率限制器 (QQ API 限制: 60次/分钟)
-        _rateLimiter = new RateLimiter(capacity: 60, refillRate: 1);
+        // 初始化速率限制器 (官方接口普遍为 30~100 QPS)
+        _rateLimiter = new RateLimiter(
+            capacity: Math.Max(1, options.RateLimitCapacity),
+            refillRate: Math.Max(1, options.RateLimitRefillPerSecond));
     }
 
     #region 基础请求方法
@@ -205,6 +207,7 @@ public class QQBotHttpClient : IDisposable
         CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(method, $"{_options.ApiBaseUrl}{endpoint}");
+        request.Headers.UserAgent.ParseAdd("Luolan.QQBot/1.5.0");
         request.Headers.Authorization = new AuthenticationHeaderValue(
             "QQBot",
             await _tokenManager.GetAccessTokenAsync(cancellationToken)
